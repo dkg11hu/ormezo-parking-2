@@ -1,0 +1,62 @@
+name: 🧹 Daily Workflow Cleanup
+
+on:
+    # Schedule to run once a day, for example, at 3:00 AM UTC
+    schedule:
+        - cron: "0 3 * * *"
+    workflow_dispatch:
+
+jobs:
+    purge_old_runs:
+        runs-on: ubuntu-latest
+
+        # IMPORTANT: The GITHUB_TOKEN MUST have permissions to delete workflow runs.
+        permissions:
+            actions: write
+            contents: read
+
+        steps:
+            - name: 📦 Install GitHub CLI
+              # GitHub-hosted runners usually have 'gh' pre-installed, but this ensures it.
+              run: sudo apt-get update && sudo apt-get install -y gh
+
+            - name: 🔄 Get Workflow Names and Purge Old Runs
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  echo "--- Starting Automated Cleanup ---"
+
+                  # 1. Get unique names of all workflows
+                  WORKFLOW_NAMES=$(gh run list --limit 100 --json name -q '.[].name' | sort | uniq)
+
+                  # 2. Loop through each workflow name
+                  for WF_NAME in "${WORKFLOW_NAMES[@]}"; do
+                      
+                      if [ -z "$WF_NAME" ]; then
+                          continue
+                      fi
+
+                      echo "Processing: $WF_NAME"
+
+                      # 3. Get all run IDs for the current workflow (newest first)
+                      ALL_RUN_IDS=$(gh run list --workflow="$WF_NAME" --limit 1000 --json databaseId -q '.[].databaseId' 2>/dev/null)
+
+                      # 4. Filter: Skip the newest run ID (the first line), and keep the rest for deletion
+                      IDS_TO_DELETE=$(echo "$ALL_RUN_IDS" | tail -n +2)
+
+                      if [ -z "$IDS_TO_DELETE" ]; then
+                          echo "  Only the latest run remains, or less than 2 runs found. Skipping."
+                      else
+                          # 5. Delete all older runs in the list
+                          DELETE_COUNT=$(echo "$IDS_TO_DELETE" | wc -l)
+                          echo "  Marked for deletion: $DELETE_COUNT runs."
+                          
+                          # Execute mass deletion via piping to xargs
+                          echo "$IDS_TO_DELETE" | xargs -r -n 1 gh run delete
+                          
+                          echo "  Deletion requests submitted."
+                      fi
+                      echo "---"
+                  done
+
+                  echo "Automated cleanup complete."
