@@ -1,0 +1,11 @@
+.PHONY: kill start
+
+# Stop the server
+kill:
+	./kill_server.sh
+
+# Start the server
+start:
+	node server.js
+	
+	

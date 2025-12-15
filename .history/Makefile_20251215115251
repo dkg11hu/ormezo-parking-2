@@ -1,0 +1,10 @@
+# Makefile for managing the server
+
+#  Usage:
+#	make kill    - to stop the server
+
+kill: ./kill_server.sh
+
+#  Usage:
+#	make start   - to start the server
+start: node server.js

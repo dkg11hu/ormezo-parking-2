@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Ormezo Parkoló státusz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f7f7f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .meta {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    @media (orientation:portrait) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (orientation:landscape) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .card {
+      background: #fff;
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .label {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .bar-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .bar {
+      background: #eef2f4;
+      height: 12px;
+      width: 160px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2ea44f, #1b8f3a);
+    }
+
+    .pct {
+      min-width: 40px;
+      text-align: right;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .numbers {
+      text-align: right;
+      min-width: 84px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .count {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .total {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .timestamp {
+      color: #999;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Parkoló státusz</h1>
+  <div id="report-time" class="meta"></div>
+  <main id="parking-grid" class="grid"></main>
+
+  <script>
+    function timeDiffString(updated) {
+      try {
+        const now = new Date();
+        const upd = new Date(updated.replace(" ", "T"));
+        const diffMs = now - upd;
+        const diffMin = Math.floor(diffMs / 60000);
+        if (diffMin < 1) return "épp most";
+        if (diffMin < 60) return diffMin + " perce";
+        const diffH = Math.floor(diffMin / 60);
+        if (diffH < 24) return diffH + " órája";
+        const diffD = Math.floor(diffH / 24);
+        return diffD + " napja";
+      } catch {
+        return updated;
+      }
+    }
+
+    async function refreshParkingStatus() {
+      try {
+        // csak a status JSON kötelező
+        const statusRes = await fetch("parking-status.json?ts=" + Date.now(), { cache: "no-store" });
+        if (!statusRes.ok) throw new Error("status JSON not found");
+        const statusData = await statusRes.json();
+
+        // mindig legyen definiálva
+        let urlsData = [];
+
+        try {
+          const urlsRes = await fetch("urls.json?ts=" + Date.now(), { cache: "no-store" });
+          if (urlsRes.ok) urlsData = await urlsRes.json();
+        } catch {
+          console.warn("urls.json nem elérhető, linkek kihagyva");
+        }
+
+        const items = Array.isArray(statusData) ? statusData : statusData.items || [];
+
+        const grid = document.getElementById("parking-grid");
+        grid.innerHTML = "";
+
+        if (items.length > 0) {
+          const updated = items[0].updated;
+          const updDate = new Date(updated.replace(" ", "T"));
+          const relative = timeDiffString(updated);
+          document.getElementById("report-time").textContent =
+            "Frissítve: " + updDate.toLocaleString("hu-HU") + " (" + relative + ")";
+        }
+
+        items.forEach(entry => {
+          const percent = (entry.total && entry.total > 0)
+            ? Math.round((entry.free / entry.total) * 100)
+            : 0;
+          const relative = timeDiffString(entry.updated);
+
+          const urlEntry = urlsData.find(u => u.id === entry.id);
+          const detailUrl = urlEntry ? urlEntry.url : "#";
+
+          const card = document.createElement("a");
+          card.className = "card";
+          card.href = detailUrl;
+          card.target = "_blank";
+          card.innerHTML = `
+              <div class="left">
+                <div class="label">${entry.label}</div>
+                <div class="bar-wrap">
+                  <div class="bar">
+                    <div class="fill" style="width:${percent}%"></div>
+                  </div>
+                  <div class="pct">${percent}%</div>
+                </div>
+              </div>
+              <div class="numbers">
+                <div class="count">${entry.free}</div>
+                <div class="total">/${entry.total}</div>
+                <div class="timestamp">${relative}</div>
+              </div>
+            `;
+          grid.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error("Hiba a JSON betöltésekor:", err);
+        document.getElementById("report-time").textContent = "Nem sikerült betölteni az adatokat.";
+      }
+    }
+
+    window.onload = () => {
+      refreshParkingStatus();
+      setInterval(refreshParkingStatus, 60000);
+    };
+  </script>
+
+
+</body>
+
+</html>
