@@ -30,7 +30,6 @@ jobs:
       - name: 🌐 Install Browser Dependencies (for Selenium)
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-browser xvfb libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth
       # -----------------------------------------------------------------
 
       # 3. Install Dependencies
