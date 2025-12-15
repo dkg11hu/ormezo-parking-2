@@ -1,0 +1,25 @@
+# .github/workflows/ci.yml
+name: CI / Code Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    # ----------------------------------------------------
+    # NEW STEP: Add conditional to skip running CI on commits made by the bot
+    if: github.actor != 'github-actions[bot]'
+    # ----------------------------------------------------
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+# ... rest of the file
