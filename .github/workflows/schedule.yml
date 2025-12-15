@@ -1,3 +1,4 @@
+# .github/workflows/schedule.yml
 name: ⏰ Schedule Data Extraction
 
 on:
@@ -23,13 +24,23 @@ jobs:
         with:
           node-version: '20'
 
+      # -----------------------------------------------------------------
+      # NEW STEP 2a: Install Chromium and libraries for ChromeDriver/Selenium
+      # -----------------------------------------------------------------
+      - name: 🌐 Install Browser Dependencies (for Selenium)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser xvfb libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth
+      # -----------------------------------------------------------------
+
       # 3. Install Dependencies
       - name: ⚙️ Install dependencies
         run: npm install
 
       # 3a Folder creation
       - name: 📁 Ensure public directory exists
-        run: mkdir -p public        
+        run: mkdir -p public        
+        
       # 4. RUN EXTRACTOR 
       - name: 🚀 Run Data Extractor
         run: npm run scrape # 
