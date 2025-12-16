@@ -36,7 +36,7 @@ jobs:
 
       # 3a Folder creation
       - name: 📁 Ensure public directory exists
-        run: mkdir -p public        
+        run: mkdir -p public 
         
       # 4. RUN EXTRACTOR 
       - name: 🚀 Run Data Extractor
