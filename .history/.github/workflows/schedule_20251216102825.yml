@@ -42,11 +42,6 @@ jobs:
       - name: 🚀 Run Data Extractor
         run: npm run scrape # 
 
-      # 4a. RUN HTML GENERATION (CRITICAL STEP)
-      - name: 🏗️ Generate HTML Dashboard
-        # This will run your server.js or whatever generates dashboard.html
-        run: npm start        
-
       # 5. Commit and Push (Final Fix)
       - name: 🔄 Commit and Push Updated Files to gh-pages
         uses: stefanzweifel/git-auto-commit-action@v5
