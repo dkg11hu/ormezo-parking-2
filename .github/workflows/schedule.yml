@@ -22,7 +22,6 @@ jobs:
           fetch-depth: 1 
           # Ensure repository path is correct (default)
           # Note: If your repository name is 'ormezo-parking-2', this path is correct.
-          path: 'ormezo-parking-2'
           
       # 2. Setup Node
       - name: 📦 Setup Node.js
