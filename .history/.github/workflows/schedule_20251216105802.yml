@@ -1,0 +1,66 @@
+# .github/workflows/schedule.yml
+name: ⏰ Schedule Data Extraction
+
+on:
+  # Manual trigger in the GitHub Actions UI
+  workflow_dispatch:
+  # Schedule to run every 15 minutes
+  schedule:
+    - cron: "*/15 * * * *" 
+
+jobs:
+  extract_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout Source (main) - Forcing a clean clone
+      - name: ⬇️ Force Clean Checkout of Main Branch
+        uses: actions/checkout@v4
+        with:
+          # Explicitly set the branch
+          ref: main
+          # Perform a shallow clone (fetch-depth 1) is usually enough
+          fetch-depth: 1 
+          # Ensure repository path is correct (default)
+          # Note: If your repository name is 'ormezo-parking-2', this path is correct.
+          
+      # 2. Setup Node
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # -----------------------------------------------------------------
+      # NEW STEP 2a: Install Chromium and libraries for ChromeDriver/Selenium
+      # NOTE: This step is missing the actual installation command.
+      # You may need to add: `sudo apt-get install chromium-browser` or similar
+      # -----------------------------------------------------------------
+      - name: 🌐 Install Browser Dependencies (for Selenium)
+        run: sudo apt-get update
+
+      # 3. Install Dependencies
+      - name: ⚙️ Install dependencies
+        run: npm install
+
+      # 3a Folder creation
+      - name: 📁 Ensure public directory exists
+        run: mkdir -p public 
+        
+      # 4. RUN EXTRACTOR 
+      - name: 🚀 Run Data Extractor
+        run: npm run scrape
+
+      # 4a. RUN HTML GENERATION (CRITICAL STEP)
+      - name: 🏗️ Generate HTML Dashboard
+        # This will run your server.js which should generate the dashboard.html and parking-status.json
+        run: npm start
+
+      # 5. Commit and Push (Final Fix)
+      - name: 🔄 Commit and Push Updated Files to gh-pages
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          # These are the files created by the scraper and the npm start script
+          file_pattern: 'public/dashboard.html public/parking-status.json'
+          commit_message: "chore: Automatic data update [skip ci]"
+          branch: gh-pages
+          skip_checkout: true
