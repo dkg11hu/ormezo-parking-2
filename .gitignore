@@ -1,0 +1,6 @@
+
+# Ignore local environment variables
+.env
+
+# Ignore local history/scratch files
+.history/
