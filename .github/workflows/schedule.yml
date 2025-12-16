@@ -11,6 +11,10 @@ on:
 jobs:
   extract_and_deploy:
     runs-on: ubuntu-latest
+    permissions: 
+          contents: write # This grants the token permission to commit and push files.
+          pages: write    # Best practice for GitHub Pages deployment actions.
+          id-token: write # Often needed for OIDC/security in modern GitHub actions.
     steps:
       # 1. Checkout Source (main) - Forcing a clean clone
       - name: ⬇️ Force Clean Checkout of Main Branch
