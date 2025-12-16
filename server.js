@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const { spawn } = require('child_process');
+const http = require('http');
 
 let extractorRunning = false;
 let child = null;
@@ -185,7 +186,9 @@ console.log('PORT:', process.env.PORT || '<none>', '-> listening on', port);
 // --- START of the FIX for EADDRINUSE (Port in TIME_WAIT) ---
 
 // 1. Create the server instance without immediately listening
-const server = app.listen();
+// const server = app.listen();
+
+const server = http.createServer(app);
 
 // 2. Set the 'reuseAddress' option directly on the server instance
 // This is the equivalent of SO_REUSEADDR, allowing immediate restart after SIGKILL.
