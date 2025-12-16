@@ -11,10 +11,17 @@ jobs:
   extract_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1. Checkout Source (main)
-      - name: ⬇️ Checkout Source (main)
-        uses: actions/checkout@v4
-
+      # 1. Checkout Source (main) - Forcing a clean clone
+            - name: ⬇️ Force Clean Checkout of Main Branch
+              uses: actions/checkout@v4
+              with:
+                # Explicitly set the branch
+                ref: main
+                # Perform a shallow clone (fetch-depth 1) is usually enough
+                fetch-depth: 1 
+                # Ensure repository path is correct (default)
+                path: 'ormezo-parking-2'
+                
       # 2. Setup Node
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
