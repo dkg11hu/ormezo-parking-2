@@ -14,6 +14,9 @@ jobs:
       # 1. Checkout Source (main)
       - name: ⬇️ Checkout Source (main)
         uses: actions/checkout@v4
+        with:
+          ref: main 
+          token: ${{ secrets.GITHUB_TOKEN }} 
 
       # 2. Setup Node
       - name: 📦 Setup Node.js
