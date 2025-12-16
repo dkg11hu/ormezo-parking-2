@@ -69,4 +69,4 @@ jobs:
           branch: gh-pages
           skip_checkout: true
           # ADD THIS LINE TEMPORARILY:
-          push_options: --force
+          #push_options: --force
