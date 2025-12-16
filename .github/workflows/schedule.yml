@@ -67,4 +67,6 @@ jobs:
           file_pattern: 'public/parking-status.json'
           commit_message: "chore: Automatic data update [skip ci]"
           branch: gh-pages
+          # ADD THIS LINE TEMPORARILY:
+          push_options: --force
           skip_checkout: true
