@@ -89,13 +89,13 @@ if (process.env.RUN_EXTRACTOR_ON_START === '1') {
     runExtractor();
 }
 
-// NEW: run extractor periodically every 5 minutes
-setInterval(() => {
-    console.log('[server] scheduled extractor run at', new Date().toISOString());
-    runExtractor();
-}, 5 * 60 * 1000);
-// --- API routes (defined before static middleware) ---
-
+// NEW: run extractor periodically every 5 minutes, but only in production/long-running environments
+if (process.env.NODE_ENV === 'production' && !process.env.CI) {
+    setInterval(() => {
+        console.log('[server] scheduled extractor run at', new Date().toISOString());
+        runExtractor();
+    }, 5 * 60 * 1000);
+}
 // Health
 app.get('/health', (req, res) => {
     const p = path.join(__dirname, 'public', 'parking-status.json');
@@ -197,6 +197,7 @@ const server = http.createServer(app);
 // 3. Now, call listen() with the desired port and host
 server.listen(port, host, () => {
     console.log(`Listening on ${port}`);
+    process.exit(0); // Exit immediately after starting and generating content
 });
 
 // --- END of the FIX ---
