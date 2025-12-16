@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
+
 
       # -----------------------------------------------------------------
       # NEW STEP 2a: Install Chromium and libraries for ChromeDriver/Selenium
