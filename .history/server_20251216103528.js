@@ -189,7 +189,7 @@ const server = app.listen();
 
 // 2. Set the 'reuseAddress' option directly on the server instance
 // This is the equivalent of SO_REUSEADDR, allowing immediate restart after SIGKILL.
-// server.set('reuseAddress', true); // LINE 192, NOW COMMENTED OUT
+// server.set('reuseAddress', true); // Removed for GitHub Actions compatibility
 
 // 3. Now, call listen() with the desired port and host
 server.listen(port, host, () => {
