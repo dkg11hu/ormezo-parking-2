@@ -60,7 +60,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           # These are the files created by the scraper and the npm start script
-          file_pattern: 'public/dashboard.html public/parking-status.json'
+          file_pattern: 'public/parking-status.json'
           commit_message: "chore: Automatic data update [skip ci]"
           branch: gh-pages
           skip_checkout: true
