@@ -31,7 +31,9 @@ jobs:
 
       - name: ⚙️ Setup Geckodriver
         run: |
-          LATEST_URL=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "browser_download_url.*linux64.tar.gz" | cut -d '"' -f 4)
+          # A head -n 1 kiszűri a felesleges .asc fájlt az API válaszból
+          LATEST_URL=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "browser_download_url.*linux64.tar.gz" | cut -d '"' -f 4 | head -n 1)
+          echo "Downloading from: $LATEST_URL"
           wget -O geckodriver.tar.gz "$LATEST_URL"
           tar -xvzf geckodriver.tar.gz
           chmod +x geckodriver
@@ -49,13 +51,20 @@ jobs:
 
       - name: 🏗️ Build HTML and Copy Assets
         run: |
+          # 1. HTML generálás
           node builder.js
+          
+          # 2. Kritikus fájlok másolása (Saved Info alapján)
           cp index.html public/ 2>/dev/null || true
           cp style.css public/
           cp script.js public/
+          
+          # 3. Ikonok és egyéb fájlok
           mkdir -p public/icons
           if [ -d "icons" ]; then cp -r icons/* public/icons/ 2>/dev/null || true; fi
           cp favicon.ico public/ 2>/dev/null || true
+          
+          # 4. JSON adat biztosítása
           cp parking-status.json public/ 2>/dev/null || true
 
       - name: 🚀 Deploy to GH Pages
