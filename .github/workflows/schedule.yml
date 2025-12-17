@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "*/15 * * * *" 
+push:                   # <--- EZ AZ ÚJ RÉSZ
+    branches:
+      - main              # Lefut minden push-nál a main-re
 
 jobs:
   extract_and_deploy:
