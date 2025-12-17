@@ -51,21 +51,21 @@ jobs:
 
       - name: 🏗️ Build HTML and Copy Assets
         run: |
-          # 1. HTML generálás
+          # 1. HTML generálás (ha a builder.js is generál valamit)
           node builder.js
           
-          # 2. Kritikus fájlok másolása (Saved Info alapján)
-          cp index.html public/ 2>/dev/null || true
+          # 2. A fő fájlok kényszerített másolása a gyökérből a public mappába
+          # Fontos: a gh-pages ágon a public tartalma lesz a GYÖKÉR!
+          cp index.html public/
           cp style.css public/
           cp script.js public/
           
-          # 3. Ikonok és egyéb fájlok
+          # 3. Adatfájl biztosítása
+          cp parking-status.json public/
+          
+          # 4. Ikonok (ha vannak)
           mkdir -p public/icons
           if [ -d "icons" ]; then cp -r icons/* public/icons/ 2>/dev/null || true; fi
-          cp favicon.ico public/ 2>/dev/null || true
-          
-          # 4. JSON adat biztosítása
-          cp parking-status.json public/ 2>/dev/null || true
 
       - name: 🚀 Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v3
