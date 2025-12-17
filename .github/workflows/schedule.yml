@@ -1,10 +1,10 @@
 name: ⏰ Extraction and Deploy
 
 on:
-  workflow_dispatch:      # Manuális indítás gombbal
+  workflow_dispatch:
   schedule:
-    - cron: "*/15 * * * *" # 15 percenkénti frissítés
-  push:                   # Frissítés minden kódmódosításkor
+    - cron: "*/15 * * * *"
+  push:
     branches:
       - main
 
@@ -26,10 +26,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 🌐 Install Chrome and Driver
+      - name: 🦊 Install Firefox and Geckodriver
         run: |
           sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
+          sudo apt-get install -y firefox geckodriver
 
       - name: ⚙️ Install dependencies
         run: npm install
@@ -42,11 +42,12 @@ jobs:
 
       - name: 🏗️ Build HTML and Copy Assets
         run: |
-          # 1. HTML generálás (a builder.js-nek a public/index.html-be kell dolgoznia)
+          # 1. HTML generálás
           node builder.js
           
-          # 2. Kritikus fájlok kényszerített másolása a main ágról a public mappába
-          cp index.html public/ 2>/dev/null || true
+          # 2. Kritikus fájlok másolása a main ágról a public mappába
+          # Megjegyzés: a builder.js már létrehozhatja az index.html-t a public-ban, 
+          # de ha a gyökérben van a friss, akkor felülírjuk.
           cp style.css public/
           cp script.js public/
           
@@ -54,7 +55,8 @@ jobs:
           mkdir -p public/icons
           if [ -d "icons" ]; then cp -r icons/* public/icons/ 2>/dev/null || true; fi
           cp favicon.ico public/ 2>/dev/null || true
-          # Ha van bármilyen JSON adat, amit a JS használ:
+          
+          # 4. Biztosítjuk, hogy a generált JSON is ott legyen
           cp parking-status.json public/ 2>/dev/null || true
 
       - name: 🚀 Deploy to GH Pages (Clean State)
@@ -63,5 +65,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public 
           publish_branch: gh-pages
-          force_orphan: true  # Törli a régi fájlokat a gh-pages-ről, így csak a frissek maradnak
+          force_orphan: true
           commit_message: "chore(deploy): Automated update from main [skip ci]"
