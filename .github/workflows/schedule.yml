@@ -56,8 +56,14 @@ jobs:
 
       # 4a. RUN HTML GENERATION (CRITICAL STEP)
       - name: 🏗️ Generate HTML Dashboard
-        # This will run your server.js which should generate the dashboard.html and parking-status.json
-        run: npm start
+        run: |
+          node builder.js
+          cp style.css public/
+          cp script.js public/
+          mkdir -p public/icons             # Létrehozzuk a célmappát
+          cp -r icons/* public/icons/       # Átmásoljuk a teljes tartalmát
+          cp favicon.ico public/ 2>/dev/null || true
+
 
       # 5. Commit and Push (Final Fix)
       - name: 🔄 Commit and Push Updated Files to gh-pages
