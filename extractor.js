@@ -12,13 +12,17 @@ const outPath = path.join(outDir, 'parking-status.json');
     try {
         console.log('🚀 FIREFOX EXTRACTOR START');
 
-        // Firefox opciók beállítása a szerver környezethez
+        // Kényszerítjük a manuálisan telepített geckodriver útvonalát
+        // Ez megkerüli a hibás Selenium Managert
+        const service = new firefox.ServiceBuilder('/usr/local/bin/geckodriver');
+
         let options = new firefox.Options();
-        options.addArguments('--headless'); // Kötelező a GitHub Actions-hez
+        options.addArguments('--headless');
 
         driver = await new Builder()
             .forBrowser('firefox')
-            .setFirefoxOptions(new firefox.Options().addArguments('--headless'))
+            .setFirefoxOptions(options)
+            .setFirefoxService(service) // Fix útvonal átadása
             .build();
 
         const results = [];
@@ -83,6 +87,12 @@ const outPath = path.join(outDir, 'parking-status.json');
         console.error('❌ Extractor hiba:', err);
         process.exitCode = 1;
     } finally {
-        if (driver) await driver.quit();
+        if (driver) {
+            try {
+                await driver.quit();
+            } catch (e) {
+                console.warn('Hiba a driver leállításakor:', e.message);
+            }
+        }
     }
 })();
