@@ -65,11 +65,6 @@ jobs:
           if [ -d "icons" ]; then cp -r icons/* public/icons/ 2>/dev/null || true; fi
           cp favicon.ico public/ 2>/dev/null || true
           
-          # 4. JSON ellenőrzése
-          # Az extractor.js már a public/ mappába tette, így nem kell cp, 
-          # csak egy ellenőrzés, hogy ott van-e:
-          ls -l public/parking-status.json
-
       - name: 🚀 Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
