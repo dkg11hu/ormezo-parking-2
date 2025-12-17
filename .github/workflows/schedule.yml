@@ -29,15 +29,14 @@ jobs:
       - name: 🦊 Setup Firefox
         uses: browser-actions/setup-firefox@v1
 
-      - name: ⚙️ Manual Geckodriver Install
+      - name: ⚙️ Setup Geckodriver
         run: |
-          # Lekérjük a legfrissebb verziószámot és letöltjük
-          GECKODRIVER_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep tag_name | cut -d '"' -f 4)
-          wget https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
-          tar -xvzf geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz
+          LATEST_URL=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "browser_download_url.*linux64.tar.gz" | cut -d '"' -f 4)
+          wget -O geckodriver.tar.gz "$LATEST_URL"
+          tar -xvzf geckodriver.tar.gz
           chmod +x geckodriver
-          # Olyan helyre mozgatjuk, amit a rendszer (és a Selenium) alapból lát
           sudo mv geckodriver /usr/local/bin/
+          rm geckodriver.tar.gz
 
       - name: ⚙️ Install dependencies
         run: npm install
@@ -50,20 +49,13 @@ jobs:
 
       - name: 🏗️ Build HTML and Copy Assets
         run: |
-          # 1. HTML generálás
           node builder.js
-          
-          # 2. Kritikus fájlok másolása (szabályod szerint a main ágról a public mappába)
           cp index.html public/ 2>/dev/null || true
           cp style.css public/
           cp script.js public/
-          
-          # 3. Ikonok és egyéb fájlok
           mkdir -p public/icons
           if [ -d "icons" ]; then cp -r icons/* public/icons/ 2>/dev/null || true; fi
           cp favicon.ico public/ 2>/dev/null || true
-          
-          # 4. JSON adat biztosítása a weboldalnak
           cp parking-status.json public/ 2>/dev/null || true
 
       - name: 🚀 Deploy to GH Pages
