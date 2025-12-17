@@ -25,15 +25,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
-# --- ÚJ LÉPÉS KEZDETE ---
+
       - name: 🌐 Install Chrome and Driver
         run: |
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
-      # --- ÚJ LÉPÉS VÉGE ---
-
-          cache: 'npm'
 
       - name: ⚙️ Install dependencies
         run: npm install
