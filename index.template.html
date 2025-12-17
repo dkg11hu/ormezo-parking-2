@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="hu">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#ffffff" />
   <title>P+R Parkoló Foglaltság</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="style.css" />
   <style>
     /* Base layout */
     :root {
@@ -19,99 +20,277 @@
       --max-width: 980px;
     }
 
-    html,body { height:100%; margin:0; background:var(--bg); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-    .wrap { max-width:var(--max-width); margin:0 auto; padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 18px); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:#111827; box-sizing:border-box; }
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .wrap {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 18px);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color: #111827;
+      box-sizing: border-box;
+    }
 
     /* Header */
-    header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
-    header > div:first-child { min-width:0; }
-    h1 { font-size:1.05rem; margin:0 0 6px 0; line-height:1.15; }
-    .meta { color:var(--muted); font-size:0.85rem; }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    header>div:first-child {
+      min-width: 0;
+    }
+
+    h1 {
+      font-size: 1.05rem;
+      margin: 0 0 6px 0;
+      line-height: 1.15;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
 
     /* Controls */
-    #controls { display:flex; gap:10px; align-items:center; }
-    button { -webkit-tap-highlight-color: rgba(0,0,0,0.05); padding:10px 12px; border-radius:10px; border:1px solid rgba(0,0,0,0.06); background:#fff; font-size:0.95rem; min-height:44px; min-width:64px; cursor:pointer; }
-    button:active { transform:translateY(1px); }
-    .status { font-size:0.95rem; color:#111827; min-width:56px; text-align:center; padding:6px 8px; background:transparent; border-radius:8px; }
+    #controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button {
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      background: #fff;
+      font-size: 0.95rem;
+      min-height: 44px;
+      min-width: 64px;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .status {
+      font-size: 0.95rem;
+      color: #111827;
+      min-width: 56px;
+      text-align: center;
+      padding: 6px 8px;
+      background: transparent;
+      border-radius: 8px;
+    }
 
     /* Main list (MODIFIED FOR GRID LAYOUT) */
-    main { 
-        display: grid; /* CHANGE: Use grid for better card layouts */
-        gap: 12px;     
-        grid-template-columns: 1fr; /* Default: Single column for mobile portrait */
+    main {
+      display: grid;
+      /* CHANGE: Use grid for better card layouts */
+      gap: 12px;
+      grid-template-columns: 1fr;
+      /* Default: Single column for mobile portrait */
     }
-    
+
     /* Card Styles */
     /* MODIFIED: .card can now be an <a> tag */
-    .card { 
-        display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px; 
-        border-radius:var(--radius); background:var(--card); 
-        box-shadow:0 1px 0 rgba(0,0,0,0.04); 
+    .card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
     }
-    .card[href] { /* Style for clickable cards */
-        text-decoration: none; 
-        color: inherit; 
-        cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s; 
+
+    .card[href] {
+      /* Style for clickable cards */
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
+
     .card[href]:hover {
-        box-shadow: 0 4px 8px rgba(0,0,0,0.12);
-        transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
     }
 
-    .card .left { flex:1; min-width:0; }
-    .label { font-weight:600; font-size:0.98rem; margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .bar-wrap { display:flex; gap:8px; align-items:center; }
-    .bar { background:#eef2f4; height:12px; width:160px; border-radius:8px; overflow:hidden; flex-shrink:0; }
-    .fill { height:100%; width:0%; background:linear-gradient(90deg,var(--accent-start),var(--accent-end)); transition:width 420ms cubic-bezier(.2,.8,.2,1); border-radius:8px 0 0 8px; }
-    .pct { min-width:56px; text-align:right; font-size:0.9rem; color:var(--muted); }
+    .card .left {
+      flex: 1;
+      min-width: 0;
+    }
 
-    .numbers { text-align:right; min-width:84px; color:#111827; display:flex; flex-direction:column; gap:4px; align-items:flex-end; }
-    .count { font-weight:700; font-size:1rem; }
-    .total { color:var(--muted); font-size:0.9rem; }
-    .timestamp { color:var(--muted); font-size:0.82rem; }
+    .label {
+      font-weight: 600;
+      font-size: 0.98rem;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-    footer { margin-top:14px; color:var(--muted); font-size:0.9rem; text-align:center; }
+    .bar-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .bar {
+      background: #eef2f4;
+      height: 12px;
+      width: 160px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      transition: width 420ms cubic-bezier(.2, .8, .2, 1);
+      border-radius: 8px 0 0 8px;
+    }
+
+    .pct {
+      min-width: 56px;
+      text-align: right;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .numbers {
+      text-align: right;
+      min-width: 84px;
+      color: #111827;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-end;
+    }
+
+    .count {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .total {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .timestamp {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    footer {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
 
     /* Horizontal overall status bar (optional) */
-    .overall-status { margin-bottom:10px; }
-    .status-track { background:#f1f3f5; border-radius:8px; height:12px; overflow:hidden; }
-    .status-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--accent-start),var(--accent-end)); transition:width 600ms ease; border-radius:8px 0 0 8px; }
+    .overall-status {
+      margin-bottom: 10px;
+    }
+
+    .status-track {
+      background: #f1f3f5;
+      border-radius: 8px;
+      height: 12px;
+      overflow: hidden;
+    }
+
+    .status-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+      transition: width 600ms ease;
+      border-radius: 8px 0 0 8px;
+    }
 
     /* --- RESPONSIVE MEDIA QUERIES (iPhone XS Landscape, Tablets, Desktop) --- */
-    
+
     /* iPhone XS portrait specific tweaks (375px width) */
     @media (max-width: 420px) {
-      .wrap { padding-left:14px; padding-right:14px; }
-      .bar { width:120px; }
-      .numbers { min-width:72px; }
-      h1 { font-size:1rem; }
-      button { padding:10px 12px; min-width:56px; font-size:0.95rem; }
-      .card { padding:10px; border-radius:12px; }
-      .fill { transition: width 300ms ease; }
+      .wrap {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .bar {
+        width: 120px;
+      }
+
+      .numbers {
+        min-width: 72px;
+      }
+
+      h1 {
+        font-size: 1rem;
+      }
+
+      button {
+        padding: 10px 12px;
+        min-width: 56px;
+        font-size: 0.95rem;
+      }
+
+      .card {
+        padding: 10px;
+        border-radius: 12px;
+      }
+
+      .fill {
+        transition: width 300ms ease;
+      }
     }
-    
+
     /* Landscape Mobile / Small Tablets (e.g., iPhone XS Landscape) */
     @media (min-width: 600px) {
-        main {
-            grid-template-columns: repeat(2, 1fr); /* Two columns */
-            gap: 20px;
-        }
+      main {
+        grid-template-columns: repeat(2, 1fr);
+        /* Two columns */
+        gap: 20px;
+      }
     }
 
     /* Larger Tablets / Desktops */
     @media (min-width: 900px) {
-        main {
-            grid-template-columns: repeat(3, 1fr); /* Three columns */
-        }
+      main {
+        grid-template-columns: repeat(3, 1fr);
+        /* Three columns */
+      }
     }
 
     /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      .fill, .status-fill { transition: none !important; }
+
+      .fill,
+      .status-fill {
+        transition: none !important;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="wrap" role="main">
     <header>
@@ -130,14 +309,15 @@
         <strong style="font-size:0.95rem">Összesített kihasználtság</strong>
         <div id="overall-percent" style="font-size:0.95rem;color:var(--muted)">—</div>
       </div>
-      <div class="status-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="">
+      <div class="status-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+        aria-labelledby="">
         <div id="status-fill" class="status-fill" style="width:0%"></div>
       </div>
       <div id="overall-note" style="font-size:0.85rem;color:var(--muted);margin-top:6px"></div>
     </div>
 
     <main id="list" aria-live="polite">
-      </main>
+    </main>
 
     <footer>
       Az oldal automatikusan frissül. Ha nem látsz friss adatot, nyomd meg a Frissít gombot.
@@ -146,7 +326,7 @@
 
   <script>
     // Configuration
-    const LOCAL_JSON = '/parking-status.json';
+    const LOCAL_JSON = '/public/parking-status.json';
     const POLL_INTERVAL_MS = 30_000; // 30s
     const FALLBACK_REFRESH_MS = 300_000; // 5min
 
@@ -162,41 +342,41 @@
     // State
     let lastJsonRaw = null;
     let pollTimer = null;
-    
+
     // *** NEW HELPER: Relative Time Function ***
     function timeAgo(dateString) {
-        if (!dateString) return 'Ismeretlen';
-        
-        // Fix for cross-browser date parsing issue with yyyy-mm-dd hh:mm:ss format
-        const updateTime = new Date(dateString.replace(/-/g, "/"));
-        const diffMs = Date.now() - updateTime.getTime();
-        
-        if (diffMs < 0) return 'Jövőbeli idő?';
-        
-        const diffSeconds = Math.round(diffMs / 1000);
-        const diffMinutes = Math.round(diffSeconds / 60);
-        const diffHours = Math.round(diffMinutes / 60);
+      if (!dateString) return 'Ismeretlen';
 
-        if (diffSeconds < 5) return 'Pillanatokkal ezelőtt';
-        if (diffMinutes < 60) return `${diffMinutes} perce`; // X minutes ago
-        if (diffHours < 24) return `${diffHours} órája`;     // X hours ago
-        
-        // If older than 24 hours, return the original date
-        return dateString.substring(0, 10); // YYYY-MM-DD
+      // Fix for cross-browser date parsing issue with yyyy-mm-dd hh:mm:ss format
+      const updateTime = new Date(dateString.replace(/-/g, "/"));
+      const diffMs = Date.now() - updateTime.getTime();
+
+      if (diffMs < 0) return 'Jövőbeli idő?';
+
+      const diffSeconds = Math.round(diffMs / 1000);
+      const diffMinutes = Math.round(diffSeconds / 60);
+      const diffHours = Math.round(diffMinutes / 60);
+
+      if (diffSeconds < 5) return 'Pillanatokkal ezelőtt';
+      if (diffMinutes < 60) return `${diffMinutes} perce`; // X minutes ago
+      if (diffHours < 24) return `${diffHours} órája`;     // X hours ago
+
+      // If older than 24 hours, return the original date
+      return dateString.substring(0, 10); // YYYY-MM-DD
     }
 
 
     // Helpers
     function createCard(item) {
       const pct = item.total ? (item.free / item.total * 100) : 0;
-      
+
       const hasUrl = item.url && item.url.startsWith('http');
-      
+
       // *** MODIFIED: Use 'a' tag for clickable card, 'article' otherwise ***
       const card = document.createElement(hasUrl ? 'a' : 'article');
       card.className = 'card';
       if (hasUrl) {
-        card.href = item.url; 
+        card.href = item.url;
         card.target = '_blank';
         card.rel = 'noopener noreferrer';
       }
@@ -236,11 +416,11 @@
       const total = document.createElement('div');
       total.className = 'total';
       total.textContent = '/' + item.total;
-      
+
       const ts = document.createElement('div');
       ts.className = 'timestamp';
       // *** MODIFIED: Use the timeAgo function for relative time ***
-      ts.textContent = timeAgo(item.updated); 
+      ts.textContent = timeAgo(item.updated);
 
       numbers.appendChild(count);
       numbers.appendChild(total);
@@ -253,7 +433,7 @@
     }
 
     function render(data) {
-      data.sort((a,b) => (b.free||0) - (a.free||0));
+      data.sort((a, b) => (b.free || 0) - (a.free || 0));
       list.innerHTML = '';
       data.forEach(it => list.appendChild(createCard(it)));
       // MODIFIED: Use timeAgo for the header timestamp as well
@@ -278,7 +458,7 @@
       const percent = totalSpaces > 0 ? Math.round((occupied / totalSpaces) * 100) : 0;
       overallPercent.textContent = percent + '%';
       statusFill.style.width = percent + '%';
-      const latest = data.reduce((a,b) => (a && a > (b.updated||'') ? a : (b.updated||'')), '');
+      const latest = data.reduce((a, b) => (a && a > (b.updated || '') ? a : (b.updated || '')), '');
       overallNote.textContent = `Összes: ${totalSpaces} • Szabad: ${totalFree} • Foglalt: ${occupied} • Utolsó: ${timeAgo(latest) || 'ismeretlen'}`;
     }
 
@@ -326,7 +506,7 @@
 
     function startPolling() {
       if (pollTimer) return;
-      pollLocalJson().catch(()=>{});
+      pollLocalJson().catch(() => { });
       pollTimer = setInterval(pollLocalJson, POLL_INTERVAL_MS);
     }
 
@@ -367,4 +547,5 @@
     });
   </script>
 </body>
+
 </html>

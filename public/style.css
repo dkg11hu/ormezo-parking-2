@@ -1,0 +1,96 @@
+:root {
+  --bg: #0f1113;
+  --card: #1a1d21;
+  --text: #e9ecef;
+  --text-muted: #94a3b8;
+  --border: #2d333b;
+  --accent: #38bdf8;
+  
+  --green: #22c55e;
+  --yellow: #eab308;
+  --red: #ef4444;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 480px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+h1 { font-size: 1.2rem; margin: 0; color: #fff; }
+
+.meta { font-size: 0.8rem; color: var(--text-muted); }
+
+.overall-status {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+}
+
+.parking-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.status-track {
+  height: 6px;
+  background: #2d333b;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.status-fill {
+  height: 100%;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button {
+  background: #2d333b;
+  color: white;
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+button:hover { background: #3d444d; }
+
+.bg-low { background: var(--green); }
+.bg-med { background: var(--yellow); }
+.bg-high { background: var(--red); }
+
+.spin { animation: rotate 1s linear infinite; }
+@keyframes rotate { 100% { transform: rotate(360deg); } }
+
+footer {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-top: 20px;
+}
