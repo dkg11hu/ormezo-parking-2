@@ -51,21 +51,24 @@ jobs:
 
       - name: 🏗️ Build HTML and Copy Assets
         run: |
-          # 1. HTML generálás (ha a builder.js is generál valamit)
+          # 1. HTML generálás (ez a builder.js a logjaid alapján már jól működik)
           node builder.js
           
-          # 2. A fő fájlok kényszerített másolása a gyökérből a public mappába
-          # Fontos: a gh-pages ágon a public tartalma lesz a GYÖKÉR!
+          # 2. Assets másolása a Saved Info alapján
+          # Mivel a builder.js a gyökérbe generálta az index.html-t, be kell másolnunk a public-ba
           cp index.html public/
           cp style.css public/
           cp script.js public/
           
-          # 3. Adatfájl biztosítása
-          cp parking-status.json public/
-          
-          # 4. Ikonok (ha vannak)
+          # 3. Ikonok kezelése
           mkdir -p public/icons
           if [ -d "icons" ]; then cp -r icons/* public/icons/ 2>/dev/null || true; fi
+          cp favicon.ico public/ 2>/dev/null || true
+          
+          # 4. JSON ellenőrzése
+          # Az extractor.js már a public/ mappába tette, így nem kell cp, 
+          # csak egy ellenőrzés, hogy ott van-e:
+          ls -l public/parking-status.json
 
       - name: 🚀 Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v3
