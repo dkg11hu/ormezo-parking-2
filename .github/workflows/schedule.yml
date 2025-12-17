@@ -26,10 +26,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 🦊 Install Firefox and Geckodriver
+      - name: 🦊 Install Firefox
         run: |
           sudo apt-get update
-          sudo apt-get install -y firefox geckodriver
+          sudo apt-get install -y firefox
 
       - name: ⚙️ Install dependencies
         run: npm install
@@ -45,18 +45,17 @@ jobs:
           # 1. HTML generálás
           node builder.js
           
-          # 2. Kritikus fájlok másolása a main ágról a public mappába
-          # Megjegyzés: a builder.js már létrehozhatja az index.html-t a public-ban, 
-          # de ha a gyökérben van a friss, akkor felülírjuk.
+          # 2. Fájlok másolása a public mappába (a kért sorrendben)
+          cp index.html public/ 2>/dev/null || true
           cp style.css public/
           cp script.js public/
           
-          # 3. Ikonok és egyebek átmásolása
+          # 3. Ikonok és egyebek
           mkdir -p public/icons
           if [ -d "icons" ]; then cp -r icons/* public/icons/ 2>/dev/null || true; fi
           cp favicon.ico public/ 2>/dev/null || true
           
-          # 4. Biztosítjuk, hogy a generált JSON is ott legyen
+          # 4. JSON adat biztosítása
           cp parking-status.json public/ 2>/dev/null || true
 
       - name: 🚀 Deploy to GH Pages (Clean State)
