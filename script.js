@@ -34,5 +34,5 @@ if (refreshBtn) {
 
 // Indítás
 updateSystemTime();
-setInterval(updateSystemTime, 30000); // Rendszeridő frissítése félpercenként
+setInterval(updateSystemTime, 1000); // Rendszeridő frissítése félpercenként
 setupAutoRefresh(5); // Új build ellenőrzése 5 percenként
