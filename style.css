@@ -4,14 +4,13 @@
   --text: #adbac7;
   --accent: #58a6ff;
   --red-alert: #f85149;
-  /* Adatok kora */
   --light-grey: #8b949e;
-  /* Rendszeridő */
   --border: #30363d;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  /* Szűkebb betűkészlet használata */
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
   background-color: var(--bg);
   color: var(--text);
   margin: 0;
@@ -22,145 +21,121 @@ body {
 .wrap {
   max-width: 600px;
   margin: 0 auto;
-  /* Kiszámoljuk a notch helyét + adunk hozzá 15px-et */
-  padding: calc(env(safe-area-inset-top) + 15px) 15px 20px 15px;
+  /* Safe area a notch miatt, de minimális paddinggel */
+  padding: calc(env(safe-area-inset-top) + 8px) 12px 10px 12px;
 }
 
-/* FEJLÉC */
+/* KOMPAKT FEJLÉC */
 header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 25px;
-  /* Biztosítjuk, hogy ne csússzon rá a gomb a notch-ra */
-  padding-top: 5px;
+  align-items: center;
+  /* Egymás mellé, nem alá-fölé */
+  margin-bottom: 12px;
 }
 
 h1 {
-  font-size: 1.6rem;
+  font-size: 1.1rem;
+  /* Kisebb főcím */
   margin: 0;
   font-weight: 800;
-  color: #f0f6fc;
-}
-
-.accent {
-  color: var(--accent);
+  letter-spacing: -0.02em;
 }
 
 .status-bar {
   display: flex;
-  gap: 10px;
-  margin-top: 5px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 0.7rem;
+  /* Nagyon kompakt szöveg */
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-#data-age {
-  color: var(--red-alert);
-}
-
-#system-time {
-  color: var(--light-grey);
-}
-
-.separator {
-  color: var(--border);
-}
-
-/* GOMB */
 button {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  color: var(--text);
-  padding: 8px 16px;
-  border-radius: 6px;
+  color: #f0f6fc;
+  padding: 4px 10px;
+  /* Kisebb gomb */
+  border-radius: 5px;
+  font-size: 0.75rem;
   font-weight: 600;
-  cursor: pointer;
 }
 
-/* KÁRTYÁK */
+/* KOMPAKT KÁRTYÁK */
 main {
   display: grid;
-  gap: 15px;
-}
-
-.parking-card-link {
-  text-decoration: none;
-  color: inherit;
-  display: block;
+  gap: 6px;
+  /* Minimális távolság a kártyák között */
 }
 
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
-  transition: transform 0.1s;
-}
-
-.card:active {
-  transform: scale(0.98);
+  border-radius: 6px;
+  padding: 8px 12px;
+  /* Szűk belső margó */
+  border-top-width: 3px;
 }
 
 .card-top {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
+  align-items: baseline;
+  margin-bottom: 4px;
 }
 
 .label {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
+  /* Kisebb, de vastag betű */
   color: #f0f6fc;
-  max-width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* Ne törje meg a sort */
+  max-width: 65%;
 }
 
 .numbers {
-  text-align: right;
+  font-size: 0.95rem;
 }
 
 .count {
-  font-size: 1.2rem;
   font-weight: 800;
 }
 
 .total {
-  font-size: 0.9rem;
-  opacity: 0.6;
-  margin-left: 4px;
+  font-size: 0.75rem;
+  opacity: 0.5;
 }
 
-/* PROGRESS BAR */
+/* MINI PROGRESS BAR */
 .bar-container {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: 8px;
+  margin-bottom: 2px;
 }
 
 .bar {
-  flex-grow: 1;
-  height: 8px;
+  height: 6px;
+  /* Vékonyabb csík */
   background: #30363d;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.5s ease-in-out;
+  border-radius: 3px;
+  flex-grow: 1;
 }
 
 .pct {
-  font-size: 0.85rem;
-  font-weight: 700;
-  min-width: 35px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  min-width: 25px;
 }
 
 .card-meta {
-  font-size: 0.75rem;
-  opacity: 0.5;
+  font-size: 0.6rem;
+  /* Apró meta infó */
+  opacity: 0.4;
   text-align: right;
 }
