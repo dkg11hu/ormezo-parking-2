@@ -55,12 +55,6 @@ jobs:
       - name: 🏗️ Build HTML and Copy Assets
         run: node builder.js
 
-      - name: 📂 Copy Assets to Public
-        run: |
-          cp script.js public/
-          cp style.css public/
-          cp index.html public/
-
       - name: 🚀 Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
