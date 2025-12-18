@@ -22,15 +22,18 @@ body {
 .wrap {
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
+  /* Kiszámoljuk a notch helyét + adunk hozzá 15px-et */
+  padding: calc(env(safe-area-inset-top) + 15px) 15px 20px 15px;
 }
 
 /* FEJLÉC */
 header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 25px;
+  /* Biztosítjuk, hogy ne csússzon rá a gomb a notch-ra */
+  padding-top: 5px;
 }
 
 h1 {
