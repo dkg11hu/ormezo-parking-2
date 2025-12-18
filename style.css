@@ -1,141 +1,115 @@
 :root {
-  --bg: #0d1117;
-  --card-bg: #161b22;
-  --text: #adbac7;
-  --accent: #58a6ff;
-  --red-alert: #f85149;
-  --light-grey: #8b949e;
-  --border: #30363d;
+  --bg: #000000;          /* Tiszta fekete */
+  --card-bg: #000000;     /* A kártya is fekete, csak a keret látszik */
+  --text: #FFFFFF;        /* Vakító fehér */
+  --accent: #00FFFF;      /* Neon Cyan (a sötétkék helyett) */
+  --red-alert: #FF3B30;   /* Élénk neonpiros */
+  --light-grey: #D1D1D6;  /* Világos ezüst (a mélyszürke helyett) */
+  --border: #FFFFFF;      /* Vastag fehér keret */
+  --safe-green: #32D74B;  /* Neon zöld a szabad helyeknek */
 }
 
 body {
-  /* Szűkebb betűkészlet használata */
   font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
   background-color: var(--bg);
   color: var(--text);
   margin: 0;
-  padding: 0;
   -webkit-font-smoothing: antialiased;
 }
 
 .wrap {
   max-width: 600px;
   margin: 0 auto;
-  /* Safe area a notch miatt, de minimális paddinggel */
-  padding: calc(env(safe-area-inset-top) + 8px) 12px 10px 12px;
+  padding: calc(env(safe-area-inset-top) + 10px) 12px 10px 12px;
 }
 
-/* KOMPAKT FEJLÉC */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* Egymás mellé, nem alá-fölé */
-  margin-bottom: 12px;
+  margin-bottom: 15px;
+  border-bottom: 3px solid var(--text); /* Nagyon erős elválasztó */
+  padding-bottom: 10px;
 }
 
 h1 {
-  font-size: 1.1rem;
-  /* Kisebb főcím */
-  margin: 0;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: 1px;
 }
 
 .status-bar {
   display: flex;
-  gap: 6px;
-  margin-top: 2px;
-  font-size: 0.7rem;
-  /* Nagyon kompakt szöveg */
-  font-weight: 700;
-  text-transform: uppercase;
+  gap: 10px;
+  font-size: 0.8rem;
+  font-weight: 900;
 }
+
+#data-age { color: var(--red-alert); }
+#system-time { color: var(--accent); } /* Cyan, sokkal jobban látszik mint a kék */
 
 button {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  color: #f0f6fc;
-  padding: 4px 10px;
-  /* Kisebb gomb */
-  border-radius: 5px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  background: var(--text);
+  border: none;
+  color: #000000;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-weight: 900;
+  font-size: 0.8rem;
 }
 
-/* KOMPAKT KÁRTYÁK */
 main {
   display: grid;
-  gap: 6px;
-  /* Minimális távolság a kártyák között */
+  gap: 10px;
 }
 
 .card {
   background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 8px 12px;
-  /* Szűk belső margó */
-  border-top-width: 3px;
-}
-
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 4px;
+  border: 2px solid var(--border); /* Erős fehér keret minden kártya köré */
+  border-radius: 4px;
+  padding: 12px;
 }
 
 .label {
-  font-weight: 700;
-  font-size: 0.9rem;
-  /* Kisebb, de vastag betű */
-  color: #f0f6fc;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  /* Ne törje meg a sort */
-  max-width: 65%;
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: var(--text);
+  text-transform: uppercase;
 }
 
 .numbers {
-  font-size: 0.95rem;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--text);
 }
 
-.count {
-  font-weight: 800;
-}
-
-.total {
-  font-size: 0.75rem;
-  opacity: 0.5;
-}
-
-/* MINI PROGRESS BAR */
-.bar-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 2px;
-}
-
+/* PROGRESS BAR - Maximális láthatóság */
 .bar {
-  height: 6px;
-  /* Vékonyabb csík */
-  background: #30363d;
-  border-radius: 3px;
-  flex-grow: 1;
+  height: 12px;
+  background: #333333;
+  border: 2px solid var(--text); /* Fehér keret a csíknak is */
+  border-radius: 6px;
+  margin: 8px 0;
+}
+
+/* A színeket a builder.js-ben felülbíráljuk, 
+   de itt a neon zöld az alapértelmezett */
+.fill {
+  height: 100%;
+  background-color: var(--safe-green);
 }
 
 .pct {
-  font-size: 0.7rem;
-  font-weight: 800;
-  min-width: 25px;
+  font-weight: 900;
+  font-size: 0.9rem;
+  color: var(--text);
 }
 
 .card-meta {
-  font-size: 0.6rem;
-  /* Apró meta infó */
-  opacity: 0.4;
-  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text);
+  text-transform: uppercase;
+  margin-top: 4px;
 }
