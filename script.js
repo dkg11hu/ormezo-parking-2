@@ -1,38 +1,37 @@
-function updateSystemTime() {
-    const systemTimeEl = document.getElementById('system-time');
-    if (systemTimeEl) {
-        systemTimeEl.textContent = new Date().toLocaleTimeString('hu-HU', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
+function updateClocks() {
+    const now = new Date();
+    
+    // 1. Rendszeridő (Világosszürke)
+    const sysEl = document.getElementById('system-time');
+    if (sysEl) {
+        sysEl.textContent = `Rendszeridő: ${now.toLocaleTimeString('hu-HU')}`;
+    }
+
+    // 2. Jelentés kora (Piros)
+    const ageEl = document.getElementById('data-age');
+    if (ageEl) {
+        const genStr = ageEl.getAttribute('data-generated');
+        if (genStr) {
+            // Manuális darabolás a Safari kedvéért: "2025-12-18 19:38:56"
+            const t = genStr.split(/[- :]/);
+            // JS Date hónapok 0-tól indulnak, ezért t[1]-1
+            const genDate = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+            
+            const diffSec = Math.max(0, Math.floor((now - genDate) / 1000));
+            const h = Math.floor(diffSec / 3600);
+            const m = Math.floor((diffSec % 3600) / 60);
+            const s = diffSec % 60;
+
+            const timeStr = [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
+            ageEl.textContent = `Jelentés: ${timeStr} idővel ezelőttről`;
+        }
     }
 }
 
-// Oldal automatikus újratöltése (pl. 5 percenként)
-// Mivel a Builder már "beégette" az adatokat az index.html-be, 
-// a reload fogja lehúzni a GitHub Actions által generált legfrissebb változatot.
-function setupAutoRefresh(minutes = 5) {
-    setInterval(() => {
-        // Csak akkor frissít, ha a lap látható (kíméli az akkut)
-        if (!document.hidden) {
-            location.reload();
-        }
-    }, minutes * 60 * 1000);
-}
+setInterval(updateClocks, 1000);
+updateClocks();
 
-// Manuális frissítés gomb kezelése
-const refreshBtn = document.getElementById('refreshBtn');
-if (refreshBtn) {
-    refreshBtn.addEventListener('click', () => {
-        // Vizuális visszajelzés
-        refreshBtn.style.opacity = "0.5";
-        refreshBtn.textContent = "Töltés...";
-        location.reload();
-    });
-}
-
-// Indítás
-updateSystemTime();
-setInterval(updateSystemTime, 1000); // Rendszeridő frissítése félpercenként
-setupAutoRefresh(5); // Új build ellenőrzése 5 percenként
+document.getElementById('refreshBtn')?.addEventListener('click', function() {
+    this.textContent = "Töltés...";
+    location.reload();
+});

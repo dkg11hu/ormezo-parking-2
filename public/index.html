@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="300">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>P+R Budapest</title>
   <link rel="stylesheet" href="style.css">
@@ -12,9 +11,13 @@
 <body>
   <div class="wrap">
     <header>
-      <div>
+      <div class="brand">
         <h1>P+R <span class="accent">Status</span></h1>
-        <div id="report-date" class="meta">Adatok: 2025. 12. 18. 18:57:21</div>
+        <div class="status-bar">
+          <span id="data-age" data-generated="2025. 12. 18. 19:23:23">Adatok: számolás...</span>
+          <span class="separator">|</span>
+          <span id="system-time">--:--:--</span>
+        </div>
       </div>
       <button id="refreshBtn">Frissítés</button>
     </header>
@@ -25,15 +28,15 @@
             <div class="card-top">
                 <div class="label">Őrmező P1 P+R parkoló</div>
                 <div class="numbers">
-                    <span class="count" style="color: #3fb950">219</span>
+                    <span class="count" style="color: #3fb950">238</span>
                     <span class="total">/ 485</span>
                 </div>
             </div>
             <div class="bar-container">
-                <div class="bar"><div class="fill" style="width:55%; background-color:#3fb950"></div></div>
-                <div class="pct">55%</div>
+                <div class="bar"><div class="fill" style="width:51%; background-color:#3fb950"></div></div>
+                <div class="pct">51%</div>
             </div>
-            <div class="card-meta">Frissítve: 2 perce</div>
+            <div class="card-meta">Frissítve: 3 perce</div>
         </article>
     </a>
     <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P131" target="_blank" class="parking-card-link">
@@ -41,15 +44,15 @@
             <div class="card-top">
                 <div class="label">Őrmező P2 P+R parkoló</div>
                 <div class="numbers">
-                    <span class="count" style="color: #3fb950">171</span>
+                    <span class="count" style="color: #3fb950">191</span>
                     <span class="total">/ 500</span>
                 </div>
             </div>
             <div class="bar-container">
-                <div class="bar"><div class="fill" style="width:66%; background-color:#3fb950"></div></div>
-                <div class="pct">66%</div>
+                <div class="bar"><div class="fill" style="width:62%; background-color:#3fb950"></div></div>
+                <div class="pct">62%</div>
             </div>
-            <div class="card-meta">Frissítve: 2 perce</div>
+            <div class="card-meta">Frissítve: 3 perce</div>
         </article>
     </a>
     <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P111" target="_blank" class="parking-card-link">
@@ -57,37 +60,33 @@
             <div class="card-top">
                 <div class="label">Etele P2 P+R parkoló</div>
                 <div class="numbers">
-                    <span class="count" style="color: #3fb950">87</span>
+                    <span class="count" style="color: #3fb950">92</span>
                     <span class="total">/ 221</span>
                 </div>
             </div>
             <div class="bar-container">
-                <div class="bar"><div class="fill" style="width:61%; background-color:#3fb950"></div></div>
-                <div class="pct">61%</div>
+                <div class="bar"><div class="fill" style="width:58%; background-color:#3fb950"></div></div>
+                <div class="pct">58%</div>
             </div>
-            <div class="card-meta">Frissítve: 2 perce</div>
+            <div class="card-meta">Frissítve: 3 perce</div>
         </article>
     </a>
     <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P101" target="_blank" class="parking-card-link">
-        <article class="card" style="border-top: 3px solid #d29922">
+        <article class="card" style="border-top: 3px solid #3fb950">
             <div class="card-top">
                 <div class="label">Etele P1 P+R parkoló</div>
                 <div class="numbers">
-                    <span class="count" style="color: #d29922">69</span>
+                    <span class="count" style="color: #3fb950">79</span>
                     <span class="total">/ 247</span>
                 </div>
             </div>
             <div class="bar-container">
-                <div class="bar"><div class="fill" style="width:72%; background-color:#d29922"></div></div>
-                <div class="pct">72%</div>
+                <div class="bar"><div class="fill" style="width:68%; background-color:#3fb950"></div></div>
+                <div class="pct">68%</div>
             </div>
-            <div class="card-meta">Frissítve: 2 perce</div>
+            <div class="card-meta">Frissítve: 3 perce</div>
         </article>
     </a></main>
-
-    <footer>
-      Rendszeridő: <span id="system-time">--:--</span>
-    </footer>
   </div>
   <script src="script.js"></script>
 </body>

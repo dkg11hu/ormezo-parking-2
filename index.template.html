@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="300">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>P+R Budapest</title>
   <link rel="stylesheet" href="style.css">
@@ -12,10 +11,11 @@
 <body>
   <div class="wrap">
     <header>
-      <div>
+      <div class="brand">
         <h1>P+R <span class="accent">Status</span></h1>
-        <div class="time-container">
-          <span id="data-age">Adatok: számolás...</span>
+        <div class="status-bar">
+          <span id="data-age" data-generated="">Adatok: --:--:-- -cel ezelőtt</span>
+          <span class="separator">|</span>
           <span id="system-time">--:--:--</span>
         </div>
       </div>
@@ -24,10 +24,6 @@
 
     <main id="list">
     </main>
-
-    <footer>
-      Rendszeridő: <span id="system-time">--:--</span>
-    </footer>
   </div>
   <script src="script.js"></script>
 </body>

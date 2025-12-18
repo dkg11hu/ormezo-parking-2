@@ -1,180 +1,163 @@
 :root {
   --bg: #0d1117;
-  --card: #161b22;
-  --border: #30363d;
-  --text-bright: #ffffff;
-  --text-normal: #c9d1d9;
-  --muted: #8b949e;
-  /* Standard GitHub-szerű tompa szürke */
+  --card-bg: #161b22;
+  --text: #adbac7;
   --accent: #58a6ff;
-
-  /* JAVÍTÁS: Kontrasztosabb színek sötét módhoz */
-  --success: #4ade80;
-  /* Világos menta */
-  --warning: #fbbf24;
-  /* Élénk borostyán */
-  --danger: #ff6b6b;
-  /* Világos korall */
+  --red-alert: #f85149;
+  /* Adatok kora */
+  --light-grey: #8b949e;
+  /* Rendszeridő */
+  --border: #30363d;
 }
 
-html,
 body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
   margin: 0;
   padding: 0;
-  background: var(--bg);
-  color: var(--text-normal);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 .wrap {
-  max-width: 900px;
+  max-width: 600px;
   margin: 0 auto;
-  /* iPhone safe area kezelés */
-  padding: env(safe-area-inset-top, 20px) 16px env(safe-area-inset-bottom, 20px) 16px;
+  padding: 20px;
 }
 
+/* FEJLÉC */
 header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 24px;
+  align-items: center;
+  margin-bottom: 25px;
 }
 
 h1 {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   margin: 0;
-  color: var(--text-bright);
-  letter-spacing: -0.5px;
+  font-weight: 800;
+  color: #f0f6fc;
 }
 
-.meta {
+.accent {
   color: var(--accent);
-  font-size: 0.85rem;
-  margin-top: 4px;
-  font-weight: 500;
 }
 
-/* GRID: Mobilon egymás alatt, tájképen/tableten egymás mellett */
+.status-bar {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+#data-age {
+  color: var(--red-alert);
+}
+
+#system-time {
+  color: var(--light-grey);
+}
+
+.separator {
+  color: var(--border);
+}
+
+/* GOMB */
+button {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* KÁRTYÁK */
 main {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-@media (min-width: 600px) {
-  main {
-    grid-template-columns: 1fr 1fr;
-  }
+  gap: 15px;
 }
 
 .parking-card-link {
   text-decoration: none;
-  display: block;
   color: inherit;
+  display: block;
 }
 
 .card {
-  background: var(--card);
+  background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  /* Finom árnyék a mélységért */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: transform 0.1s ease, border-color 0.2s ease;
+  border-radius: 8px;
+  padding: 16px;
+  transition: transform 0.1s;
 }
 
 .card:active {
-  transform: scale(0.97);
-  border-color: var(--accent);
+  transform: scale(0.98);
 }
 
 .card-top {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: flex-start;
+  margin-bottom: 12px;
 }
 
 .label {
-  color: var(--text-bright);
   font-weight: 700;
   font-size: 1.1rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #f0f6fc;
+  max-width: 70%;
+}
+
+.numbers {
+  text-align: right;
 }
 
 .count {
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  /* A színt a builder.js adja majd inline stílusként */
 }
 
 .total {
   font-size: 0.9rem;
-  color: var(--muted);
-  font-weight: 400;
+  opacity: 0.6;
   margin-left: 4px;
 }
 
+/* PROGRESS BAR */
 .bar-container {
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-bottom: 8px;
 }
 
 .bar {
-  background: #000;
-  height: 10px;
-  flex: 1;
-  border-radius: 5px;
+  flex-grow: 1;
+  height: 8px;
+  background: #30363d;
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .fill {
   height: 100%;
-  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 4px;
+  transition: width 0.5s ease-in-out;
 }
 
 .pct {
-  font-size: 0.9rem;
-  color: var(--text-normal);
-  min-width: 40px;
-  text-align: right;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 700;
+  min-width: 35px;
 }
 
 .card-meta {
-  font-size: 0.8rem;
-  color: var(--muted);
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-button {
-  background: #21262d;
-  color: var(--text-bright);
-  border: 1px solid var(--border);
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: background 0.2s;
-}
-
-button:active {
-  background: #30363d;
-}
-
-footer {
-  margin-top: 40px;
-  text-align: center;
-  font-size: 0.8rem;
-  color: var(--muted);
-  padding-bottom: 40px;
+  font-size: 0.75rem;
+  opacity: 0.5;
+  text-align: right;
 }

@@ -38,21 +38,21 @@ try {
     </a>`;
     });
 
-    // BEILLESZTÉS: Most már az "id=list" és "id=report-date" helyekre szúrunk be
-    // A rawData.generatedAt-ot betesszük egy data attribútumba a JS-nek
+    // BEILLESZTÉS: Adatok beillesztése és a generatedAt átadása data-generated attribútumban
     const finalHtml = template
         .replace(/<main id="list">[\s\S]*?<\/main>/, `<main id="list">${cardsHtml}</main>`)
         .replace(/id="data-age"[^>]*>[\s\S]*?<\/span>/, `id="data-age" data-generated="${rawData.generatedAt}">Adatok: számolás...</span>`);
+
     fs.writeFileSync(outputPath, finalHtml, 'utf8');
 
-    // Assetek másolása
+    // Fájlok másolása a public mappába
     ['style.css', 'script.js'].forEach(file => {
         const src = path.join(__dirname, file);
         if (fs.existsSync(src)) fs.copyFileSync(src, path.join(outputDir, file));
     });
 
-    console.log('✨ Build sikeres! A public/index.html most már tartalmazza a kártyákat.');
+    console.log('✅ Build sikeres: public/index.html frissítve.');
 
 } catch (err) {
-    console.error('❌ Hiba:', err.message);
+    console.error('❌ Hiba a build során:', err.message);
 }
