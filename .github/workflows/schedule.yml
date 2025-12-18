@@ -31,12 +31,22 @@ jobs:
 
       - name: ⚙️ Setup Geckodriver
         run: |
-          GECKO_VER="v0.35.0"
-          URL="https://github.com/mozilla/geckodriver/releases/download/$GECKO_VER/geckodriver-$GECKO_VER-linux64.tar.gz"
+          # Direkt letöltési link a v0.35.0-hoz, ami nem változik
+          URL="https://github.com/mozilla/geckodriver/releases/download/v0.35.0/geckodriver-v0.35.0-linux64.tar.gz"
+          
+          echo "Letöltés: $URL"
+          
+          # A -L flag követi az átirányításokat, a -o pedig elmenti a fájlt
           curl -L -o geckodriver.tar.gz "$URL"
+          
+          # Kicsomagolás
           tar -xvzf geckodriver.tar.gz
+          
+          # Telepítés a PATH-ba
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
+          
+          # Takarítás
           rm geckodriver.tar.gz
 
       - name: ⚙️ Install dependencies
