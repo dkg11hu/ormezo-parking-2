@@ -41,6 +41,17 @@ header {
   margin-bottom: 24px;
 }
 
+#data-age {
+  color: #adbac7;
+  /* Halványabb szürke */
+}
+
+#system-time {
+  color: #539bf5;
+  /* Kék szín a ketyegő órának */
+  font-weight: 500;
+}
+
 h1 {
   font-size: 1.5rem;
   margin: 0;

@@ -39,10 +39,10 @@ try {
     });
 
     // BEILLESZTÉS: Most már az "id=list" és "id=report-date" helyekre szúrunk be
+    // A rawData.generatedAt-ot betesszük egy data attribútumba a JS-nek
     const finalHtml = template
         .replace(/<main id="list">[\s\S]*?<\/main>/, `<main id="list">${cardsHtml}</main>`)
-        .replace(/id="report-date"[^>]*>[\s\S]*?<\/div>/, `id="report-date" class="meta">Adatok: ${rawData.generatedAt}</div>`);
-
+        .replace(/id="data-age"[^>]*>[\s\S]*?<\/span>/, `id="data-age" data-generated="${rawData.generatedAt}">Adatok: számolás...</span>`);
     fs.writeFileSync(outputPath, finalHtml, 'utf8');
 
     // Assetek másolása
