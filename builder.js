@@ -1,29 +1,18 @@
 const fs = require('fs');
 const path = require('path');
 
-// 1. ELÉRÉSI UTAK (Gyökérben keressük a forrást, public-ba írunk)
 const templatePath = path.join(__dirname, 'index.template.html');
-const dataPath = path.join(__dirname, 'parking-status.json'); // Itt kell lennie a forrásnak
+const dataPath = path.join(__dirname, 'parking-status.json');
 const outputDir = path.join(__dirname, 'public');
 const outputPath = path.join(outputDir, 'index.html');
 
 try {
-    // 2. ADATOK BEOLVASÁSA (Még a takarítás előtt!)
-    if (!fs.existsSync(dataPath)) {
-        throw new Error(`A ${dataPath} nem található! Futtasd le az extractor.js-t, és ellenőrizd, hogy a gyökérbe ment-e.`);
-    }
-
     const rawData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
     const template = fs.readFileSync(templatePath, 'utf8');
-    const parkingList = rawData.parkings || (Array.isArray(rawData) ? rawData : []);
+    const parkingList = rawData.parkings || [];
 
-    // 3. CLEANUP: Csak most ürítjük a public mappát, mert már megvannak az adatok a memóriában
-    if (fs.existsSync(outputDir)) {
-        fs.rmSync(outputDir, { recursive: true, force: true });
-    }
-    fs.mkdirSync(outputDir, { recursive: true });
+    if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
 
-    // 4. HTML GENERÁLÁS (Beégetett adatokkal)
     let cardsHtml = '';
     parkingList.sort((a, b) => b.free - a.free).forEach(p => {
         const percent = Math.round(((p.total - p.free) / p.total) * 100);
@@ -41,9 +30,7 @@ try {
                 </div>
             </div>
             <div class="bar-container">
-                <div class="bar">
-                    <div class="fill" style="width:${percent}%; background-color:${color}"></div>
-                </div>
+                <div class="bar"><div class="fill" style="width:${percent}%; background-color:${color}"></div></div>
                 <div class="pct">${percent}%</div>
             </div>
             <div class="card-meta">Frissítve: ${timeStr}</div>
@@ -51,27 +38,21 @@ try {
     </a>`;
     });
 
-    // 5. BEILLESZTÉS ÉS MENTÉS
+    // BEILLESZTÉS: Most már az "id=list" és "id=report-date" helyekre szúrunk be
     const finalHtml = template
         .replace(/<main id="list">[\s\S]*?<\/main>/, `<main id="list">${cardsHtml}</main>`)
-        .replace(/id="report-date"[^>]*>[\s\S]*?<\/div>/, `id="report-date" class="meta">Frissítve: ${rawData.generatedAt || new Date().toLocaleString('hu-HU')}</div>`);
+        .replace(/id="report-date"[^>]*>[\s\S]*?<\/div>/, `id="report-date" class="meta">Adatok: ${rawData.generatedAt}</div>`);
 
     fs.writeFileSync(outputPath, finalHtml, 'utf8');
-    console.log('✅ index.html kész.');
 
-    // 6. ASSETEK MÁSOLÁSA (Saved Information szabály alapján)
-    ['style.css', 'script.js', 'favicon.ico'].forEach(file => {
+    // Assetek másolása
+    ['style.css', 'script.js'].forEach(file => {
         const src = path.join(__dirname, file);
-        const dest = path.join(outputDir, file);
-        if (fs.existsSync(src)) {
-            fs.copyFileSync(src, dest);
-            console.log(`📋 Másolva: ${file}`);
-        }
+        if (fs.existsSync(src)) fs.copyFileSync(src, path.join(outputDir, file));
     });
 
-    console.log('✨ Build sikeres a public mappában.');
+    console.log('✨ Build sikeres! A public/index.html most már tartalmazza a kártyákat.');
 
 } catch (err) {
-    console.error('❌ Build hiba:', err.message);
-    process.exit(1);
+    console.error('❌ Hiba:', err.message);
 }

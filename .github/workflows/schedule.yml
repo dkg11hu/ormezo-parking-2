@@ -31,13 +31,8 @@ jobs:
 
       - name: ⚙️ Setup Geckodriver
         run: |
-          # Fix verziót használunk, hogy elkerüljük az API parsing hibákat
           GECKO_VER="v0.35.0"
           URL="https://github.com/mozilla/geckodriver/releases/download/$GECKO_VER/geckodriver-$GECKO_VER-linux64.tar.gz"
-          
-          echo "Downloading: $URL"
-          
-          # Letöltés és kicsomagolás
           curl -L -o geckodriver.tar.gz "$URL"
           tar -xvzf geckodriver.tar.gz
           chmod +x geckodriver
