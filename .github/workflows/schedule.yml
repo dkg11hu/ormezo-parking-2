@@ -31,10 +31,15 @@ jobs:
 
       - name: ⚙️ Setup Geckodriver
         run: |
-          # Ez a sor pontosan megkeresi a linux64-es tar.gz URL-jét a legfrissebb release-ben
-          LATEST_URL=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "browser_download_url.*linux64.tar.gz" | cut -d '"' -f 4)
-          echo "Downloading from: $LATEST_URL"
+          # 1. Lekérjük a legfrissebb release adatait és kiszűrjük a konkrét letöltési linket
+          LATEST_URL=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "browser_download_url" | grep "linux64.tar.gz" | cut -d '"' -f 4 | head -n 1)
+          
+          echo "Végleges letöltési link: $LATEST_URL"
+          
+          # 2. Letöltés (a -L követi az átirányításokat)
           curl -L -o geckodriver.tar.gz "$LATEST_URL"
+          
+          # 3. Kicsomagolás és telepítés
           tar -xvzf geckodriver.tar.gz
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
