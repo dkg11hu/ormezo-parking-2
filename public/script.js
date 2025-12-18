@@ -1,62 +1,37 @@
-async function updateDashboard() {
-    const refreshBtn = document.getElementById('refreshBtn');
-    const refreshIcon = refreshBtn.querySelector('.material-icons');
-    refreshIcon.classList.add('spin');
+async function refreshParkingStatus() {
+    // Rendszeridő frissítése (mindig lefut)
+    const systemTimeEl = document.getElementById('system-time');
+    if (systemTimeEl) {
+        systemTimeEl.textContent = new Date().toLocaleTimeString('hu-HU', {
+            hour: '2-digit', minute: '2-digit'
+        });
+    }
 
     try {
-        // A builder.js által létrehozott aktuális JSON fájl lekérése
-        const response = await fetch('parking-status.json');
+        // JAVÍTÁS: Nem 'public/parking-status.json', mert már a public-ban vagyunk!
+        const response = await fetch(`parking-status.json?ts=${Date.now()}`);
+
+        if (!response.ok) throw new Error('status JSON not found');
+
         const data = await response.json();
 
-        const listContainer = document.getElementById('list');
-        listContainer.innerHTML = '';
-
-        let totalMax = 0;
-        let totalFree = 0;
-        let latestUpdate = "";
-
-        data.forEach(p => {
-            const occupied = p.total - p.free;
-            const percent = Math.round((occupied / p.total) * 100);
-            const colorClass = percent > 90 ? 'bg-high' : (percent > 70 ? 'bg-med' : 'bg-low');
-
-            totalMax += p.total;
-            totalFree += p.free;
-            latestUpdate = p.updated;
-
-            listContainer.innerHTML += `
-        <div class="parking-card">
-          <div style="display:flex; justify-content:space-between; align-items:center">
-            <div style="font-weight:500">${p.label}</div>
-            <div style="text-align:right">
-              <span style="color:var(--green); font-weight:bold">${p.free}</span>
-              <span style="font-size:0.7rem; color:var(--text-muted)"> SZABAD</span>
-            </div>
-          </div>
-          <div class="status-track">
-            <div class="status-fill ${colorClass}" style="width: ${percent}%"></div>
-          </div>
-          <div style="font-size:0.7rem; margin-top:8px; color:var(--text-muted)">
-            Kapacitás: ${p.total} | Telítettség: ${percent}%
-          </div>
-        </div>
-      `;
-        });
-
-        // Összesített adatok számítása
-        const totalPercent = Math.round(((totalMax - totalFree) / totalMax) * 100);
-        document.getElementById('overall-percent').textContent = `${totalPercent}%`;
-        document.getElementById('status-fill').style.width = `${totalPercent}%`;
-        document.getElementById('status-fill').className = `status-fill ${totalPercent > 85 ? 'bg-high' : 'bg-low'}`;
-        document.getElementById('overall-note').textContent = `${totalFree} szabad hely összesen (${totalMax} férőhelyből).`;
-        document.getElementById('last-updated').textContent = `Frissítve: ${latestUpdate}`;
+        // Csak létező elemeket frissítünk (a cím alatti dátumot)
+        const reportDateEl = document.getElementById('report-date');
+        if (reportDateEl && data.generatedAt) {
+            reportDateEl.textContent = `Frissítve: ${data.generatedAt}`;
+        }
 
     } catch (error) {
-        console.error("Hiba az adatok frissítésekor:", error);
-    } finally {
-        setTimeout(() => refreshIcon.classList.remove('spin'), 600);
+        console.error('Hiba a JSON betöltésekor:', error);
     }
 }
 
-document.getElementById('refreshBtn').addEventListener('click', updateDashboard);
-window.addEventListener('DOMContentLoaded', updateDashboard);
+// Oldal újratöltése a frissítés gombra
+const refreshBtn = document.getElementById('refreshBtn');
+if (refreshBtn) {
+    refreshBtn.addEventListener('click', () => location.reload());
+}
+
+// Futtatás
+refreshParkingStatus();
+setInterval(refreshParkingStatus, 60000);

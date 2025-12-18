@@ -1,603 +1,102 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="hu">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ffffff" />
-  <title>P+R Parkoló Foglaltság</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Base layout */
-    :root {
-      --bg: #f7f7f8;
-      --card: #ffffff;
-      --muted: #6b7280;
-      --accent-start: #2ea44f;
-      --accent-end: #1b8f3a;
-      --gap: 12px;
-      --radius: 10px;
-      --max-width: 980px;
-    }
-
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-      background: var(--bg);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    .wrap {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 18px);
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color: #111827;
-      box-sizing: border-box;
-    }
-
-    /* Header */
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    header>div:first-child {
-      min-width: 0;
-    }
-
-    h1 {
-      font-size: 1.05rem;
-      margin: 0 0 6px 0;
-      line-height: 1.15;
-    }
-
-    .meta {
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    /* Controls */
-    #controls {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    button {
-      -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      background: #fff;
-      font-size: 0.95rem;
-      min-height: 44px;
-      min-width: 64px;
-      cursor: pointer;
-    }
-
-    button:active {
-      transform: translateY(1px);
-    }
-
-    .status {
-      font-size: 0.95rem;
-      color: #111827;
-      min-width: 56px;
-      text-align: center;
-      padding: 6px 8px;
-      background: transparent;
-      border-radius: 8px;
-    }
-
-    /* Main list (MODIFIED FOR GRID LAYOUT) */
-    main {
-      display: grid;
-      /* CHANGE: Use grid for better card layouts */
-      gap: 12px;
-      grid-template-columns: 1fr;
-      /* Default: Single column for mobile portrait */
-    }
-
-    /* Card Styles */
-    /* MODIFIED: .card can now be an <a> tag */
-    .card {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      padding: 12px;
-      border-radius: var(--radius);
-      background: var(--card);
-      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
-    }
-
-    .card[href] {
-      /* Style for clickable cards */
-      text-decoration: none;
-      color: inherit;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .card[href]:hover {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
-      transform: translateY(-2px);
-    }
-
-    .card .left {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .label {
-      font-weight: 600;
-      font-size: 0.98rem;
-      margin-bottom: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .bar-wrap {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .bar {
-      background: #eef2f4;
-      height: 12px;
-      width: 160px;
-      border-radius: 8px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-      transition: width 420ms cubic-bezier(.2, .8, .2, 1);
-      border-radius: 8px 0 0 8px;
-    }
-
-    .pct {
-      min-width: 56px;
-      text-align: right;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .numbers {
-      text-align: right;
-      min-width: 84px;
-      color: #111827;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: flex-end;
-    }
-
-    .count {
-      font-weight: 700;
-      font-size: 1rem;
-    }
-
-    .total {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .timestamp {
-      color: var(--muted);
-      font-size: 0.82rem;
-    }
-
-    footer {
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 0.9rem;
-      text-align: center;
-    }
-
-    /* Horizontal overall status bar (optional) */
-    .overall-status {
-      margin-bottom: 10px;
-    }
-
-    .status-track {
-      background: #f1f3f5;
-      border-radius: 8px;
-      height: 12px;
-      overflow: hidden;
-    }
-
-    .status-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
-      transition: width 600ms ease;
-      border-radius: 8px 0 0 8px;
-    }
-
-    /* --- RESPONSIVE MEDIA QUERIES (iPhone XS Landscape, Tablets, Desktop) --- */
-
-    /* iPhone XS portrait specific tweaks (375px width) */
-    @media (max-width: 420px) {
-      .wrap {
-        padding-left: 14px;
-        padding-right: 14px;
-      }
-
-      .bar {
-        width: 120px;
-      }
-
-      .numbers {
-        min-width: 72px;
-      }
-
-      h1 {
-        font-size: 1rem;
-      }
-
-      button {
-        padding: 10px 12px;
-        min-width: 56px;
-        font-size: 0.95rem;
-      }
-
-      .card {
-        padding: 10px;
-        border-radius: 12px;
-      }
-
-      .fill {
-        transition: width 300ms ease;
-      }
-    }
-
-    /* Landscape Mobile / Small Tablets (e.g., iPhone XS Landscape) */
-    @media (min-width: 600px) {
-      main {
-        grid-template-columns: repeat(2, 1fr);
-        /* Two columns */
-        gap: 20px;
-      }
-    }
-
-    /* Larger Tablets / Desktops */
-    @media (min-width: 900px) {
-      main {
-        grid-template-columns: repeat(3, 1fr);
-        /* Three columns */
-      }
-    }
-
-    /* Respect reduced motion */
-    @media (prefers-reduced-motion: reduce) {
-
-      .fill,
-      .status-fill {
-        transition: none !important;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>P+R Budapest</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div class="wrap" role="main">
+  <div class="wrap">
     <header>
       <div>
-        <h1>P+R Parkoló Foglaltság</h1>
-        <div class="meta" id="last-updated">Frissítve: —</div>
+        <h1>P+R <span class="accent">Status</span></h1>
+        <div id="report-date" class="meta">Frissítve: 2025. 12. 18. 17:56:26</div>
       </div>
-      <div id="controls">
-        <button id="refreshBtn" aria-label="Frissítés">Frissít</button>
-        <div class="status" id="status">—</div>
-      </div>
+      <button id="refreshBtn">Frissítés</button>
     </header>
 
-    <div class="overall-status" aria-hidden="false">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-        <strong style="font-size:0.95rem">Összesített kihasználtság</strong>
-        <div id="overall-percent" style="font-size:0.95rem;color:var(--muted)">—</div>
-      </div>
-      <div class="status-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
-        aria-labelledby="">
-        <div id="status-fill" class="status-fill" style="width:0%"></div>
-      </div>
-      <div id="overall-note" style="font-size:0.85rem;color:var(--muted);margin-top:6px"></div>
-    </div>
-
-    <main id="list" aria-live="polite">
-            <a href="undefined" target="_blank" class="parking-card" style="border-left: 4px solid #22c55e; text-decoration: none; display: block; margin-bottom: 12px; background: #1e293b; padding: 16px; border-radius: 8px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
-                    <span style="font-weight:600; color: #fff;">Őrmező P1 P+R parkoló</span>
-                    <span style="color:#22c55e; font-weight:bold;">383 szabad</span>
+    <main id="list">
+    <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P121" target="_blank" class="parking-card-link">
+        <article class="card" style="border-top: 3px solid #3fb950">
+            <div class="card-top">
+                <div class="label">Őrmező P1 P+R parkoló</div>
+                <div class="numbers">
+                    <span class="count" style="color: #3fb950">165</span>
+                    <span class="total">/ 485</span>
                 </div>
-                <div style="height:6px; background:#0f172a; border-radius:3px; overflow:hidden;">
-                    <div style="width:21%; height:100%; background:#22c55e; transition: width 0.5s;"></div>
+            </div>
+            <div class="bar-container">
+                <div class="bar">
+                    <div class="fill" style="width:66%; background-color:#3fb950"></div>
                 </div>
-                <div style="font-size:0.75rem; color:#94a3b8; margin-top:8px;">
-                    Kihasználtság: 21% | Kapacitás: 485
+                <div class="pct">66%</div>
+            </div>
+            <div class="card-meta">Frissítve: 2 perce</div>
+        </article>
+    </a>
+    <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P131" target="_blank" class="parking-card-link">
+        <article class="card" style="border-top: 3px solid #d29922">
+            <div class="card-top">
+                <div class="label">Őrmező P2 P+R parkoló</div>
+                <div class="numbers">
+                    <span class="count" style="color: #d29922">119</span>
+                    <span class="total">/ 500</span>
                 </div>
-            </a>
-        
-            <a href="undefined" target="_blank" class="parking-card" style="border-left: 4px solid #22c55e; text-decoration: none; display: block; margin-bottom: 12px; background: #1e293b; padding: 16px; border-radius: 8px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
-                    <span style="font-weight:600; color: #fff;">Őrmező P2 P+R parkoló</span>
-                    <span style="color:#22c55e; font-weight:bold;">398 szabad</span>
+            </div>
+            <div class="bar-container">
+                <div class="bar">
+                    <div class="fill" style="width:76%; background-color:#d29922"></div>
                 </div>
-                <div style="height:6px; background:#0f172a; border-radius:3px; overflow:hidden;">
-                    <div style="width:20%; height:100%; background:#22c55e; transition: width 0.5s;"></div>
+                <div class="pct">76%</div>
+            </div>
+            <div class="card-meta">Frissítve: 2 perce</div>
+        </article>
+    </a>
+    <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P111" target="_blank" class="parking-card-link">
+        <article class="card" style="border-top: 3px solid #d29922">
+            <div class="card-top">
+                <div class="label">Etele P2 P+R parkoló</div>
+                <div class="numbers">
+                    <span class="count" style="color: #d29922">63</span>
+                    <span class="total">/ 221</span>
                 </div>
-                <div style="font-size:0.75rem; color:#94a3b8; margin-top:8px;">
-                    Kihasználtság: 20% | Kapacitás: 500
+            </div>
+            <div class="bar-container">
+                <div class="bar">
+                    <div class="fill" style="width:71%; background-color:#d29922"></div>
                 </div>
-            </a>
-        
-            <a href="undefined" target="_blank" class="parking-card" style="border-left: 4px solid #22c55e; text-decoration: none; display: block; margin-bottom: 12px; background: #1e293b; padding: 16px; border-radius: 8px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
-                    <span style="font-weight:600; color: #fff;">Etele P1 P+R parkoló</span>
-                    <span style="color:#22c55e; font-weight:bold;">193 szabad</span>
+                <div class="pct">71%</div>
+            </div>
+            <div class="card-meta">Frissítve: 2 perce</div>
+        </article>
+    </a>
+    <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P101" target="_blank" class="parking-card-link">
+        <article class="card" style="border-top: 3px solid #d29922">
+            <div class="card-top">
+                <div class="label">Etele P1 P+R parkoló</div>
+                <div class="numbers">
+                    <span class="count" style="color: #d29922">48</span>
+                    <span class="total">/ 247</span>
                 </div>
-                <div style="height:6px; background:#0f172a; border-radius:3px; overflow:hidden;">
-                    <div style="width:22%; height:100%; background:#22c55e; transition: width 0.5s;"></div>
+            </div>
+            <div class="bar-container">
+                <div class="bar">
+                    <div class="fill" style="width:81%; background-color:#d29922"></div>
                 </div>
-                <div style="font-size:0.75rem; color:#94a3b8; margin-top:8px;">
-                    Kihasználtság: 22% | Kapacitás: 247
-                </div>
-            </a>
-        
-            <a href="undefined" target="_blank" class="parking-card" style="border-left: 4px solid #22c55e; text-decoration: none; display: block; margin-bottom: 12px; background: #1e293b; padding: 16px; border-radius: 8px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 10px;">
-                    <span style="font-weight:600; color: #fff;">Etele P2 P+R parkoló</span>
-                    <span style="color:#22c55e; font-weight:bold;">179 szabad</span>
-                </div>
-                <div style="height:6px; background:#0f172a; border-radius:3px; overflow:hidden;">
-                    <div style="width:19%; height:100%; background:#22c55e; transition: width 0.5s;"></div>
-                </div>
-                <div style="font-size:0.75rem; color:#94a3b8; margin-top:8px;">
-                    Kihasználtság: 19% | Kapacitás: 221
-                </div>
-            </a>
-        
-    </main>
+                <div class="pct">81%</div>
+            </div>
+            <div class="card-meta">Frissítve: 2 perce</div>
+        </article>
+    </a></main>
 
     <footer>
-      Az oldal automatikusan frissül. Ha nem látsz friss adatot, nyomd meg a Frissít gombot.
+      Rendszeridő: <span id="system-time">--:--</span>
     </footer>
   </div>
-
-  <script>
-    // Configuration
-    const LOCAL_JSON = '/public/parking-status.json';
-    const POLL_INTERVAL_MS = 30_000; // 30s
-    const FALLBACK_REFRESH_MS = 300_000; // 5min
-
-    // DOM refs
-    const list = document.getElementById('list');
-    const lastUpdated = document.getElementById('last-updated');
-    const status = document.getElementById('status');
-    const refreshBtn = document.getElementById('refreshBtn');
-    const overallPercent = document.getElementById('overall-percent');
-    const statusFill = document.getElementById('status-fill');
-    const overallNote = document.getElementById('overall-note');
-
-    // State
-    let lastJsonRaw = null;
-    let pollTimer = null;
-
-    // *** NEW HELPER: Relative Time Function ***
-    function timeAgo(dateString) {
-      if (!dateString) return 'Ismeretlen';
-
-      // Fix for cross-browser date parsing issue with yyyy-mm-dd hh:mm:ss format
-      const updateTime = new Date(dateString.replace(/-/g, "/"));
-      const diffMs = Date.now() - updateTime.getTime();
-
-      if (diffMs < 0) return 'Jövőbeli idő?';
-
-      const diffSeconds = Math.round(diffMs / 1000);
-      const diffMinutes = Math.round(diffSeconds / 60);
-      const diffHours = Math.round(diffMinutes / 60);
-
-      if (diffSeconds < 5) return 'Pillanatokkal ezelőtt';
-      if (diffMinutes < 60) return `${diffMinutes} perce`; // X minutes ago
-      if (diffHours < 24) return `${diffHours} órája`;     // X hours ago
-
-      // If older than 24 hours, return the original date
-      return dateString.substring(0, 10); // YYYY-MM-DD
-    }
-
-
-    // Helpers
-    function createCard(item) {
-      const pct = item.total ? (item.free / item.total * 100) : 0;
-
-      const hasUrl = item.url && item.url.startsWith('http');
-
-      // *** MODIFIED: Use 'a' tag for clickable card, 'article' otherwise ***
-      const card = document.createElement(hasUrl ? 'a' : 'article');
-      card.className = 'card';
-      if (hasUrl) {
-        card.href = item.url;
-        card.target = '_blank';
-        card.rel = 'noopener noreferrer';
-      }
-      card.setAttribute('role', hasUrl ? 'link' : 'article');
-
-      const left = document.createElement('div');
-      left.className = 'left';
-
-      const label = document.createElement('div');
-      label.className = 'label';
-      label.textContent = item.label;
-
-      const barWrap = document.createElement('div');
-      barWrap.className = 'bar-wrap';
-      const bar = document.createElement('div');
-      bar.className = 'bar';
-      const fill = document.createElement('div');
-      fill.className = 'fill';
-      fill.style.width = (item.total ? ((item.free / item.total) * 100) : 0) + '%';
-
-      const pctText = document.createElement('div');
-      pctText.className = 'pct';
-      pctText.textContent = (item.total ? ((item.free / item.total) * 100).toFixed(1) : '0.0') + '%';
-
-      bar.appendChild(fill);
-      barWrap.appendChild(bar);
-      barWrap.appendChild(pctText);
-
-      left.appendChild(label);
-      left.appendChild(barWrap);
-
-      const numbers = document.createElement('div');
-      numbers.className = 'numbers';
-      const count = document.createElement('div');
-      count.className = 'count';
-      count.textContent = item.free;
-      const total = document.createElement('div');
-      total.className = 'total';
-      total.textContent = '/' + item.total;
-
-      const ts = document.createElement('div');
-      ts.className = 'timestamp';
-      // *** MODIFIED: Use the timeAgo function for relative time ***
-      ts.textContent = timeAgo(item.updated);
-
-      numbers.appendChild(count);
-      numbers.appendChild(total);
-      numbers.appendChild(ts);
-
-      card.appendChild(left);
-      card.appendChild(numbers);
-
-      return card;
-    }
-
-    function render(data) {
-      data.sort((a, b) => (b.free || 0) - (a.free || 0));
-      list.innerHTML = '';
-      data.forEach(it => list.appendChild(createCard(it)));
-      // MODIFIED: Use timeAgo for the header timestamp as well
-      const latestUpdateTime = data[0]?.updated || new Date().toISOString();
-      lastUpdated.textContent = 'Frissítve: ' + timeAgo(latestUpdateTime) + ' (Feltöltve: ' + latestUpdateTime.substring(0, 16) + ')';
-      updateOverallStatus(data);
-    }
-
-    function updateOverallStatus(data) {
-      if (!Array.isArray(data) || data.length === 0) {
-        overallPercent.textContent = '—';
-        statusFill.style.width = '0%';
-        overallNote.textContent = '';
-        return;
-      }
-      let totalSpaces = 0, totalFree = 0;
-      for (const p of data) {
-        totalSpaces += Number(p.total) || 0;
-        totalFree += Number(p.free) || 0;
-      }
-      const occupied = Math.max(0, totalSpaces - totalFree);
-      const percent = totalSpaces > 0 ? Math.round((occupied / totalSpaces) * 100) : 0;
-      overallPercent.textContent = percent + '%';
-      statusFill.style.width = percent + '%';
-      const latest = data.reduce((a, b) => (a && a > (b.updated || '') ? a : (b.updated || '')), '');
-      overallNote.textContent = `Összes: ${totalSpaces} • Szabad: ${totalFree} • Foglalt: ${occupied} • Utolsó: ${timeAgo(latest) || 'ismeretlen'}`;
-    }
-
-    async function fetchJsonRaw(url) {
-      const res = await fetch(url, { cache: 'no-store' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const raw = await res.text();
-      let json;
-      try { json = JSON.parse(raw); } catch (e) { throw new Error('JSON parse error'); }
-      return { raw, json };
-    }
-
-    async function loadInitialFromLocal() {
-      status.textContent = 'Betöltés…';
-      refreshBtn.disabled = true;
-      try {
-        const { raw, json } = await fetchJsonRaw(LOCAL_JSON);
-        lastJsonRaw = raw;
-        if (!Array.isArray(json)) throw new Error('Váratlan formátum');
-        render(json);
-        status.textContent = 'OK';
-      } catch (err) {
-        console.error('initial load error', err);
-        status.textContent = 'Hiba';
-      } finally {
-        refreshBtn.disabled = false;
-      }
-    }
-
-    async function pollLocalJson() {
-      try {
-        const { raw, json } = await fetchJsonRaw(LOCAL_JSON + '?t=' + Date.now());
-        if (raw !== lastJsonRaw) {
-          lastJsonRaw = raw;
-          if (Array.isArray(json)) {
-            render(json);
-            status.textContent = 'OK';
-          }
-        }
-      } catch (err) {
-        console.error('poll error', err);
-        status.textContent = 'Hiba';
-      }
-    }
-
-    function startPolling() {
-      if (pollTimer) return;
-      pollLocalJson().catch(() => { });
-      pollTimer = setInterval(pollLocalJson, POLL_INTERVAL_MS);
-    }
-
-    async function manualRefresh() {
-      status.textContent = 'Frissítés…';
-      refreshBtn.disabled = true;
-      try {
-        const { raw, json } = await fetchJsonRaw(LOCAL_JSON + '?t=' + Date.now());
-        lastJsonRaw = raw;
-        if (Array.isArray(json)) {
-          render(json);
-          status.textContent = 'OK';
-        } else {
-          status.textContent = 'Hiba';
-        }
-      } catch (err) {
-        console.error('manual refresh error', err);
-        status.textContent = 'Hiba';
-      } finally {
-        refreshBtn.disabled = false;
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      await loadInitialFromLocal();
-      startPolling();
-      setInterval(manualRefresh, FALLBACK_REFRESH_MS);
-    });
-
-    refreshBtn.addEventListener('click', manualRefresh);
-
-    // touch pull-to-refresh
-    let touchStartY = 0;
-    window.addEventListener('touchstart', e => { if (window.scrollY === 0) touchStartY = e.touches[0].clientY; });
-    window.addEventListener('touchend', e => {
-      const dy = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY - touchStartY : 0;
-      if (dy > 80) manualRefresh();
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 
 </html>

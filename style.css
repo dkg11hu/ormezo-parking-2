@@ -1,80 +1,160 @@
-:root{
-  --bg:#f7f7f8;
-  --card:#ffffff;
-  --muted:#6b7280;
-  --accent-start:#2ea44f;
-  --accent-end:#1b8f3a;
-  --gap:12px;
-  --radius:10px;
-  --max-width:980px;
+:root {
+  --bg: #0d1117;
+  --card: #161b22;
+  --border: #30363d;
+  --text-bright: #ffffff;
+  --text-normal: #c9d1d9;
+  /* JAVÍTÁS: Világosabb, olvashatóbb szürke */
+  --muted: #acbac7;
+  --accent: #58a6ff;
+  --success: #3fb950;
 }
 
-/* Base */
-html,body{height:100%;margin:0;background:var(--bg);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-.wrap{max-width:var(--max-width);margin:0 auto;padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 18px);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;color:#111827;box-sizing:border-box}
-
-/* Header */
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
-header>div:first-child{min-width:0}
-h1{font-size:1.05rem;margin:0 0 6px 0;line-height:1.15}
-.meta{color:var(--muted);font-size:0.85rem}
-
-/* Controls */
-#controls{display:flex;gap:10px;align-items:center}
-button{-webkit-tap-highlight-color:rgba(0,0,0,0.05);padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);background:#fff;font-size:0.95rem;min-height:44px;min-width:64px;cursor:pointer}
-button:active{transform:translateY(1px)}
-.status{font-size:0.95rem;color:#111827;min-width:56px;text-align:center;padding:6px 8px;background:transparent;border-radius:8px}
-
-/* Main list */
-main{display:flex;flex-direction:column;gap:10px}
-.card{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;border-radius:var(--radius);background:var(--card);box-shadow:0 1px 0 rgba(0,0,0,0.04)}
-.card .left{flex:1;min-width:0}
-.label{font-weight:600;font-size:0.98rem;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar-wrap{display:flex;gap:8px;align-items:center}
-.bar{background:#eef2f4;height:12px;width:160px;border-radius:8px;overflow:hidden;flex-shrink:0}
-.fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent-start),var(--accent-end));transition:width 420ms cubic-bezier(.2,.8,.2,1);border-radius:8px 0 0 8px}
-.pct{min-width:56px;text-align:right;font-size:0.9rem;color:var(--muted)}
-
-.numbers{text-align:right;min-width:84px;color:#111827;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
-.count{font-weight:700;font-size:1rem}
-.total{color:var(--muted);font-size:0.9rem}
-.timestamp{color:var(--muted);font-size:0.82rem}
-
-footer{margin-top:14px;color:var(--muted);font-size:0.9rem;text-align:center}
-
-/* Overall status bar */
-.overall-status{margin-bottom:10px}
-.status-track{background:#f1f3f5;border-radius:8px;height:12px;overflow:hidden}
-.status-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent-start),var(--accent-end));transition:width 600ms ease;border-radius:8px 0 0 8px}
-
-/* iPhone XS portrait tweaks */
-@media (max-width:420px){
-  .wrap{padding-left:14px;padding-right:14px}
-  .bar{width:120px}
-  .numbers{min-width:72px}
-  h1{font-size:1rem}
-  button{padding:10px 12px;min-width:56px;font-size:0.95rem}
-  .card{padding:10px;border-radius:12px}
-  .fill{transition:width 300ms ease}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text-normal);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion:reduce){
-  .fill,.status-fill{transition:none!important}
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: env(safe-area-inset-top, 20px) calc(env(safe-area-inset-right) + 16px) env(safe-area-inset-bottom, 20px) calc(env(safe-area-inset-left) + 16px);
 }
 
-/* Overall summary styles */
-.overall-summary {
+header {
   display: flex;
-  gap: 1rem;
-  align-items: center;
-  font-weight: 600;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 20px;
 }
-.overall-summary .free { color: #1b8f3b; }   /* zöld */
-.overall-summary .occupied { color: #d32f2f; } /* piros */
-.overall-meta {
-  margin-top: 0.25rem;
-  color: #555;
+
+h1 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--text-bright);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.meta {
+  color: var(--accent);
+  font-size: 0.85rem;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* GRID LOGIKA */
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (orientation: landscape) {
+  main {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.parking-card-link {
+  text-decoration: none;
+  display: block;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.1s ease;
+}
+
+.card:active {
+  transform: scale(0.98);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.label {
+  color: var(--text-bright);
+  font-weight: 600;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
+.count {
+  color: var(--success);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.bar-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bar {
+  background: #000;
+  height: 8px;
+  flex: 1;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background: var(--success);
+  transition: width 0.6s ease-out;
+}
+
+.pct {
+  font-size: 0.85rem;
+  color: var(--muted);
+  min-width: 35px;
+  text-align: right;
+  font-weight: 500;
+}
+
+/* IDŐBÉLYEG JAVÍTÁSA */
+.card-meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: -4px;
+  /* Közelebb húzzuk a tartalomhoz */
   font-weight: 400;
-  font-size: 0.95rem;
+}
+
+button {
+  background: #21262d;
+  color: var(--text-bright);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+footer {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+  padding-bottom: 20px;
 }
