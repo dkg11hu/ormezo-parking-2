@@ -29,6 +29,12 @@ jobs:
       - name: 🦊 Setup Firefox
         uses: browser-actions/setup-firefox@v1
 
+      - name: ⚙️ Install UI Dependencies (Fix status 255)
+        # Ez a parancs feltelepíti az összes szükséges könyvtárat a Firefoxhoz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-0t64 libdbus-glib-1-2 libxt6t64 libx11-xcb1 libasound2t64 libpci3
+
       - name: ⚙️ Setup Geckodriver
         run: |
           # Direkt letöltési link a v0.35.0-hoz, ami nem változik
@@ -62,7 +68,13 @@ jobs:
         run: |
           # 1. HTML generálás (ez a builder.js a logjaid alapján már jól működik)
           node builder.js
-          
+
+      - name: 📂 Copy Assets to Public
+              run: |
+                cp script.js public/
+                cp style.css public/
+                cp index.html public/
+
       - name: 🚀 Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
