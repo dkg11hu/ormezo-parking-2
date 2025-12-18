@@ -1,37 +1,34 @@
-async function refreshParkingStatus() {
-    // Rendszeridő frissítése (mindig lefut)
+function updateSystemTime() {
     const systemTimeEl = document.getElementById('system-time');
     if (systemTimeEl) {
         systemTimeEl.textContent = new Date().toLocaleTimeString('hu-HU', {
-            hour: '2-digit', minute: '2-digit'
+            hour: '2-digit',
+            minute: '2-digit'
         });
     }
-
-    try {
-        // JAVÍTÁS: Nem 'public/parking-status.json', mert már a public-ban vagyunk!
-        const response = await fetch(`parking-status.json?ts=${Date.now()}`);
-
-        if (!response.ok) throw new Error('status JSON not found');
-
-        const data = await response.json();
-
-        // Csak létező elemeket frissítünk (a cím alatti dátumot)
-        const reportDateEl = document.getElementById('report-date');
-        if (reportDateEl && data.generatedAt) {
-            reportDateEl.textContent = `Frissítve: ${data.generatedAt}`;
-        }
-
-    } catch (error) {
-        console.error('Hiba a JSON betöltésekor:', error);
-    }
 }
 
-// Oldal újratöltése a frissítés gombra
+// Oldal automatikus újratöltése 5 percenként
+function setupAutoRefresh(minutes = 5) {
+    setInterval(() => {
+        // Csak akkor frissít, ha a lap látható (kíméli az akkut)
+        if (!document.hidden) {
+            location.reload();
+        }
+    }, minutes * 60 * 1000);
+}
+
+// Manuális frissítés gomb
 const refreshBtn = document.getElementById('refreshBtn');
 if (refreshBtn) {
-    refreshBtn.addEventListener('click', () => location.reload());
+    refreshBtn.addEventListener('click', () => {
+        refreshBtn.style.opacity = "0.5";
+        refreshBtn.textContent = "Frissítés...";
+        location.reload();
+    });
 }
 
-// Futtatás
-refreshParkingStatus();
-setInterval(refreshParkingStatus, 60000);
+// Indítás
+updateSystemTime();
+setInterval(updateSystemTime, 30000); // Félpercenkénti óra frissítés
+setupAutoRefresh(5);

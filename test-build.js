@@ -36,13 +36,17 @@ try {
     ];
 
     console.log("\n📂 A 'public' mappa ellenőrzése (GitHub Pages forrás):");
-    expectedOutputs.forEach(file => {
-        const filePath = path.join(__dirname, 'public', file);
-        if (!fs.existsSync(filePath)) {
-            throw new Error(`HIÁNYZIK A KIMENET: public/${file}`);
+    const requiredFiles = ['index.html', 'style.css', 'script.js']; // A JSON-t kivettük innen!
+
+    requiredFiles.forEach(file => {
+        const p = path.join(__dirname, 'public', file);
+        if (fs.existsSync(p)) {
+            const stats = fs.statSync(p);
+            console.log(` ✅ ${file} (${stats.size} bytes) - OK`);
+        } else {
+            console.error(` ❌ HIÁNYZIK: public/${file}`);
+            process.exit(1);
         }
-        const stats = fs.statSync(filePath);
-        console.log(` - ${file} (${stats.size} bytes) - OK`);
     });
 
     // 4. Kritikus tartalom ellenőrzés
