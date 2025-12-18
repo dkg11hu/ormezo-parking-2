@@ -30,29 +30,17 @@ jobs:
         uses: browser-actions/setup-firefox@v1
 
       - name: ⚙️ Install UI Dependencies (Fix status 255)
-        # Ez a parancs feltelepíti az összes szükséges könyvtárat a Firefoxhoz
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-0t64 libdbus-glib-1-2 libxt6t64 libx11-xcb1 libasound2t64 libpci3
 
       - name: ⚙️ Setup Geckodriver
         run: |
-          # Direkt letöltési link a v0.35.0-hoz, ami nem változik
           URL="https://github.com/mozilla/geckodriver/releases/download/v0.35.0/geckodriver-v0.35.0-linux64.tar.gz"
-          
-          echo "Letöltés: $URL"
-          
-          # A -L flag követi az átirányításokat, a -o pedig elmenti a fájlt
           curl -L -o geckodriver.tar.gz "$URL"
-          
-          # Kicsomagolás
           tar -xvzf geckodriver.tar.gz
-          
-          # Telepítés a PATH-ba
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
-          
-          # Takarítás
           rm geckodriver.tar.gz
 
       - name: ⚙️ Install dependencies
@@ -65,15 +53,13 @@ jobs:
         run: node extractor.js
 
       - name: 🏗️ Build HTML and Copy Assets
-        run: |
-          # 1. HTML generálás (ez a builder.js a logjaid alapján már jól működik)
-          node builder.js
+        run: node builder.js
 
       - name: 📂 Copy Assets to Public
-              run: |
-                cp script.js public/
-                cp style.css public/
-                cp index.html public/
+        run: |
+          cp script.js public/
+          cp style.css public/
+          cp index.html public/
 
       - name: 🚀 Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -83,4 +69,3 @@ jobs:
           publish_branch: gh-pages
           force_orphan: true
           commit_message: "chore(deploy): Automated update from main [skip ci]"
-          
