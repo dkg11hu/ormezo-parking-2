@@ -31,10 +31,10 @@ jobs:
 
       - name: ⚙️ Setup Geckodriver
         run: |
-          # A head -n 1 kiszűri a felesleges .asc fájlt az API válaszból
-          LATEST_URL=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "browser_download_url.*linux64.tar.gz" | cut -d '"' -f 4 | head -n 1)
+          # Ez a sor pontosan megkeresi a linux64-es tar.gz URL-jét a legfrissebb release-ben
+          LATEST_URL=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep "browser_download_url.*linux64.tar.gz" | cut -d '"' -f 4)
           echo "Downloading from: $LATEST_URL"
-          wget -O geckodriver.tar.gz "$LATEST_URL"
+          curl -L -o geckodriver.tar.gz "$LATEST_URL"
           tar -xvzf geckodriver.tar.gz
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
