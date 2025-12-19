@@ -1,12 +1,23 @@
 function updateClocks() {
     const now = new Date();
-    
+
+
+    // 0. Clear cache 
+    document.getElementById('refreshBtn')?.addEventListener('click', function () {
+        this.textContent = "Töltés...";
+        this.style.opacity = "0.5";
+
+        // Cache-busting: egy egyedi időbélyeget adunk az URL-hez, 
+        // így a Safari kénytelen a szerverről lekérni az újat.
+        const url = new URL(window.location.href);
+        url.searchParams.set('t', new Date().getTime());
+        window.location.href = url.toString();
+    });
     // 1. Rendszeridő (Világosszürke)
     const sysEl = document.getElementById('system-time');
     if (sysEl) {
         sysEl.textContent = `Rendszeridő: ${now.toLocaleTimeString('hu-HU')}`;
     }
-
     // 2. Jelentés kora (Piros)
     const ageEl = document.getElementById('data-age');
     if (ageEl) {
@@ -15,8 +26,8 @@ function updateClocks() {
             // Manuális darabolás a Safari kedvéért: "2025-12-18 19:38:56"
             const t = genStr.split(/[- :]/);
             // JS Date hónapok 0-tól indulnak, ezért t[1]-1
-            const genDate = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
-            
+            const genDate = new Date(t[0], t[1] - 1, t[2], t[3], t[4], t[5]);
+
             const diffSec = Math.max(0, Math.floor((now - genDate) / 1000));
             const h = Math.floor(diffSec / 3600);
             const m = Math.floor((diffSec % 3600) / 60);
@@ -31,7 +42,7 @@ function updateClocks() {
 setInterval(updateClocks, 1000);
 updateClocks();
 
-document.getElementById('refreshBtn')?.addEventListener('click', function() {
+document.getElementById('refreshBtn')?.addEventListener('click', function () {
     this.textContent = "Töltés...";
     location.reload();
 });
