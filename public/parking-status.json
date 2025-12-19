@@ -1,29 +1,33 @@
 {
-  "generatedAt": "2025-12-19T20:29:08.141Z",
+  "generatedAt": "2025-12-19T20:42:01.262Z",
   "parkings": [
     {
       "id": "p1",
       "label": "Őrmező P1 P+R parkoló",
-      "free": 290,
-      "total": 485
+      "free": 293,
+      "total": 485,
+      "url": "https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P121"
     },
     {
       "id": "p2",
       "label": "Őrmező P2 P+R parkoló",
-      "free": 246,
-      "total": 500
+      "free": 257,
+      "total": 500,
+      "url": "https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P131"
     },
     {
       "id": "p3",
       "label": "Etele P1 P+R parkoló",
-      "free": 125,
-      "total": 247
+      "free": 133,
+      "total": 247,
+      "url": "https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P101"
     },
     {
       "id": "p4",
       "label": "Etele P2 P+R parkoló",
       "free": 151,
-      "total": 221
+      "total": 221,
+      "url": "https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P111"
     }
   ]
 }

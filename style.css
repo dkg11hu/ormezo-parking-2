@@ -22,25 +22,30 @@ header {
   flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
-  /* Egy sorba teszi a két infót */
   align-items: center;
-  padding: 4px 8px;
+  padding: 8px 12px;
   margin-bottom: 5px;
-  border-bottom: 1px solid #222;
+  border-bottom: 2px solid #222;
+  background: #080808;
+  /* Enyhe kiemelés a háttérből */
 }
 
 #system-time {
-  font-size: 0.9rem;
-  /* Lezsugorítva */
-  font-weight: 800;
-  color: #2ecc71;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #666;
+  /* A pontos idő most másodlagos */
 }
 
+/* AZ IDŐBÉLYEG: Nagy, vastag és élénk kék/türkiz */
 #data-age {
-  font-size: 0.8rem;
-  /* Lezsugorítva */
-  color: #888;
-  font-weight: 400;
+  font-size: 1.2rem;
+  color: #00d4ff;
+  /* Élénk neon kék */
+  font-weight: 900;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+  /* Enyhe ragyogás */
 }
 
 #list {
@@ -65,6 +70,15 @@ header {
   position: relative;
   flex: 1;
   min-height: 0;
+
+  /* --- LINK SPECIFIKUS JAVÍTÁSOK --- */
+  text-decoration: none;
+  /* Nincs aláhúzás */
+  color: inherit;
+  /* Fehér marad a szöveg */
+  -webkit-tap-highlight-color: transparent;
+  /* Nincs szürke villanás iPhone-on */
+  cursor: pointer;
 }
 
 .card.status-ok {
@@ -96,6 +110,17 @@ header {
   color: #fff;
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+
+/* Enyhe vizuális visszajelzés, ha megnyomod a kártyát */
+.card:active {
+  background: #222;
+}
+
+/* Biztosítjuk, hogy a belső szövegek ne zavarják a kattintást */
+.card h2,
+.card .value {
+  pointer-events: none;
 }
 
 .progress-container {

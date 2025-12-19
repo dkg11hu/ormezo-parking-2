@@ -13,7 +13,6 @@ async function startDriver() {
     options.addArguments('--no-sandbox');
     options.addArguments('--disable-dev-shm-usage');
 
-    console.log('--- Driver konfigurálása ---');
     try {
         let builder = new Builder().forBrowser('firefox').setFirefoxOptions(options);
         let geckoPath = '';
@@ -27,7 +26,7 @@ async function startDriver() {
 
         return await builder.build();
     } catch (e) {
-        console.error('--- Driver indítási hiba ---');
+        console.error('--- Driver indítási hiba ---', e);
         throw e;
     }
 }
@@ -46,7 +45,8 @@ async function startDriver() {
         const huTime = now.toLocaleString("hu-HU", {
             timeZone: "Europe/Budapest",
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
+            second: '2-digit'
         });
 
         for (const entry of facilities) {
@@ -62,7 +62,8 @@ async function startDriver() {
                     id: entry.id,
                     label: entry.label,
                     free: free,
-                    total: Number(entry.maxLot)
+                    total: Number(entry.maxLot),
+                    url: entry.url // Itt veszi át a teljes URL-t a urls.json-ból
                 });
             } catch (err) {
                 console.error(`❌ Hiba (${entry.id}):`, err.message);
@@ -72,7 +73,7 @@ async function startDriver() {
         // 1. JSON mentése
         fs.writeFileSync(outPath, JSON.stringify({ generatedAt: isoTime, parkings: results }, null, 2));
 
-        // 2. HTML GENERÁLÁS (iPhone XS Dashboard Design)
+        // 2. HTML GENERÁLÁS
         const templatePath = path.join(__dirname, 'index.template.html');
         const targetHtmlPath = path.join(__dirname, 'index.html');
 
@@ -81,13 +82,12 @@ async function startDriver() {
 
             const cardsHtml = results.map(p => {
                 const percent = Math.round((p.free / p.total) * 100);
-                // Státusz meghatározása a korábbi logika szerint
                 let statusClass = 'status-ok';
                 if (p.free <= 10) statusClass = 'status-low';
                 else if (p.free <= 50) statusClass = 'status-warn';
 
                 return `
-        <div class="card ${statusClass}">
+        <a href="${p.url}" target="_blank" class="card ${statusClass}">
             <div class="card-content">
                 <h2>${p.label}</h2>
             </div>
@@ -95,12 +95,11 @@ async function startDriver() {
             <div class="progress-container">
                 <div class="progress-bar" style="width: ${Math.min(percent, 100)}%"></div>
             </div>
-        </div>`;
+        </a>`;
             }).join('\n');
 
-            // ID-k és tartalom beillesztése
+            // Beillesztés a sablonba
             html = html.replace('<main id="list">', `<main id="list">${cardsHtml}`);
-            html = html.replace('{{huTime}}', huTime); // Ha van ilyen placeholder
             html = html.replace(/id="system-time">.*?<\/div>/, `id="system-time">${huTime}</div>`);
             html = html.replace(/data-generated=".*?"/, `data-generated="${isoTime}"`);
 
@@ -114,7 +113,6 @@ async function startDriver() {
             const dest = path.join(outDir, file);
             if (fs.existsSync(src)) {
                 fs.copyFileSync(src, dest);
-                console.log(`- ${file} másolva a public mappába.`);
             }
         });
 
