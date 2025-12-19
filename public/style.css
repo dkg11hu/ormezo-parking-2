@@ -9,29 +9,30 @@ body {
   background-color: #000;
   color: #fff;
   padding: 4px;
-  /* Minimális külső keret */
   width: 100vw;
   height: 100dvh;
-  /* Dinamikus magasság Safarihoz */
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
+/* FEJLÉC - Több hely az első kártya felett */
 header {
   flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 8px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #222;
+  padding: 10px 12px;
+  /* Több függőleges hely */
+  margin-bottom: 12px;
+  /* Ez tolja el az első kártyát lefelé */
+  border-bottom: 1px solid #333;
 }
 
 #system-time {
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: 0.85rem;
   color: #666;
+  font-weight: 600;
 }
 
 #data-age {
@@ -41,27 +42,28 @@ header {
   text-transform: uppercase;
 }
 
+/* LISTA - Biztonságos távolság a fejléctől */
 #list {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  /* Extra szűk rés a kártyák között */
+  gap: 6px;
   flex: 1 1 auto;
   min-height: 0;
+  padding-top: 4px;
+  /* Extra belső távolság */
 }
 
 .card {
   background: #111;
-  border-radius: 6px;
-  padding: 0 12px;
-  border-left: 4px solid #333;
+  border-radius: 10px;
+  padding: 0 15px;
+  border-left: 6px solid #333;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   position: relative;
   flex: 1;
-  /* Ez kényszeríti ki, hogy egyenlően osszák el a helyet */
   min-height: 0;
   text-decoration: none;
   color: inherit;
@@ -80,31 +82,26 @@ header {
   border-left-color: #e74c3c;
 }
 
+/* SHINING WHITE NEVEK */
 .card h2 {
-  font-size: 1rem;
-  /* Nagyobb betűméret az egyensúlyért */
+  font-size: 1.1rem;
   color: #fff;
-  /* Tiszta fehér */
   text-transform: uppercase;
   font-weight: 800;
-  /* Vastag betűk */
-  letter-spacing: 0.5px;
   max-width: 45%;
   line-height: 1.1;
-  /* SHINING EFFECT: Finom fehér ragyogás a betűk körül */
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  /* Ragyogó effekt */
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .card .value {
-  font-size: 11vh;
-  /* Finomított méret, hogy a szövegnek több hely maradjon */
+  font-size: 10vh;
   font-weight: 900;
   line-height: 1;
-  letter-spacing: -3px;
+  letter-spacing: -2px;
   color: #fff;
   text-align: right;
   font-variant-numeric: tabular-nums;
-  /* A számok is kapnak egy kis mélységet */
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
@@ -113,7 +110,7 @@ header {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 3px;
+  height: 4px;
   background: #222;
 }
 

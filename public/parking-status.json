@@ -1,10 +1,17 @@
 {
-  "generatedAt": "2025-12-19T20:51:08.877Z",
+  "generatedAt": "2025-12-19T20:54:35.377Z",
   "parkings": [
+    {
+      "id": "p1",
+      "label": "Őrmező P1 P+R parkoló",
+      "free": 307,
+      "total": 485,
+      "url": "https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P121"
+    },
     {
       "id": "p2",
       "label": "Őrmező P2 P+R parkoló",
-      "free": 266,
+      "free": 270,
       "total": 500,
       "url": "https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P131"
     },
