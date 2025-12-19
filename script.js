@@ -7,24 +7,37 @@ function updateClocks() {
         sysEl.textContent = now.toLocaleTimeString('hu-HU');
     }
 
-    // 2. Jelentés kora - Stabilizált verzió
-    const ageEl = document.getElementById('data-age');
-    if (ageEl) {
-        const genStr = ageEl.getAttribute('data-generated');
-        if (genStr && genStr !== "---") {
-            const t = genStr.split(/[- :]/);
-            const genDate = new Date(t[0], t[1] - 1, t[2], t[3], t[4], t[5]);
+    // 2. HTML GENERÁLÁS ADATOKKAL
+    const templatePath = path.join(__dirname, 'index.template.html');
+    const targetHtmlPath = path.join(__dirname, 'index.html');
 
-            let diffSec = Math.floor((now - genDate) / 1000);
-            if (diffSec < 0) diffSec = 0;
+    if (fs.existsSync(templatePath)) {
+        let html = fs.readFileSync(templatePath, 'utf8');
 
-            const m = Math.floor(diffSec / 60);
-            const s = diffSec % 60;
+        // HTML kártyák összeállítása a results tömbből
+        const parkingCardsHtml = results.map(p => `
+        <div class="card">
+            <div class="card-header">
+            <span class="label">${p.label}</span>
+            <span class="spots">${p.free} / ${p.total}</span>
+            </div>
+            <div class="progress-bar">
+            <div class="progress" style="width: ${(p.free / p.total) * 100}%"></div>
+            </div>
+            <div class="card-footer">
+            <span>Frissítve: ${p.updated}</span>
+            </div>
+        </div>
+        `).join('');
 
-            ageEl.textContent = `Kora: ${m}p ${s}mp`;
-        } else {
-            ageEl.textContent = "Kora: --";
-        }
+        // A sablonban lévő <main id="list"></main> tartalmának kicserélése
+        html = html.replace('<main id="list">', `<main id="list">${parkingCardsHtml}`);
+
+        // A generálás idejének beírása a data-generated attribútumba (a script.js-nek)
+        html = html.replace('id="data-age" data-generated=""', `id="data-age" data-generated="${budapestTimeStr}"`);
+
+        fs.writeFileSync(targetHtmlPath, html);
+        console.log('✅ index.html legenerálva hardkódolt adatokkal.');
     }
 
     // 3. Kártyák frissítése
