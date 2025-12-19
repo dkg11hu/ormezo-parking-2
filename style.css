@@ -1,108 +1,120 @@
-/* style.css - iPhone XS Optimized (No Wrap) */
+/* style.css - iPhone XS Ultra-Compact & High Contrast */
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  font-family: -apple-system-headline, -apple-system, sans-serif !important;
-  font-stretch: condensed;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    font-family: -apple-system, sans-serif !important;
+    font-stretch: condensed;
 }
 
 body {
-  background-color: #000000;
-  color: #ffffff;
-  padding: env(safe-area-inset-top) 8px;
+    background-color: #000 !important;
+    /* MINDEN szöveg fehér, felülírva a builder.js sötét színeit */
+    color: #ffffff !important;
+    padding: env(safe-area-inset-top) 8px 10px 8px;
+    height: 100vh;
+}
+
+/* Minden szöveges elem kényszerített fehérítése */
+.label, .count, .total, .card-meta, .pct, h1 {
+    color: #ffffff !important; 
+    opacity: 1 !important; /* Maximális láthatóság */
+}
+
+.card-meta, .total {
+    opacity: 0.6 !important; /* Csak ezeknél hagyunk egy kis halványítást */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 4px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #333;
+}
+
+h1 { font-size: 0.9rem; font-weight: 400; text-transform: uppercase; }
+
+#refreshBtn {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
 }
 
 .card {
-  background: #121212;
-  border: 1px solid #333;
-  border-radius: 12px;
-  padding: 10px;
-  margin-bottom: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+    background: #111 !important;
+    border: 1px solid #333 !important;
+    border-radius: 8px;
+    padding: 6px 10px;
+    margin-bottom: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-/* 1. SOR: Név és Idő - Széthúzva a két szélre */
+/* Egy soros elrendezés a tömörségért */
 .card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    width: 100%;
 }
 
 .label {
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 65%;
-}
-
-.card-meta {
-  font-size: 0.7rem;
-  opacity: 0.6;
-  color: #fff;
-}
-
-/* 2. SOR: Számok és Százalék - Ez a "fő" adatsor */
-.numbers-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+    flex: 2;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .numbers {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
+    flex: 1.5;
+    display: flex;
+    justify-content: center;
+    gap: 3px;
 }
 
-.count {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #fff;
+.count { font-size: 1.1rem; font-weight: 700; }
+.total { font-size: 0.75rem; }
+
+.card-meta {
+    flex: 1;
+    text-align: right;
+    font-size: 0.65rem;
 }
 
-.total {
-  font-size: 0.85rem;
-  opacity: 0.5;
-  color: #fff;
+/* Csík szekció */
+.bar-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
+
+.bar {
+    flex: 1;
+    height: 5px;
+    background: #222 !important;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.fill { height: 100%; border-radius: 3px; }
+
+/* Csak a CSÍKOK kapnak színt, az Apple High-Contrast palettájából */
+.fill[style*="#3fb950"] { background-color: #30D158 !important; } /* Neon Zöld */
+.fill[style*="#e2b13c"] { background-color: #FF9F0A !important; } /* Neon Narancs */
+.fill[style*="#c53030"] { background-color: #FF453A !important; } /* Neon Piros */
 
 .pct {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #fff;
-}
-
-/* 3. SOR: Csík - Teljes szélességben, hogy ne szoruljon be */
-.bar {
-  width: 100%;
-  height: 8px;
-  background: #222;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.fill {
-  height: 100%;
-  border-radius: 4px;
-}
-
-/* Apple High-Contrast Színek */
-.fill[style*="#3fb950"] {
-  background-color: #30D158 !important;
-}
-
-.fill[style*="#e2b13c"] {
-  background-color: #FF9F0A !important;
-}
-
-.fill[style*="#c53030"] {
-  background-color: #FF453A !important;
+    font-size: 0.8rem;
+    font-weight: 700;
+    min-width: 30px;
+    text-align: right;
 }
