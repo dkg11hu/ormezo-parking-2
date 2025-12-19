@@ -1,125 +1,100 @@
-/* style.css - Ultra-High Contrast Vertical Layout */
+/* style.css - iPhone XS Optimized (No Wrap) */
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
-  font-family: -apple-system, sans-serif !important;
+  font-family: -apple-system-headline, -apple-system, sans-serif !important;
   font-stretch: condensed;
 }
 
 body {
   background-color: #000000;
   color: #ffffff;
-  padding: 15px 10px;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #333;
-  margin-bottom: 15px;
-}
-
-h1 {
-  font-size: 1.1rem;
-  font-weight: 300;
-  text-transform: uppercase;
-  color: #fff;
-}
-
-#refreshBtn {
-  background: #fff;
-  color: #000;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-weight: 700;
-  font-size: 0.75rem;
-}
-
-.parking-card-link {
-  text-decoration: none;
-  display: block;
-  margin-bottom: 10px;
+  padding: env(safe-area-inset-top) 8px;
 }
 
 .card {
   background: #121212;
   border: 1px solid #333;
   border-radius: 12px;
-  padding: 12px;
+  padding: 10px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-/* 1. SOR: Név (Bal) + Idő (Jobb) */
+/* 1. SOR: Név és Idő - Széthúzva a két szélre */
 .card-top {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 10px;
+  align-items: center;
 }
 
 .label {
-  font-size: 1rem;
-  font-weight: 300;
+  font-size: 0.95rem;
+  font-weight: 400;
   color: #fff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 70%;
+  max-width: 65%;
 }
 
 .card-meta {
   font-size: 0.7rem;
+  opacity: 0.6;
   color: #fff;
-  opacity: 0.7;
-  white-space: nowrap;
 }
 
-/* 2. SOR: Számok (Bal) + Csík (Közép) + Százalék (Jobb) */
-.bar-container {
+/* 2. SOR: Számok és Százalék - Ez a "fő" adatsor */
+.numbers-row {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .numbers {
   display: flex;
   align-items: baseline;
-  gap: 3px;
-  min-width: 70px;
-  /* Fix hely a számoknak, hogy ne ugráljon */
+  gap: 4px;
 }
 
 .count {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #fff;
 }
 
 .total {
-  font-size: 0.8rem;
-  opacity: 0.6;
+  font-size: 0.85rem;
+  opacity: 0.5;
   color: #fff;
 }
 
+.pct {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* 3. SOR: Csík - Teljes szélességben, hogy ne szoruljon be */
 .bar {
-  flex-grow: 1;
-  height: 10px;
+  width: 100%;
+  height: 8px;
   background: #222;
-  border-radius: 5px;
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .fill {
   height: 100%;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
-/* Apple High-Contrast Színek a csíkra */
+/* Apple High-Contrast Színek */
 .fill[style*="#3fb950"] {
   background-color: #30D158 !important;
 }
@@ -130,12 +105,4 @@ h1 {
 
 .fill[style*="#c53030"] {
   background-color: #FF453A !important;
-}
-
-.pct {
-  font-size: 0.9rem;
-  font-weight: 700;
-  min-width: 35px;
-  text-align: right;
-  color: #fff;
 }
