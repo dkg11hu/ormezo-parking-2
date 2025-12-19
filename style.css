@@ -1,4 +1,3 @@
-/* Alapbeállítások a rugalmassághoz */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,87 +5,91 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, system-ui, sans-serif;
   background-color: #121212;
   color: #ffffff;
   padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
+  width: 100%;
+  /* Megakadályozza a vízszintes csúszkálást */
+  overflow-x: hidden;
 }
 
 header {
   width: 100%;
-  max-width: 500px;
   text-align: center;
-  margin-bottom: 20px;
-  padding: 10px;
+  margin: 15px 0;
 }
 
-/* Dinamikus lista elrendezés */
+#system-time {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#data-age {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+/* Kártyák tárolója */
 #list {
-  display: grid;
-  grid-template-columns: 1fr;
-  /* Álló módban 1 oszlop */
-  gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   width: 100%;
-  max-width: 500px;
 }
 
-/* Fekvő mód (Landscape) vagy szélesebb kijelző esetén 2 oszlop */
-@media (min-width: 600px) or (orientation: landscape) {
+/* Fekvő mód: Ha elforgatod, 2 oszlopos lesz */
+@media (orientation: landscape) {
   #list {
+    display: grid;
     grid-template-columns: 1fr 1fr;
-    max-width: 900px;
   }
 }
 
 .card {
   background: #1e1e1e;
-  border-radius: 12px;
-  padding: 15px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 12px;
+  width: 100%;
+  /* Mindig kitölti a rendelkezésre álló helyet */
 }
 
 .card h2 {
-  font-size: 1.1rem;
-  margin-bottom: 8px;
+  font-size: 0.9rem;
   color: #aaa;
+  text-transform: uppercase;
 }
 
 .card .value {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: bold;
-  margin-bottom: 15px;
-  display: block;
+  margin: 8px 0;
 }
 
-/* A csík, ami nem takarja a számokat */
+/* Haladási sáv konténer */
 .progress-container {
   width: 100%;
-  height: 8px;
+  height: 10px;
   background: #333;
-  border-radius: 4px;
-  overflow: hidden;
+  border-radius: 5px;
 }
 
 .progress-bar {
   height: 100%;
-  transition: width 0.8s ease-in-out;
+  border-radius: 5px;
+  transition: width 0.5s ease;
 }
 
-/* Színek */
 .status-ok {
-  background-color: #4caf50;
+  background: #2ecc71;
 }
 
 .status-warn {
-  background-color: #ff9800;
+  background: #f1c40f;
 }
 
 .status-low {
-  background-color: #f44336;
+  background: #e74c3c;
 }
