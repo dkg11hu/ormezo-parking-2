@@ -8,77 +8,64 @@ body {
   font-family: -apple-system, system-ui, sans-serif;
   background-color: #000;
   color: #fff;
-  padding: 5px 8px;
-  /* Minimális padding */
+  padding: 4px;
+  /* Minimális külső keret */
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
+  /* Dinamikus magasság Safarihoz */
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-/* ULTRA-KOMPAKT FEJLÉC */
 header {
   flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  margin-bottom: 5px;
-  border-bottom: 2px solid #222;
-  background: #080808;
-  /* Enyhe kiemelés a háttérből */
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #222;
 }
 
 #system-time {
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: #666;
-  /* A pontos idő most másodlagos */
 }
 
-/* AZ IDŐBÉLYEG: Nagy, vastag és élénk kék/türkiz */
 #data-age {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #00d4ff;
-  /* Élénk neon kék */
   font-weight: 900;
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
-  /* Enyhe ragyogás */
 }
 
 #list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  /* Minimális rés */
+  gap: 3px;
+  /* Extra szűk rés a kártyák között */
   flex: 1 1 auto;
   min-height: 0;
 }
 
 .card {
   background: #111;
-  border-radius: 8px;
-  padding: 0 15px;
-  /* Függőleges padding 0, a flex intézi */
-  border-left: 5px solid #333;
+  border-radius: 6px;
+  padding: 0 12px;
+  border-left: 4px solid #333;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   position: relative;
   flex: 1;
+  /* Ez kényszeríti ki, hogy egyenlően osszák el a helyet */
   min-height: 0;
-
-  /* --- LINK SPECIFIKUS JAVÍTÁSOK --- */
   text-decoration: none;
-  /* Nincs aláhúzás */
   color: inherit;
-  /* Fehér marad a szöveg */
   -webkit-tap-highlight-color: transparent;
-  /* Nincs szürke villanás iPhone-on */
-  cursor: pointer;
 }
 
 .card.status-ok {
@@ -94,33 +81,31 @@ header {
 }
 
 .card h2 {
-  font-size: 0.85rem;
-  color: #bbb;
+  font-size: 1rem;
+  /* Nagyobb betűméret az egyensúlyért */
+  color: #fff;
+  /* Tiszta fehér */
   text-transform: uppercase;
   font-weight: 800;
+  /* Vastag betűk */
+  letter-spacing: 0.5px;
   max-width: 45%;
+  line-height: 1.1;
+  /* SHINING EFFECT: Finom fehér ragyogás a betűk körül */
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
 }
 
 .card .value {
-  font-size: 13vh;
-  /* Kicsit még növelhető a felszabadult hely miatt */
+  font-size: 11vh;
+  /* Finomított méret, hogy a szövegnek több hely maradjon */
   font-weight: 900;
   line-height: 1;
   letter-spacing: -3px;
   color: #fff;
   text-align: right;
   font-variant-numeric: tabular-nums;
-}
-
-/* Enyhe vizuális visszajelzés, ha megnyomod a kártyát */
-.card:active {
-  background: #222;
-}
-
-/* Biztosítjuk, hogy a belső szövegek ne zavarják a kattintást */
-.card h2,
-.card .value {
-  pointer-events: none;
+  /* A számok is kapnak egy kis mélységet */
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
 .progress-container {
@@ -128,13 +113,12 @@ header {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 4px;
+  height: 3px;
   background: #222;
 }
 
 .progress-bar {
   height: 100%;
-  transition: width 0.5s ease;
 }
 
 .status-ok .progress-bar {

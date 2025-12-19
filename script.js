@@ -25,11 +25,11 @@ function updateDataAge() {
     if (isNaN(diffSec)) return;
 
     if (diffSec < 60) {
-        ageEl.textContent = `Adatok: ${diffSec} mp-el ezelőtt`;
+        ageEl.textContent = `Adatok: ${diffSec} mp-cel ezelőtt`;
     } else {
         const mins = Math.floor(diffSec / 60);
         const secs = diffSec % 60;
-        ageEl.textContent = `Adatok: ${mins}p ${secs}mp-el ezelőtt`;
+        ageEl.textContent = `Adatok: ${mins}p ${secs}mp-cel ezelőtt`;
     }
 }
 
@@ -55,7 +55,7 @@ if (diffSec < 60) {
 } else {
     const mins = Math.floor(diffSec / 60);
     const secs = diffSec % 60;
-    ageEl.textContent = `Adatok: ${mins} perce, ${secs} mp-e frissültek`;
+    ageEl.textContent = `Adatok: ${mins} perc ${secs} mp-e frissültek`;
 }
 
 // Másodpercenként frissítjük a kijelzőt
