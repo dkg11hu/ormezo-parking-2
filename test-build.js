@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
 console.log("🚀 Lokális build és struktúra teszt indítása...");
 
@@ -8,7 +9,6 @@ try {
     // A szabályod szerint ezeknek a main ágon (gyökérben) kell lenniük
     const masterSources = [
         'extractor.js',
-        'builder.js',
         'index.template.html',
         'style.css',   // <--- Most már a gyökérben keressük
         'script.js'    // <--- Most már a gyökérben keressük
@@ -21,11 +21,8 @@ try {
     });
     console.log("✅ Master forrásfájlok a gyökérben rendben.");
 
-    // 2. Futtassuk a buildert
-    // A builder.js fogja legenerálni a HTML-t és ÁTMÁSOLNI a css/js fájlokat a public-ba
-    console.log("⏳ Builder futtatása...");
-    require('./builder.js');
-    console.log("✅ builder.js lefutott.");
+    // 2. Az extractor.js-t futtatjuk
+    execSync('node extractor.js');
 
     // 3. Ellenőrizzük a kimenetet a public mappában (Deployment ready állapot)
     const expectedOutputs = [

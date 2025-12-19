@@ -1,64 +1,65 @@
-function updateClocks() {
+function updateClock() {
+    const clockEl = document.getElementById('system-time');
+    if (!clockEl) return;
+
     const now = new Date();
-
-    // 1. Rendszeridő
-    const sysEl = document.getElementById('system-time');
-    if (sysEl) {
-        sysEl.textContent = now.toLocaleTimeString('hu-HU');
-    }
-
-    // 2. HTML GENERÁLÁS ADATOKKAL
-    const templatePath = path.join(__dirname, 'index.template.html');
-    const targetHtmlPath = path.join(__dirname, 'index.html');
-
-    if (fs.existsSync(templatePath)) {
-        let html = fs.readFileSync(templatePath, 'utf8');
-
-        // HTML kártyák összeállítása a results tömbből
-        const parkingCardsHtml = results.map(p => `
-        <div class="card">
-            <div class="card-header">
-            <span class="label">${p.label}</span>
-            <span class="spots">${p.free} / ${p.total}</span>
-            </div>
-            <div class="progress-bar">
-            <div class="progress" style="width: ${(p.free / p.total) * 100}%"></div>
-            </div>
-            <div class="card-footer">
-            <span>Frissítve: ${p.updated}</span>
-            </div>
-        </div>
-        `).join('');
-
-        // A sablonban lévő <main id="list"></main> tartalmának kicserélése
-        html = html.replace('<main id="list">', `<main id="list">${parkingCardsHtml}`);
-
-        // A generálás idejének beírása a data-generated attribútumba (a script.js-nek)
-        html = html.replace('id="data-age" data-generated=""', `id="data-age" data-generated="${budapestTimeStr}"`);
-
-        fs.writeFileSync(targetHtmlPath, html);
-        console.log('✅ index.html legenerálva hardkódolt adatokkal.');
-    }
-
-    // 3. Kártyák frissítése
-    document.querySelectorAll('.card-meta').forEach(meta => {
-        const cardGenStr = meta.getAttribute('data-generated') || (ageEl ? ageEl.getAttribute('data-generated') : null);
-        if (cardGenStr && cardGenStr !== "---") {
-            const t = cardGenStr.split(/[- :]/);
-            const cardDate = new Date(t[0], t[1] - 1, t[2], t[3], t[4], t[5]);
-            const diffMin = Math.floor((now - cardDate) / 60000);
-            meta.textContent = diffMin <= 0 ? "Frissítve: most" : `Frissítve: ${diffMin} perce`;
-        }
+    // Magyar formátum: 20:15:05
+    const timeStr = now.toLocaleTimeString('hu-HU', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
     });
+
+    clockEl.textContent = timeStr;
 }
 
-setInterval(updateClocks, 1000);
-updateClocks();
+// A korábbi adat-kor számláló függvényed mellé add be ezt is:
+function updateDataAge() {
+    const ageEl = document.getElementById('data-age');
+    if (!ageEl || !ageEl.getAttribute('data-generated')) return;
 
-// Frissítés gomb cache-kerüléssel
-document.getElementById('refreshBtn')?.addEventListener('click', function () {
-    this.textContent = "Töltés...";
-    const url = new URL(window.location.href);
-    url.searchParams.set('t', new Date().getTime());
-    window.location.href = url.toString();
-});
+    const genTime = new Date(ageEl.getAttribute('data-generated'));
+    const now = new Date();
+    const diffSec = Math.floor((now - genTime) / 1000);
+
+    if (isNaN(diffSec)) return;
+
+    if (diffSec < 60) {
+        ageEl.textContent = `Adatok: ${diffSec} mp-el ezelőtt`;
+    } else {
+        const mins = Math.floor(diffSec / 60);
+        const secs = diffSec % 60;
+        ageEl.textContent = `Adatok: ${mins}p ${secs}mp-el ezelőtt`;
+    }
+}
+
+// Indítás és folyamatos frissítés
+setInterval(() => {
+    updateClock();
+    updateDataAge();
+}, 1000);
+
+updateClock();
+updateDataAge();
+
+// 1 másodpercenkénti frissítés
+setInterval(updateDataAge, 1000);
+// Azonnali indítás
+updateDataAge();
+
+setInterval(updateDataAge, 1000);
+updateDataAge();
+// Magyaros kijelzés
+if (diffSec < 60) {
+    ageEl.textContent = `Adatok: ${diffSec} másodperce frissültek`;
+} else {
+    const mins = Math.floor(diffSec / 60);
+    const secs = diffSec % 60;
+    ageEl.textContent = `Adatok: ${mins} perce, ${secs} mp-e frissültek`;
+}
+
+// Másodpercenként frissítjük a kijelzőt
+setInterval(updateDataAge, 1000);
+
+// Azonnal is lefuttatjuk a betöltéskor
+document.addEventListener('DOMContentLoaded', updateDataAge);

@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-
 const { Builder, By, until } = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 
@@ -20,17 +19,13 @@ async function startDriver() {
         let geckoPath = '';
         try {
             geckoPath = require('child_process').execSync('which geckodriver').toString().trim();
-            console.log(`--- Geckodriver megtalálva: ${geckoPath} ---`);
-        } catch (e) {
-            console.warn('--- Geckodriver automata mód ---');
-        }
+        } catch (e) { }
 
         if (geckoPath) {
             builder.setFirefoxService(new firefox.ServiceBuilder(geckoPath));
         }
 
         let driver = await builder.build();
-        console.log('--- Driver sikeresen elindult ---');
         return driver;
     } catch (e) {
         console.error('--- Driver indítási hiba ---');
@@ -47,7 +42,10 @@ async function startDriver() {
         driver = await startDriver();
         const results = [];
         const now = new Date();
-        const budapestTimeStr = now.toLocaleString("sv-SE", { timeZone: "Europe/Budapest" }).replace('T', ' ');
+
+        // Dátumok: ISO a gépnek, magyar az embernek
+        const isoTime = now.toISOString();
+        const huTime = now.toLocaleString("hu-HU", { timeZone: "Europe/Budapest" });
 
         for (const entry of facilities) {
             console.log(`- Processing: ${entry.label}`);
@@ -64,44 +62,33 @@ async function startDriver() {
                     updated = await tsEl.getText();
                 } catch (e) { updated = 'N/A'; }
 
-                let diffMinutes = null;
-                if (updated && updated !== 'N/A') {
-                    const isoReady = updated.replace(/\./g, '-').replace(' ', 'T');
-                    const updateTime = new Date(isoReady + "+01:00");
-                    if (!isNaN(updateTime)) {
-                        diffMinutes = Math.round((now.getTime() - updateTime.getTime()) / 1000 / 60);
-                    }
-                }
-
                 results.push({
                     id: entry.id,
                     label: entry.label,
                     free,
                     total: Number(entry.maxLot),
                     updated,
-                    minutesAgo: diffMinutes,
                     url: entry.url.startsWith('http') ? entry.url : `https://www.budapestkozut.hu${entry.url}`
                 });
             } catch (err) { console.error(`❌ Hiba (${entry.id}):`, err.message); }
         }
 
         // 1. JSON mentése
-        const outputData = { generatedAt: budapestTimeStr, parkings: results };
-        fs.writeFileSync(outPath, JSON.stringify(outputData, null, 2));
-        console.log(`✅ JSON kimentve: ${outPath}`);
+        fs.writeFileSync(outPath, JSON.stringify({ generatedAt: isoTime, parkings: results }, null, 2));
 
-        // 2. HTML GENERÁLÁS SABLONBÓL (ADATOK BEÉGETÉSE)
+        // 2. HTML GENERÁLÁS
         const templatePath = path.join(__dirname, 'index.template.html');
         const targetHtmlPath = path.join(__dirname, 'index.html');
 
         if (fs.existsSync(templatePath)) {
             let html = fs.readFileSync(templatePath, 'utf8');
 
-            // KÁRTYÁK GENERÁLÁSA
             const cardsHtml = results.map(p => {
                 const percent = Math.round((p.free / p.total) * 100);
+                const statusClass = percent < 10 ? 'status-low' : (percent < 25 ? 'status-warn' : 'status-ok');
+
                 return `
-      <section class="parking-item">
+      <section class="parking-item ${statusClass}">
         <div class="info">
           <h2>${p.label}</h2>
           <div class="capacity">
@@ -109,39 +96,37 @@ async function startDriver() {
             <span class="total">/ ${p.total}</span>
           </div>
         </div>
+        <div class="progress-container">
+          <div class="progress-bar" style="width: ${percent}%"></div>
+        </div>
         <div class="visual">
-          <div class="percentage">${percent}%</div>
-          <div class="update-info">Frissítve: ${p.minutesAgo !== null ? p.minutesAgo + ' perce' : p.updated}</div>
+          <div class="percentage">${percent}% szabad</div>
+          <div class="update-info">Frissítve: ${huTime}</div>
         </div>
       </section>`;
             }).join('\n');
 
-            // BEHELYETTESÍTÉS (Csak egyszer, az if-en belül!)
-            html = html.replace('<main id="list">', `<main id="list">${cardsHtml}`);
-            html = html.replace('data-generated=""', `data-generated="${budapestTimeStr}"`);
+        // 1. A kártyák beillesztése (a sablon üres listáját keressük)
+        html = html.replace('<main id="list">', `<main id="list">${cardsHtml}`);
+
+        // 2. Az időbélyeg frissítése (Reguláris kifejezéssel, hogy bármit felülírjon az idézőjelek között)
+        html = html.replace(/data-generated=".*?"/, `data-generated="${isoTime}"`);
 
             fs.writeFileSync(targetHtmlPath, html);
-            console.log('✅ index.html sikeresen frissítve az aktuális adatokkal.');
-        } else {
-            console.warn('⚠️ index.template.html nem található!');
+            console.log('✅ index.html frissítve.');
         }
 
-        // 3. UI Fájlok másolása a public mappába
-        const uiFiles = ['index.html', 'style.css', 'script.js'];
-        uiFiles.forEach(file => {
+        // 3. Másolás a public mappába
+        ['index.html', 'style.css', 'script.js'].forEach(file => {
             const src = path.join(__dirname, file);
             const dest = path.join(outDir, file);
-            if (fs.existsSync(src)) {
-                fs.copyFileSync(src, dest);
-                console.log(`➡️  Másolva: ${file} -> public/`);
-            }
+            if (fs.existsSync(src)) fs.copyFileSync(src, dest);
         });
 
         console.log('✨ Build kész!');
 
     } catch (globalErr) {
         console.error('💥 KRITIKUS HIBA:', globalErr.message);
-        process.exit(1);
     } finally {
         if (driver) {
             await driver.quit();
