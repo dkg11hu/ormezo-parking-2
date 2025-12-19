@@ -8,60 +8,63 @@ body {
   font-family: -apple-system, system-ui, sans-serif;
   background-color: #000;
   color: #fff;
-  padding: 12px;
+  padding: 5px 8px;
+  /* Minimális padding */
   width: 100vw;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
+/* ULTRA-KOMPAKT FEJLÉC */
 header {
+  flex: 0 0 auto;
   display: flex;
-  flex-direction: column;
-  /* Egymás alá kerülnek a mobilon a jobb helykihasználásért */
-  align-items: flex-start;
-  padding: 10px;
-  margin-bottom: 12px;
-  border-bottom: 2px solid #222;
-  gap: 4px;
+  justify-content: space-between;
+  /* Egy sorba teszi a két infót */
+  align-items: center;
+  padding: 4px 8px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #222;
 }
 
-/* RENDSZERIDŐ: Élénk zöldes-fehér */
 #system-time {
-  font-size: 1.4rem;
+  font-size: 0.9rem;
+  /* Lezsugorítva */
   font-weight: 800;
   color: #2ecc71;
-  /* Élénk zöld */
 }
 
-/* ADATOK KORA: Nagyobb és figyelemfelkeltő */
 #data-age {
-  font-size: 1.1rem;
-  color: #fff;
-  /* Tiszta fehér, hogy "vivid" legyen */
-  font-weight: 600;
-  opacity: 0.9;
+  font-size: 0.8rem;
+  /* Lezsugorítva */
+  color: #888;
+  font-weight: 400;
 }
 
 #list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  flex-grow: 1;
+  gap: 4px;
+  /* Minimális rés */
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .card {
   background: #111;
-  border-radius: 12px;
-  padding: 10px 20px;
-  border-left: 6px solid #333;
+  border-radius: 8px;
+  padding: 0 15px;
+  /* Függőleges padding 0, a flex intézi */
+  border-left: 5px solid #333;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   position: relative;
-  min-height: 95px;
+  flex: 1;
+  min-height: 0;
 }
 
 .card.status-ok {
@@ -76,22 +79,20 @@ header {
   border-left-color: #e74c3c;
 }
 
-/* NEVEK: Bold és jól látható */
 .card h2 {
-  font-size: 0.9rem;
-  color: #ddd;
+  font-size: 0.85rem;
+  color: #bbb;
   text-transform: uppercase;
   font-weight: 800;
-  letter-spacing: 0.5px;
   max-width: 45%;
 }
 
-/* SZÁMOK: Brutális és tiszta */
 .card .value {
-  font-size: 4.2rem;
+  font-size: 13vh;
+  /* Kicsit még növelhető a felszabadult hely miatt */
   font-weight: 900;
   line-height: 1;
-  letter-spacing: -2px;
+  letter-spacing: -3px;
   color: #fff;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -102,7 +103,7 @@ header {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 6px;
+  height: 4px;
   background: #222;
 }
 
