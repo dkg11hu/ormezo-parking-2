@@ -1,4 +1,4 @@
-/* style.css - Ultra-Compact & White Force */
+/* style.css - Clean Dark Mode for iPhone XS */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -11,70 +11,51 @@
 body {
   background-color: #000 !important;
   color: #fff !important;
-  padding: env(safe-area-inset-top) 8px 5px 8px;
+  padding: env(safe-area-inset-top) 10px 5px 10px;
   height: 100vh;
   overflow: hidden;
 }
 
-/* Kényszerített Fehér Szövegek */
+/* Fehér szöveg kényszerítése */
 h1,
 .label,
 .count,
 .total,
+.pct,
 .card-meta,
-.pct {
+#system-time,
+#data-age {
   color: #ffffff !important;
-  opacity: 1 !important;
-}
-
-.card-meta,
-.total {
-  opacity: 0.6 !important;
 }
 
 header {
-  display: flex;
-  flex-direction: column;
-  /* Egymás alá kerül a cím és az idősor */
-  gap: 2px;
-  padding: 4px 0;
-  margin-bottom: 8px;
+  padding: 8px 0;
   border-bottom: 1px solid #222;
+  margin-bottom: 6px;
+}
+
+h1 {
+  font-size: 1rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  margin-bottom: 4px;
 }
 
 .time-info-row {
   display: flex;
   justify-content: space-between;
-  width: 100%;
-}
-
-h1 {
-  font-size: 0.85rem;
-  font-weight: 300;
-}
-
-#refreshBtn {
-  background: #fff;
-  color: #000;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  border: none;
+  font-size: 0.65rem;
+  opacity: 0.6;
 }
 
 .card {
-  background: #111;
-  border: 1px solid #222;
-  border-radius: 8px;
-  padding: 5px 10px;
-  margin-bottom: 3px;
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
+  background: #111 !important;
+  border: 1px solid #333 !important;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 5px;
 }
 
-/* 1. SOR: Név + Idő */
 .card-top {
   display: flex;
   justify-content: space-between;
@@ -82,7 +63,7 @@ h1 {
 }
 
 .label {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   flex: 2;
   white-space: nowrap;
   overflow: hidden;
@@ -91,37 +72,36 @@ h1 {
 
 .card-meta {
   font-size: 0.65rem;
-  text-align: right;
-  flex: 1;
+  opacity: 0.5;
 }
 
-/* 2. SOR: Számok + Csík + % */
 .bar-container {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 2px;
+  gap: 10px;
+  margin-top: 4px;
 }
 
 .numbers {
   display: flex;
   align-items: baseline;
-  gap: 2px;
+  gap: 3px;
   min-width: 60px;
 }
 
 .count {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 700;
 }
 
 .total {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
+  opacity: 0.5;
 }
 
 .bar {
-  flex: 1;
-  height: 5px;
+  flex-grow: 1;
+  height: 6px;
   background: #222;
   border-radius: 3px;
   overflow: hidden;
@@ -132,6 +112,7 @@ h1 {
   border-radius: 3px;
 }
 
+/* Neon állapot színek */
 .fill[style*="#3fb950"] {
   background-color: #30D158 !important;
 }
@@ -145,7 +126,7 @@ h1 {
 }
 
 .pct {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 700;
   min-width: 30px;
   text-align: right;
