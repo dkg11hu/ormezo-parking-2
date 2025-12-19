@@ -8,7 +8,7 @@ body {
   font-family: -apple-system, system-ui, sans-serif;
   background-color: #000;
   color: #fff;
-  padding: 10px;
+  padding: 12px;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -18,37 +18,52 @@ body {
 
 header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  /* Egymás alá kerülnek a mobilon a jobb helykihasználásért */
+  align-items: flex-start;
   padding: 10px;
-  border-bottom: 1px solid #333;
+  margin-bottom: 12px;
+  border-bottom: 2px solid #222;
+  gap: 4px;
+}
+
+/* RENDSZERIDŐ: Élénk zöldes-fehér */
+#system-time {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #2ecc71;
+  /* Élénk zöld */
+}
+
+/* ADATOK KORA: Nagyobb és figyelemfelkeltő */
+#data-age {
+  font-size: 1.1rem;
+  color: #fff;
+  /* Tiszta fehér, hogy "vivid" legyen */
+  font-weight: 600;
+  opacity: 0.9;
 }
 
 #list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex-grow: 1;
-  padding-top: 10px;
-}
-
-@media (orientation: landscape) {
-  #list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-  }
 }
 
 .card {
-  background: #1a1a1a;
+  background: #111;
   border-radius: 12px;
-  padding: 12px 20px;
-  border-left: 6px solid #444;
-  /* Alapértelmezett szürke szél */
+  padding: 10px 20px;
+  border-left: 6px solid #333;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  min-height: 95px;
 }
 
-/* Színek - Kártya széle */
 .card.status-ok {
   border-left-color: #2ecc71;
 }
@@ -61,32 +76,41 @@ header {
   border-left-color: #e74c3c;
 }
 
+/* NEVEK: Bold és jól látható */
 .card h2 {
-  font-size: 0.8rem;
-  color: #888;
+  font-size: 0.9rem;
+  color: #ddd;
   text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  max-width: 45%;
 }
 
+/* SZÁMOK: Brutális és tiszta */
 .card .value {
-  font-size: 2.5rem;
-  font-weight: 800;
-  line-height: 1.1;
+  font-size: 4.2rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -2px;
+  color: #fff;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .progress-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
   height: 6px;
-  background: #333;
-  border-radius: 3px;
-  margin-top: 10px;
+  background: #222;
 }
 
 .progress-bar {
   height: 100%;
-  border-radius: 3px;
+  transition: width 0.5s ease;
 }
 
-/* Színek - Haladási sáv belső része */
 .status-ok .progress-bar {
   background-color: #2ecc71;
 }
