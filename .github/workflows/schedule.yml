@@ -49,11 +49,8 @@ jobs:
       - name: 📁 Prepare Public Folder
         run: mkdir -p public 
 
-      - name: 🚀 Run Data Extractor
+      - name: 🚀 Run Data Extractor, 🏗️ Build HTML and Copy Assets
         run: node extractor.js
-
-      - name: 🏗️ Build HTML and Copy Assets
-        run: node builder.js
 
       - name: 🚀 Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v3
