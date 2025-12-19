@@ -38,6 +38,7 @@ make build
 
 We use [GitHub Discussions](https://github.com/dkg11hu/ormezo-parking/discussions) for Q&A, troubleshooting, and idea sharing.  
 Please use Discussions instead of Issues for general questions or help requests.
+-x-
 
 ## CI/CD
 
