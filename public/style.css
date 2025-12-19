@@ -34,11 +34,18 @@ h1,
 
 header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px;
-  margin-bottom: 4px;
+  flex-direction: column;
+  /* Egymás alá kerül a cím és az idősor */
+  gap: 2px;
+  padding: 4px 0;
+  margin-bottom: 8px;
   border-bottom: 1px solid #222;
+}
+
+.time-info-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 h1 {
