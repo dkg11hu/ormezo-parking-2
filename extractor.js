@@ -6,7 +6,8 @@ const firefox = require('selenium-webdriver/firefox');
 
 const facilities = require(path.resolve(__dirname, 'urls.json'));
 const outDir = path.resolve(__dirname, 'public');
-const outPath = path.join(__dirname, 'parking-status.json');
+// A JSON fájlt közvetlenül a public mappába irányítjuk
+const outPath = path.join(outDir, 'parking-status.json');
 
 async function startDriver() {
     let options = new firefox.Options();
@@ -30,13 +31,16 @@ async function startDriver() {
     let driver;
     try {
         console.log('🚀 EXTRACTOR START');
+
+        // Biztosítjuk, hogy a public mappa létezik
+        if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+
         driver = await startDriver();
         const results = [];
 
-        // Pontos mostani idő UTC-ben
         const now = new Date();
-        // Megjelenítéshez használt magyar formátum
-        const budapestTimeStr = now.toLocaleString("hu-HU", { timeZone: "Europe/Budapest" });
+        // Safari-barát ISO formátum: "2025-12-19 18:30:00"
+        const budapestTimeStr = now.toLocaleString("sv-SE", { timeZone: "Europe/Budapest" }).replace('T', ' ');
 
         for (const entry of facilities) {
             console.log(`- Processing: ${entry.label}`);
@@ -55,13 +59,10 @@ async function startDriver() {
 
                 let diffMinutes = null;
                 if (updated && updated !== 'N/A') {
-                    // A kapott formátum: "2025.12.18 23:13:25"
-                    // Átalakítjuk ISO-szerűre és KÉNYSZERÍTJÜK a magyar időzónát (+01:00)
                     const isoReady = updated.replace(/\./g, '-').replace(' ', 'T');
                     const updateTime = new Date(isoReady + "+01:00");
 
                     if (!isNaN(updateTime)) {
-                        // Abszolút időkülönbség (mindkettő epoch timestamp)
                         const diffMs = now.getTime() - updateTime.getTime();
                         diffMinutes = Math.round(diffMs / 1000 / 60);
                     }
@@ -84,9 +85,24 @@ async function startDriver() {
             parkings: results
         };
 
-        if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+        // 1. JSON mentése a public mappába
         fs.writeFileSync(outPath, JSON.stringify(outputData, null, 2));
         console.log(`✅ Adatok kimentve: ${outPath}`);
+
+        // 2. UI Fájlok másolása (index.html, style.css, script.js) -> public/
+        const uiFiles = ['index.html', 'style.css', 'script.js'];
+        uiFiles.forEach(file => {
+            const src = path.join(__dirname, file);
+            const dest = path.join(outDir, file);
+            if (fs.existsSync(src)) {
+                fs.copyFileSync(src, dest);
+                console.log(`➡️  Másolva: ${file} -> public/`);
+            } else {
+                console.warn(`⚠️  Hiányzó UI fájl: ${file}`);
+            }
+        });
+
+        console.log('✨ Minden fájl készen áll a deploy-ra a public mappában.');
 
     } catch (globalErr) {
         console.error('💥 KRITIKUS HIBA:', globalErr.message);
