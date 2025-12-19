@@ -1,115 +1,141 @@
-:root {
-  --bg: #000000;          /* Tiszta fekete */
-  --card-bg: #000000;     /* A kártya is fekete, csak a keret látszik */
-  --text: #FFFFFF;        /* Vakító fehér */
-  --accent: #00FFFF;      /* Neon Cyan (a sötétkék helyett) */
-  --red-alert: #FF3B30;   /* Élénk neonpiros */
-  --light-grey: #D1D1D6;  /* Világos ezüst (a mélyszürke helyett) */
-  --border: #FFFFFF;      /* Vastag fehér keret */
-  --safe-green: #32D74B;  /* Neon zöld a szabad helyeknek */
+/* style.css - Ultra-High Contrast Vertical Layout */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  font-family: -apple-system, sans-serif !important;
+  font-stretch: condensed;
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-}
-
-.wrap {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: calc(env(safe-area-inset-top) + 10px) 12px 10px 12px;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 15px 10px;
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #333;
   margin-bottom: 15px;
-  border-bottom: 3px solid var(--text); /* Nagyon erős elválasztó */
-  padding-bottom: 10px;
 }
 
 h1 {
-  font-size: 1.3rem;
-  font-weight: 900;
-  color: var(--text);
-  letter-spacing: 1px;
+  font-size: 1.1rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  color: #fff;
 }
 
-.status-bar {
-  display: flex;
-  gap: 10px;
-  font-size: 0.8rem;
-  font-weight: 900;
-}
-
-#data-age { color: var(--red-alert); }
-#system-time { color: var(--accent); } /* Cyan, sokkal jobban látszik mint a kék */
-
-button {
-  background: var(--text);
+#refreshBtn {
+  background: #fff;
+  color: #000;
   border: none;
-  color: #000000;
-  padding: 8px 14px;
-  border-radius: 4px;
-  font-weight: 900;
-  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.75rem;
 }
 
-main {
-  display: grid;
-  gap: 10px;
+.parking-card-link {
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px;
 }
 
 .card {
-  background: var(--card-bg);
-  border: 2px solid var(--border); /* Erős fehér keret minden kártya köré */
-  border-radius: 4px;
+  background: #121212;
+  border: 1px solid #333;
+  border-radius: 12px;
   padding: 12px;
 }
 
+/* 1. SOR: Név (Bal) + Idő (Jobb) */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
 .label {
-  font-weight: 900;
-  font-size: 1.1rem;
-  color: var(--text);
-  text-transform: uppercase;
-}
-
-.numbers {
-  font-size: 1.2rem;
-  font-weight: 900;
-  color: var(--text);
-}
-
-/* PROGRESS BAR - Maximális láthatóság */
-.bar {
-  height: 12px;
-  background: #333333;
-  border: 2px solid var(--text); /* Fehér keret a csíknak is */
-  border-radius: 6px;
-  margin: 8px 0;
-}
-
-/* A színeket a builder.js-ben felülbíráljuk, 
-   de itt a neon zöld az alapértelmezett */
-.fill {
-  height: 100%;
-  background-color: var(--safe-green);
-}
-
-.pct {
-  font-weight: 900;
-  font-size: 0.9rem;
-  color: var(--text);
+  font-size: 1rem;
+  font-weight: 300;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
 }
 
 .card-meta {
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: var(--text);
-  text-transform: uppercase;
-  margin-top: 4px;
+  font-size: 0.7rem;
+  color: #fff;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+/* 2. SOR: Számok (Bal) + Csík (Közép) + Százalék (Jobb) */
+.bar-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.numbers {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  min-width: 70px;
+  /* Fix hely a számoknak, hogy ne ugráljon */
+}
+
+.count {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.total {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  color: #fff;
+}
+
+.bar {
+  flex-grow: 1;
+  height: 10px;
+  background: #222;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 5px;
+}
+
+/* Apple High-Contrast Színek a csíkra */
+.fill[style*="#3fb950"] {
+  background-color: #30D158 !important;
+}
+
+.fill[style*="#e2b13c"] {
+  background-color: #FF9F0A !important;
+}
+
+.fill[style*="#c53030"] {
+  background-color: #FF453A !important;
+}
+
+.pct {
+  font-size: 0.9rem;
+  font-weight: 700;
+  min-width: 35px;
+  text-align: right;
+  color: #fff;
 }
