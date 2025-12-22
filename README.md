@@ -1,4 +1,3 @@
-
 # Őrmező Parking
 
 [![CI](https://github.com/dkg11hu/ormezo-parking/actions/workflows/ci.yml/badge.svg)](https://github.com/dkg11hu/ormezo-parking/actions/workflows/ci.yml)
@@ -14,79 +13,47 @@
 
 ## Overview
 
-Extractor and dashboard for monitoring Őrmező (Budapest) P+R parking availability.  
-Built entirely with **JavaScript (Node.js)** and automated via GitHub Actions.
+Real-time extractor and dashboard for monitoring **Őrmező (Budapest) P+R** parking availability.  
+Optimized for **iPhone XS OLED** displays, providing an ultra-fast, no-scroll experience with high-contrast "shining" typography. Built with **Node.js**, **Selenium**, and automated via **GitHub Actions**.
+
+## 📱 iPhone XS Optimization
+
+- **Dynamic Viewport:** Uses `100dvh` to fit the dashboard perfectly within Safari's frame without scrolling.
+- **OLED Black Theme:** Pure `#000` background for maximum energy efficiency and contrast.
+- **Shining Typography:** Labels feature a subtle glow (`text-shadow`) and pure white color for high legibility.
+- **Vivid Status:** Data freshness ("X mp-cel ezelőtt") is highlighted in neon blue (`#00d4ff`).
+- **Full-Surface Touch:** Each parking card is a clickable `<a>` tag for easy one-handed navigation.
 
 ## Quickstart
 
 ```bash
-git clone https://github.com/dkg11hu/ormezo-parking.git
+git clone [https://github.com/dkg11hu/ormezo-parking.git](https://github.com/dkg11hu/ormezo-parking.git)
 cd ormezo-parking
 npm install
 make extract
 make build
 ```
 
-## Documents
+## 🛠 Project Logic
 
-- [CODE OF CONDUCT](CODE_OF_CONDUCT.md)
-- [CONTRIBUTING](CONTRIBUTING.md)
-- [SECURITY](SECURITY.md)
-- [LICENCE](LICENCE)
-
-## 💬 Community Support
-
-We use [GitHub Discussions](https://github.com/dkg11hu/ormezo-parking/discussions) for Q&A, troubleshooting, and idea sharing.  
-Please use Discussions instead of Issues for general questions or help requests.
--x-
+### File,Responsibility
+extractor.js,Selenium scraper that fetches live data and generates index.html.
+urls.json,Source configuration (URLs and CSS selectors).
+style.css,"XS-optimized ""Shining White"" stylesheet."
+public/,Deployment-ready folder containing synced assets.
 
 ## CI/CD
+Automated Extraction: Scheduled Selenium runs via GitHub Actions.
 
-- Semantic versioning + GitHub Releases  
-- Sanity checks for extractor/dashboard  
-- Transparent deploy/test logging  
+Auto-Sync: Build process automatically copies index.html, style.css, and script.js to the public/ directory.
 
-### Extract
+Semantic versioning: Automated GitHub Releases.
 
 ```bash
 make extract
 ```
 
-Runs node extractor.js to refresh data in data.
-
-### Build
-
-```bash
-make build
-```
-
-Produces _site/ and any bundled assets.
-
-### Serve
-
-```bash
-node server.js
-```
-
-Starts the HTTP server for local preview.
-
 ## Runtime Flow
-
-```text
-Extractor → Parking Data → Dashboard → User
+```Plaintext
+Selenium (Geckodriver) → urls.json → parking-status.json → index.html
 ```
-
-## 🌱 Community Health
-
-This project follows open source best practices to ensure a safe, welcoming, and transparent environment for all contributors.
-
-- 📜 [CODE OF CONDUCT](CODE_OF_CONDUCT.md) — Standards for respectful collaboration.
-- 🤝 [CONTRIBUTING](CONTRIBUTING.md) — Guidelines for workflow, commits, and branch management.
-- 🔒 [SECURITY](SECURITY.md) — How to report vulnerabilities and supported versions.
-- 📝 [RELEASE_NOTES](RELEASE_NOTES.md) — Changelog of features, fixes, and improvements across releases.
-
-By participating in this project, you agree to uphold these documents. Please review them before submitting issues or pull requests.
-
-## License
-
-MIT — see [LICENCE](LICENCE).

@@ -1,0 +1,49 @@
+name: ⏰ Extraction and Deploy
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+  push:
+    branches:
+      - main
+
+jobs:
+  extract_and_deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: write
+      pages: write
+      id-token: write
+    steps:
+      - name: ⬇️ Checkout Main Branch
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: ⚙️ Install Chrome dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libnspr4 libatk1.0-0t64 libatk-bridge2.0-0t64 libcups2t64 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libasound2t64
+
+      - name: ⚙️ Install Project dependencies
+        run: npm install
+
+      - name: 📁 Prepare Public Folder
+        run: mkdir -p public 
+
+      - name: 🚀 Run Data Extractor & Build
+        run: node extractor.js
+
+      - name: 🚀 Deploy to GH Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public 
+          publish_branch: gh-pages
+          force_orphan: true
+          commit_message: "chore(deploy): Automated update [skip ci]"

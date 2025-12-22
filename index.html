@@ -3,69 +3,136 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/ffffff/parking.png">
-  <link rel="apple-touch-icon" href="https://img.icons8.com/ios-filled/180/ffffff/parking.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>P+R Budapest</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: 8px;
+      gap: 8px;
+    }
+
+    /* LANDSCAPE - ITT DŐL EL A SZÉLESSÉG */
+    @media (orientation: landscape) {
+      body {
+        flex-direction: row !important;
+      }
+
+      header {
+        width: 18% !important;
+        height: 100%;
+        background: #111;
+        border-left: 6px solid #00d4ff;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 15px;
+      }
+
+      #dashboard-grid {
+        display: flex !important;
+        flex-direction: row !important;
+        /* Egymás mellé teszi a két oszlopot */
+        width: 82% !important;
+        height: 100%;
+        gap: 8px;
+      }
+
+      .column-narrow {
+        width: 20% !important;
+        /* A maradék hely 20%-a (~16% összesen) */
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .column-wide {
+        width: 80% !important;
+        /* A maradék hely 80%-a (~66% összesen) */
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    /* KÁRTYÁK ALAPSTÍLUSA */
+    .card {
+      background: #111;
+      border-radius: 10px;
+      padding: 15px;
+      border-left: 6px solid #333;
+      flex: 1;
+      /* Kitöltik a magasságot az oszlopon belül */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100px;
+    }
+
+    .status-ok {
+      border-left-color: #2ecc71;
+    }
+
+    .status-warn {
+      border-left-color: #f1c40f;
+    }
+
+    .value {
+      font-size: 8vh;
+      font-weight: 900;
+      font-family: monospace;
+    }
+
+    h2 {
+      font-size: 0.8rem;
+      color: #888;
+      text-transform: uppercase;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <h1>P+R <span class="accent">Status</span></h1>
-        <div class="status-bar">
-          <span id="data-age" data-generated="2025-12-19T20:54:35.377Z">Adatok: --:--:-- -cel ezelőtt</span>
-          <span class="separator">|</span>
-          <span id="system-time">--:--:--</span>
-        </div>
+
+  <header>
+    <h1>Őrmező</h1>
+    <div id="system-time">10:44:36</div>
+  </header>
+
+  <div id="dashboard-grid">
+    <div class="column-narrow">
+      <div class="card status-ok">
+        <h2>P1</h2>
+        <div class="value">142</div>
       </div>
-    </header>
+      <div class="card status-ok">
+        <h2>P2</h2>
+        <div class="value">24</div>
+      </div>
+    </div>
 
-    <main id="list">
-        <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P121" target="_blank" class="card status-ok">
-            <div class="card-content">
-                <h2>Őrmező P1 P+R parkoló</h2>
-            </div>
-            <div class="value">307</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: 63%"></div>
-            </div>
-        </a>
-
-        <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P131" target="_blank" class="card status-ok">
-            <div class="card-content">
-                <h2>Őrmező P2 P+R parkoló</h2>
-            </div>
-            <div class="value">270</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: 54%"></div>
-            </div>
-        </a>
-
-        <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P101" target="_blank" class="card status-ok">
-            <div class="card-content">
-                <h2>Etele P1 P+R parkoló</h2>
-            </div>
-            <div class="value">136</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: 55%"></div>
-            </div>
-        </a>
-
-        <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P111" target="_blank" class="card status-ok">
-            <div class="card-content">
-                <h2>Etele P2 P+R parkoló</h2>
-            </div>
-            <div class="value">152</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: 69%"></div>
-            </div>
-        </a>
-    </main>
+    <div class="column-wide">
+      <div class="card status-warn">
+        <h2>P3 - Külső Parkoló</h2>
+        <div class="value">5</div>
+      </div>
+      <div class="card status-ok">
+        <h2>P4 - Tároló Övezet</h2>
+        <div class="value">88</div>
+      </div>
+    </div>
   </div>
-  <script src="script.js"></script>
+
 </body>
 
 </html>

@@ -5,127 +5,208 @@
 }
 
 body {
+  background-color: #000 !important;
+  color: #fff;
   font-family: -apple-system, system-ui, sans-serif;
   background-color: #000;
   color: #fff;
-  padding: 4px;
+  padding: 10px;
   width: 100vw;
   height: 100dvh;
   display: flex;
-  flex-direction: column;
+  gap: 10px;
   overflow: hidden;
 }
 
-/* FEJLÉC - Több hely az első kártya felett */
+/* --- HEADER --- */
 header {
-  flex: 0 0 auto;
+  background: #111;
+  border-radius: 12px;
+  padding: 20px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 12px;
-  /* Több függőleges hely */
-  margin-bottom: 12px;
-  /* Ez tolja el az első kártyát lefelé */
-  border-bottom: 1px solid #333;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  text-align: left;
+  flex: 0 0 auto;
 }
 
-#system-time {
-  font-size: 0.85rem;
-  color: #666;
-  font-weight: 600;
+header h1 {
+  font-size: 1.8rem;
+  color: #ffcc00;
+  /* Cyber Gold */
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.4), 0 0 20px rgba(255, 204, 0, 0.2);
 }
 
-#data-age {
+#last-update {
   font-size: 1.1rem;
   color: #00d4ff;
   font-weight: 900;
   text-transform: uppercase;
+  font-family: 'SF Mono', monospace;
 }
 
-/* LISTA - Biztonságos távolság a fejléctől */
-#list {
+* #system-time {
+  font-size: 1rem;
+  color: #ff8800;
+  /* Glowing Orange */
+  font-weight: 800;
+  font-family: 'SF Mono', monospace;
+  text-shadow: 0 0 10px rgba(255, 136, 0, 0.6), 0 0 20px rgba(255, 136, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- GRID & COLUMNS --- */
+#dashboard-grid {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  min-height: 0;
+}
+
+.column-narrow {
+  flex: 0 0 25%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  flex: 1 1 auto;
-  min-height: 0;
-  padding-top: 4px;
-  /* Extra belső távolság */
+  gap: 10px;
 }
 
-.card {
-  background: #111;
-  border-radius: 10px;
-  padding: 0 15px;
-  border-left: 6px solid #333;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
+.column-wide {
   flex: 1;
-  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* --- KÁRTYÁK --- */
+.card {
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   color: inherit;
+  background: #111;
+  border-radius: 12px;
+  border-left: 8px solid #333;
+  position: relative;
+  z-index: 5;
+  cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease;
+  flex: 1;
 }
 
-.card.status-ok {
-  border-left-color: #2ecc71;
+.card:active {
+  transform: scale(0.96);
+  background-color: #1a1a1a;
 }
 
-.card.status-warn {
-  border-left-color: #f1c40f;
-}
-
-.card.status-low {
-  border-left-color: #e74c3c;
-}
-
-/* SHINING WHITE NEVEK */
-.card h2 {
-  font-size: 1.1rem;
-  color: #fff;
-  text-transform: uppercase;
-  font-weight: 800;
-  max-width: 45%;
-  line-height: 1.1;
-  /* Ragyogó effekt */
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-.card .value {
-  font-size: 10vh;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: -2px;
-  color: #fff;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-}
-
-.progress-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: #222;
-}
-
-.progress-bar {
+.card-inner {
+  padding: 20px;
+  pointer-events: none;
+  /* Átengedi a kattintást az <a>-nak */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   height: 100%;
 }
 
-.status-ok .progress-bar {
-  background-color: #2ecc71;
+.card h2 {
+  font-size: 0.9rem;
+  color: #00ffcc;
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-bottom: 5px;
+  text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
 }
 
-.status-warn .progress-bar {
-  background-color: #f1c40f;
+.value-container {
+  display: flex;
+  align-items: baseline;
 }
 
-.status-low .progress-bar {
-  background-color: #e74c3c;
+.value {
+  font-size: 8vh;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  font-family: 'SF Mono', monospace;
+}
+
+.max-lot {
+  font-size: 1.5rem;
+  color: #444;
+  font-weight: 700;
+  margin-left: 10px;
+  text-shadow: 0 0 5px rgba(68, 68, 68, 0.5);
+}
+
+/* Státuszok */
+.status-ok {
+  border-left-color: #2ecc71;
+}
+
+.status-warn {
+  border-left-color: #f1c40f;
+}
+
+.status-low {
+  border-left-color: #e74c3c;
+}
+
+/* --- RESPONSIVE --- */
+/* --- RESPONSIVE --- */
+@media (orientation: portrait) {
+  body {
+    flex-direction: column;
+  }
+
+  header {
+    width: 100%;
+    /* Fix magasság helyett hagyjuk rugalmasra, de legyen alul keret */
+    border-bottom: 4px solid #ffcc00;
+    padding: 15px;
+    flex: 0 0 auto;
+  }
+
+  #dashboard-grid {
+    flex-direction: column;
+    flex: 1; /* Ez kitölti a maradék függőleges helyet a fejléc alatt */
+  }
+
+  .column-narrow,
+  .column-wide {
+    width: 100%;
+    flex: 1; /* Kényszerítjük, hogy mindkét oszlop a grid magasságának pontosan a felét foglalja el */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card {
+    flex: 1; /* Minden kártya kitölti az oszlopa rendelkezésre álló magasságának felét */
+  }
+}
+
+@media (orientation: landscape) {
+  body {
+    flex-direction: row;
+  }
+
+  header {
+    width: 20%;
+    border-left: 5px solid #ffcc00;
+  }
+
+  #dashboard-grid {
+    flex-direction: row; /* Fektetve egymás mellett vannak */
+    flex: 1;
+  }
+
+  .column-narrow { flex: 0 0 25%; }
+  .column-wide { flex: 1; }
 }
