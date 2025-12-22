@@ -7,228 +7,211 @@
 body {
   background-color: #000 !important;
   color: #fff;
-  font-family: -apple-system, system-ui, sans-serif;
-  /* Safe Area Insets for iPhone Notch/Home Indicator */
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  /* Premium System Font Stack */
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom) 10px;
   width: 100vw;
-  /* Use dvh to fix Safari mobile address bar issues */
   height: 100dvh;
   display: flex;
-  gap: 10px;
+  gap: 12px;
   overflow: hidden;
-  /* Prevent "bouncing" or scrolling */
+  -webkit-font-smoothing: antialiased;
 }
 
-/* --- HEADER --- */
+/* --- SIDEBAR HEADER --- */
 header {
   background: #111;
-  border-radius: 12px;
-  padding: 15px 20px;
+  border-radius: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 8px;
-  text-align: left;
+  gap: 12px;
   flex: 0 0 auto;
-}
-
-header h1 {
-  font-size: 1.8rem;
-  line-height: 1;
-  margin: 0;
-  color: #ffcc00;
-  /* Cyber Gold */
-  text-transform: uppercase;
-  font-weight: 900;
-  letter-spacing: -1px;
-  text-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
 }
 
 .title-group {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .header-logo {
-  height: 1.2rem;
-  /* Inline with text height */
+  height: 1rem;
+  /* Matched precisely to text height */
   width: auto;
-  filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.6));
-  transform: translateY(-1px);
+  filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.5));
+}
+
+header h1 {
+  font-size: 1.8rem;
+  color: #ffcc00;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  /* Tighter tracking for bold titles */
+  line-height: 1;
+}
+
+#last-update,
+#system-time {
+  font-size: 0.8rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
 }
 
 #last-update {
-  font-size: 1.1rem;
   color: #00d4ff;
-  font-weight: 900;
-  text-transform: uppercase;
-  font-family: 'SF Mono', monospace;
+  font-weight: 600;
 }
 
 #system-time {
-  font-size: 1rem;
   color: #ff8800;
-  /* Glowing Orange */
-  font-weight: 800;
-  font-family: 'SF Mono', monospace;
-  text-shadow: 0 0 10px rgba(255, 136, 0, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-weight: 600;
 }
 
-/* --- GRID & COLUMNS --- */
+/* --- CARD STACK --- */
 #dashboard-grid {
   flex: 1;
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
   min-height: 0;
-  /* Critical for flex-shrink behavior */
+  overflow-y: auto;
 }
 
-.column-narrow {
-  flex: 0 0 25%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
+.column-narrow,
 .column-wide {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: contents;
 }
 
-/* --- CARDS --- */
+/* --- JUMBO CARDS --- */
 .card {
   display: flex;
   flex-direction: column;
   text-decoration: none;
   color: inherit;
-  background: #111;
-  border-radius: 12px;
-  border-left: 8px solid #333;
+  background: linear-gradient(145deg, #111, #080808);
+  border-radius: 16px;
+  width: 100%;
+  flex: 0 0 auto;
+  min-height: 120px;
   position: relative;
-  z-index: 5;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: transform 0.1s ease;
-  flex: 1;
-  min-height: 0;
-  /* Allow cards to shrink to fit screen */
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .card:active {
-  transform: scale(0.96);
-  background-color: #1a1a1a;
+  transform: scale(0.99);
+  background: #1a1a1a;
 }
 
 .card-inner {
-  padding: 15px;
-  pointer-events: none;
+  padding: 20px 30px;
+  height: 100%;
+}
+
+.card-content-row {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   height: 100%;
 }
 
 .card h2 {
-  font-size: 0.85rem;
+  font-size: 1.3rem;
   color: #00ffcc;
   text-transform: uppercase;
   font-weight: 800;
-  margin-bottom: 5px;
-  text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+  letter-spacing: -0.02em;
+  max-width: 45%;
 }
 
 .value-container {
   display: flex;
   align-items: baseline;
+  gap: 4px;
 }
 
 .value {
-  font-size: 7vh;
-  /* Scaled relative to viewport height */
+  font-size: 5.5rem;
+  /* Jumbo Figures */
   font-weight: 900;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
   color: #fff;
-  line-height: 1;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
-  font-family: 'SF Mono', monospace;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .max-lot {
-  font-size: 1.2rem;
-  color: #444;
-  font-weight: 700;
-  margin-left: 10px;
-  text-shadow: 0 0 5px rgba(68, 68, 68, 0.5);
+  font-size: 1.6rem;
+  color: #333;
+  font-weight: 800;
+  font-family: 'SF Mono', monospace;
 }
 
-/* Status Colors */
-.status-ok {
-  border-left-color: #2ecc71;
+/* --- GLOWING RATIO BAR --- */
+.card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 10px;
+  width: var(--ratio, 0%);
+  transition: width 1s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.status-warn {
-  border-left-color: #f1c40f;
+.status-ok::after {
+  background: #00ff88;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
 }
 
-.status-low {
-  border-left-color: #e74c3c;
+.status-warn::after {
+  background: #ffcc00;
+  box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
 }
 
-/* --- RESPONSIVE PORTRAIT (iPhone XS) --- */
+.status-low::after {
+  background: #ff4444;
+  box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
+}
+
+/* --- ORIENTATION LOGIC --- */
+@media (orientation: landscape) {
+  body {
+    flex-direction: row;
+    padding-left: env(safe-area-inset-left);
+  }
+
+  header {
+    width: 260px;
+    border-right: 4px solid #ffcc00;
+    height: 100%;
+  }
+
+  .value {
+    font-size: 20vh;
+  }
+
+  .card {
+    min-height: 25vh;
+  }
+}
+
 @media (orientation: portrait) {
   body {
     flex-direction: column;
-    padding: 10px;
-    padding-top: env(safe-area-inset-top);
   }
 
   header {
     width: 100%;
     border-bottom: 4px solid #ffcc00;
-    padding: 12px;
-    flex: 0 0 auto;
-    border-radius: 12px 12px 0 0;
-  }
-
-  #dashboard-grid {
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  .column-narrow,
-  .column-wide {
-    width: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
   }
 
   .value {
-    font-size: 6vh;
-    /* Smaller on mobile to ensure it fits the card width */
-  }
-}
-
-/* --- RESPONSIVE LANDSCAPE --- */
-@media (orientation: landscape) {
-  body {
-    flex-direction: row;
-  }
-
-  header {
-    width: 20%;
-    border-left: 5px solid #ffcc00;
-    border-radius: 0 12px 12px 0;
-  }
-
-  #dashboard-grid {
-    flex-direction: row;
-    flex: 1;
+    font-size: 4.5rem;
   }
 }

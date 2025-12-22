@@ -21,7 +21,6 @@ async function runExtractor() {
     }
     const facilities = JSON.parse(fs.readFileSync(urlsPath, 'utf8'));
 
-    // Firefox beállítások (Headless mód GitHub Actions-höz)
     let options = new firefox.Options();
     options.addArguments('--headless');
 
@@ -35,8 +34,7 @@ async function runExtractor() {
         let results = [];
         const now = new Date();
         const huTime = now.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        const isoTime = now.toISOString();
-        const timestamp = now.getTime(); // ISO helyett tiszta szám (ezredmásodperc)
+        const timestamp = now.getTime();
 
         for (const entry of facilities) {
             console.log(`⏳ Scrape: ${entry.label}...`);
@@ -46,55 +44,67 @@ async function runExtractor() {
                 const el = await driver.wait(until.elementLocated(selector), 15000);
                 const rawText = await el.getText();
                 const freeSpots = parseInt(rawText.match(/(\d+)/)[1], 10);
-                results.push({ id: entry.id, free: freeSpots });
+
+                results.push({
+                    id: entry.id,
+                    label: entry.label,
+                    url: entry.url,
+                    maxLot: entry.maxLot,
+                    free: freeSpots
+                });
             } catch (err) {
                 console.error(`⚠️ Hiba (${entry.id}): ${err.message}`);
-                results.push({ id: entry.id, free: "N/A" });
+                results.push({
+                    id: entry.id,
+                    label: entry.label,
+                    url: entry.url,
+                    maxLot: entry.maxLot,
+                    free: "N/A"
+                });
             }
         }
 
         if (fs.existsSync(templatePath)) {
             let html = fs.readFileSync(templatePath, 'utf8');
 
-            const generateCardHtml = (result) => {
-                const config = facilities.find(f => f.id === result.id);
-                let statusClass = 'status-ok';
-                if (result.free === "N/A" || result.free <= 10) statusClass = 'status-low';
-                else if (result.free <= 50) statusClass = 'status-warn';
+            function generateCardHtml(res) {
+                const label = res.label || res.id;
+                const free = parseInt(res.free) || 0;
+                const max = parseInt(res.maxLot) || 1;
+                const url = res.url || "#";
+                const percent = Math.min(Math.round((free / max) * 100), 100);
+                const statusClass = percent > 50 ? 'status-ok' : (percent > 15 ? 'status-warn' : 'status-low');
 
                 return `
-                <a href="${config.url}" target="_blank" class="card ${statusClass}">
-                    <div class="card-inner">
-                        <h2>${config.label}</h2>
-                        <div class="value-container">
-                            <span class="value">${result.free}</span>
-                            <span class="max-lot">/ ${config.maxLot}</span>
-                        </div>
-                    </div>
-                </a>`;
-            };
+      <a href="${url}" class="card ${statusClass}" target="_blank" style="--ratio: ${percent}%">
+        <div class="card-inner">
+          <div class="card-content-row">
+            <h2>${label}</h2>
+            <div class="value-container">
+              <span class="value">${res.free === "N/A" ? "N/A" : free}</span>
+              <span class="max-lot">/ ${max}</span>
+            </div>
+          </div>
+        </div>
+      </a>`;
+            }
 
             const p1p2 = results.filter(r => r.id === 'p1' || r.id === 'p2').map(generateCardHtml).join('\n');
             const others = results.filter(r => r.id !== 'p1' && r.id !== 'p2').map(generateCardHtml).join('\n');
 
-            // HTML frissítés (A pontos ID-kat használva)
             html = html.replace(/(id="col-p1-p2"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${p1p2}\n$3`);
             html = html.replace(/(id="col-p3-p4"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${others}\n$3`);
-            // html = html.replace(/(id="last-update"\s+data-generated=").*?(")/, `$1${isoTime}$2`);
             html = html.replace(/id="system-time">.*?<\/div>/, `id="system-time">${huTime}</div>`);
-            html = html.replace(/(id="last-update"\s+data-generated=").*?(")/, `$1${timestamp}$2`);
             html = html.replace(/data-generated="[^"]*"/, `data-generated="${timestamp}"`);
 
-            // Mentés a public mappába
             if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
             fs.writeFileSync(targetHtmlPath, html);
 
-            // Assetek másolása (2025-12-17 szabály szerint)
             if (fs.existsSync(srcStylePath)) fs.copyFileSync(srcStylePath, targetStylePath);
             if (fs.existsSync(srcScriptPath)) fs.copyFileSync(srcScriptPath, targetScriptPath);
-            if (fs.existsSync('favicon.png')) fs.copyFileSync('favicon.png', 'public/favicon.png');
-            if (fs.existsSync('favicon.svg')) {fs.copyFileSync('favicon.svg', 'public/favicon.svg');}            
-            console.log(`✅ Minden fájl készen áll a public/ mappában.`);
+            if (fs.existsSync('favicon.svg')) fs.copyFileSync('favicon.svg', 'public/favicon.svg');
+
+            console.log(`✅ Adatok frissítve: ${huTime}`);
         }
     } catch (criticalErr) {
         console.error("❌ Hiba:", criticalErr.message);
