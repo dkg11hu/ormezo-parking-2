@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Őrmező Parking Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <h1>Őrmező</h1>
+    <div id="last-update" data-generated="2025-12-22T12:52:45.484Z">Updated: -- min ago</div>
+    <div id="system-time">12:52:45</div>
+  </header>
+
+  <div id="dashboard-grid">
+    <div class="column-narrow" id="col-p1-p2">
+
+    <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P121" target="_blank" class="card status-ok">
+        <div class="card-inner">
+            <h2>Őrmező P1 P+R parkoló</h2>
+            <div class="value-container">
+                <span class="value">93</span>
+                <span class="max-lot">/ 485</span>
+            </div>
+        </div>
+    </a>
+
+    <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P131" target="_blank" class="card status-ok">
+        <div class="card-inner">
+            <h2>Őrmező P2 P+R parkoló</h2>
+            <div class="value-container">
+                <span class="value">125</span>
+                <span class="max-lot">/ 500</span>
+            </div>
+        </div>
+    </a>
+</div>
+    <div class="column-wide" id="col-p3-p4">
+
+    <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P101" target="_blank" class="card status-low">
+        <div class="card-inner">
+            <h2>Etele P1 P+R parkoló</h2>
+            <div class="value-container">
+                <span class="value">1</span>
+                <span class="max-lot">/ 247</span>
+            </div>
+        </div>
+    </a>
+
+    <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P111" target="_blank" class="card status-ok">
+        <div class="card-inner">
+            <h2>Etele P2 P+R parkoló</h2>
+            <div class="value-container">
+                <span class="value">74</span>
+                <span class="max-lot">/ 221</span>
+            </div>
+        </div>
+    </a>
+</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

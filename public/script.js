@@ -1,65 +1,65 @@
-/**
- * Real-time óra frissítése (Narancssárga kijelző)
- */
 function updateClock() {
-    const timeElement = document.getElementById('system-time');
-    if (!timeElement) return;
+    const clockEl = document.getElementById('system-time');
+    if (!clockEl) return;
 
     const now = new Date();
-    timeElement.textContent = now.toLocaleTimeString('hu-HU', {
+    // Magyar formátum: 20:15:05
+    const timeStr = now.toLocaleTimeString('hu-HU', {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit'
     });
+
+    clockEl.textContent = timeStr;
 }
 
-/**
- * Adatok frissességi idejének számítása és stílusozása
- */
+// A korábbi adat-kor számláló függvényed mellé add be ezt is:
 function updateDataAge() {
-    // Az extractor.js a 'last-update' elembe teszi a data-generated attribútumot
-    const ageEl = document.getElementById('last-update');
-    if (!ageEl) return;
+    const ageEl = document.getElementById('data-age');
+    if (!ageEl || !ageEl.getAttribute('data-generated')) return;
 
-    const genTimeStr = ageEl.getAttribute('data-generated');
-    if (!genTimeStr) return;
-
-    const genTime = new Date(genTimeStr);
+    const genTime = new Date(ageEl.getAttribute('data-generated'));
     const now = new Date();
     const diffSec = Math.floor((now - genTime) / 1000);
 
     if (isNaN(diffSec)) return;
 
-    // Kijelzés formázása
     if (diffSec < 60) {
-        ageEl.textContent = `Updated: ${diffSec} sec ago`;
+        ageEl.textContent = `Adatok: ${diffSec} mp-cel ezelőtt`;
     } else {
         const mins = Math.floor(diffSec / 60);
         const secs = diffSec % 60;
-        ageEl.textContent = `Updated: ${mins} min ${secs} sec ago`;
-    }
-
-    // Dinamikus színezés: 15 perc (900 mp) után figyelmeztető piros
-    if (diffSec >= 900) {
-        ageEl.style.color = "#ff4444";
-        ageEl.style.textShadow = "0 0 10px rgba(255, 68, 68, 0.6)";
-    } else {
-        ageEl.style.color = "#00d4ff"; // Eredeti cián
-        ageEl.style.textShadow = "0 0 8px rgba(0, 212, 255, 0.4)";
+        ageEl.textContent = `Adatok: ${mins}p ${secs}mp-cel ezelőtt`;
     }
 }
 
-/**
- * Inicializálás és egyetlen közös ciklus az erőforrás-takarékosságért
- */
-document.addEventListener('DOMContentLoaded', () => {
-    // Azonnali futtatás
+// Indítás és folyamatos frissítés
+setInterval(() => {
     updateClock();
     updateDataAge();
+}, 1000);
 
-    // Közös intervallum 1 másodperces frissítéssel
-    setInterval(() => {
-        updateClock();
-        updateDataAge();
-    }, 1000);
-});
+updateClock();
+updateDataAge();
+
+// 1 másodpercenkénti frissítés
+setInterval(updateDataAge, 1000);
+// Azonnali indítás
+updateDataAge();
+
+setInterval(updateDataAge, 1000);
+updateDataAge();
+// Magyaros kijelzés
+if (diffSec < 60) {
+    ageEl.textContent = `Adatok: ${diffSec} másodperce frissültek`;
+} else {
+    const mins = Math.floor(diffSec / 60);
+    const secs = diffSec % 60;
+    ageEl.textContent = `Adatok: ${mins} perc ${secs} mp-e frissültek`;
+}
+
+// Másodpercenként frissítjük a kijelzőt
+setInterval(updateDataAge, 1000);
+
+// Azonnal is lefuttatjuk a betöltéskor
+document.addEventListener('DOMContentLoaded', updateDataAge);
