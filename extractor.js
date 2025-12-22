@@ -93,6 +93,7 @@ async function runExtractor() {
             if (fs.existsSync(srcStylePath)) fs.copyFileSync(srcStylePath, targetStylePath);
             if (fs.existsSync(srcScriptPath)) fs.copyFileSync(srcScriptPath, targetScriptPath);
             if (fs.existsSync('favicon.png')) fs.copyFileSync('favicon.png', 'public/favicon.png');
+            if (fs.existsSync('favicon.svg')) {fs.copyFileSync('favicon.svg', 'public/favicon.svg');}            
             console.log(`✅ Minden fájl készen áll a public/ mappában.`);
         }
     } catch (criticalErr) {
