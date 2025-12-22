@@ -4,12 +4,21 @@ const fs = require('fs');
 const path = require('path');
 
 async function runExtractor() {
+    // --- ÚTVONALAK DEFINIÁLÁSA ---
+    const publicDir = path.join(__dirname, 'public');
     const urlsPath = path.join(__dirname, 'urls.json');
     const templatePath = path.join(__dirname, 'index.template.html');
-    const targetPath = path.join(__dirname, 'public', 'index.html');
-    const styleSrc = path.join(__dirname, 'style.css');
-    const styleDest = path.join(__dirname, 'public', 'style.css');
 
+    // Cél útvonalak a public mappában
+    const targetHtmlPath = path.join(publicDir, 'index.html');
+    const targetStylePath = path.join(publicDir, 'style.css');
+    const targetScriptPath = path.join(publicDir, 'script.js');
+
+    // Forrás útvonalak az assetekhez
+    const srcStylePath = path.join(__dirname, 'style.css');
+    const srcScriptPath = path.join(__dirname, 'script.js');
+
+    // Alapvető ellenőrzés
     if (!fs.existsSync(urlsPath)) {
         console.error("❌ Hiba: urls.json nem található!");
         return;
@@ -26,15 +35,11 @@ async function runExtractor() {
         '--window-size=1920,1080'
     );
 
-    // --- JAVÍTOTT PÉLDÁNYOSÍTÁS ---
     let driver;
     try {
-        const service = new chrome.ServiceBuilder(); // Alapértelmezett service
-
         driver = await new Builder()
             .forBrowser('chrome')
             .setChromeOptions(options)
-            // Biztosítjuk, hogy ne legyen ütközés a portok között
             .build();
 
         let results = [];
@@ -42,6 +47,7 @@ async function runExtractor() {
         const huTime = now.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         const isoTime = now.toISOString();
 
+        // --- ADATGYŰJTÉS ---
         for (const entry of facilities) {
             console.log(`⏳ Scrape: ${entry.label}...`);
             try {
@@ -58,7 +64,7 @@ async function runExtractor() {
             }
         }
 
-        // --- HTML GENERÁLÁS (urls.json adatokkal) ---
+        // --- HTML GENERÁLÁS ÉS FÁJLKEZELÉS ---
         if (fs.existsSync(templatePath)) {
             let html = fs.readFileSync(templatePath, 'utf8');
 
@@ -85,18 +91,36 @@ async function runExtractor() {
             const p1p2 = results.filter(r => r.id === 'p1' || r.id === 'p2').map(generateCardHtml).join('\n');
             const others = results.filter(r => r.id !== 'p1' && r.id !== 'p2').map(generateCardHtml).join('\n');
 
+            // Tartalom behelyettesítése a template-be
             html = html.replace(/(id="col-p1-p2"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${p1p2}\n$3`);
             html = html.replace(/(id="col-p3-p4"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${others}\n$3`);
             html = html.replace(/id="system-time">.*?<\/div>/, `id="system-time">${huTime}</div>`);
             html = html.replace(/data-generated=".*?"/, `data-generated="${isoTime}"`);
 
-            if (!fs.existsSync(path.dirname(targetPath))) fs.mkdirSync(path.dirname(targetPath), { recursive: true });
-            fs.writeFileSync(targetPath, html);
+            // 1. Biztosítjuk a public mappa létezését
+            if (!fs.existsSync(publicDir)) {
+                fs.mkdirSync(publicDir, { recursive: true });
+            }
 
-            // Automatikus CSS másolás a szabály szerint
-            if (fs.existsSync(styleSrc)) fs.copyFileSync(styleSrc, styleDest);
+            // 2. Mentjük a generált HTML-t -> public/index.html
+            fs.writeFileSync(targetHtmlPath, html);
+            console.log(`✅ HTML legenerálva a public mappába.`);
 
-            console.log(`✅ Dashboard frissítve: ${huTime}`);
+            // 3. CSS másolása -> public/style.css
+            if (fs.existsSync(srcStylePath)) {
+                fs.copyFileSync(srcStylePath, targetStylePath);
+                console.log('✅ style.css átmásolva.');
+            }
+
+            // 4. Script másolása -> public/script.js (2025-12-17-i szabály szerint)
+            if (fs.existsSync(srcScriptPath)) {
+                fs.copyFileSync(srcScriptPath, targetScriptPath);
+                console.log('✅ script.js átmásolva.');
+            }
+
+            console.log(`🚀 Dashboard sikeresen frissítve és publikálásra kész: ${huTime}`);
+        } else {
+            console.error("❌ Hiba: index.template.html nem található a forrás könyvtárban!");
         }
     } catch (criticalErr) {
         console.error("❌ Kritikus Selenium hiba:", criticalErr.message);

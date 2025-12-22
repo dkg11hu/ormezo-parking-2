@@ -52,6 +52,7 @@ jobs:
       - name: 🚀 Run Data Extractor, 🏗️ Build HTML and Copy Assets
         run: node extractor.js
 
+
       - name: 🚀 Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
