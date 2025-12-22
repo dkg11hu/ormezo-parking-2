@@ -83,6 +83,7 @@ async function runExtractor() {
             // html = html.replace(/(id="last-update"\s+data-generated=").*?(")/, `$1${isoTime}$2`);
             html = html.replace(/id="system-time">.*?<\/div>/, `id="system-time">${huTime}</div>`);
             html = html.replace(/(id="last-update"\s+data-generated=").*?(")/, `$1${timestamp}$2`);
+            html = html.replace(/data-generated="[^"]*"/, `data-generated="${timestamp}"`);
 
             // Mentés a public mappába
             if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
