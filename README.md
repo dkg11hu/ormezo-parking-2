@@ -1,59 +1,148 @@
-# Őrmező Parking
+# Őrmező Parking Dashboard 🚗
 
-[![CI](https://github.com/dkg11hu/ormezo-parking/actions/workflows/ci.yml/badge.svg)](https://github.com/dkg11hu/ormezo-parking/actions/workflows/ci.yml)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D20-green?logo=node.js)](https://nodejs.org/)
-[![GitHub release](https://img.shields.io/github/v/release/dkg11hu/ormezo-parking?logo=github)](RELEASE_NOTES.md)
-[![Semantic Versioning](https://img.shields.io/badge/semver-2.0.0-blue)](https://semver.org/)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
-[![Contributing](https://img.shields.io/badge/Contributing-Guide-green.svg)](CONTRIBUTING.md)
-[![Security Policy](https://img.shields.io/badge/Security-Policy-green.svg)](SECURITY.md)
+[![CI](https://github.com/dkg11hu/ormezo-parking/actions/workflows/schedule.yml/badge.svg)](https://github.com/dkg11hu/ormezo-parking/actions/workflows/schedule.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D20-green?logo=node.js)](https://nodejs.org/)
 
----
+A real-time (updated every 15 minutes) dashboard monitoring parking spot availability in the Őrmező area. The system scrapes public data, generates a responsive "Cyberpunk-style" dashboard, and hosts it via GitHub Pages.
 
-## Overview
+## 🌟 Features
+- **Automated Extraction**: Scrapes parking data using Selenium (Firefox Headless).
+- **Static Site Generation**: Injects live data into a pre-defined HTML template.
+- **Responsive Design**: Optimized for both Portrait (mobile) and Landscape (tablet/kiosk) orientations.
+- **Visual Status Indicators**: Color-coded cards (Green/Yellow/Red) based on occupancy levels.
+- **Data Freshness**: Includes a live "time-since-update" counter and system clock.
 
-Real-time extractor and dashboard for monitoring **Őrmező (Budapest) P+R** parking availability.  
-Optimized for **iPhone XS OLED** displays, providing an ultra-fast, no-scroll experience with high-contrast "shining" typography. Built with **Node.js**, **Selenium**, and automated via **GitHub Actions**.
+## 🛠️ Tech Stack
+- **Backend/Scraper**: Node.js, Selenium WebDriver (Geckodriver/Firefox).
+- **CI/CD**: GitHub Actions (scheduled CRON jobs).
+- **Frontend**: Vanilla JS, CSS3 (Flexbox/Grid), HTML5.
+- **Hosting**: GitHub Pages.
 
-## 📱 iPhone XS Optimization
+## 🚀 Getting Started
 
-- **Dynamic Viewport:** Uses `100dvh` to fit the dashboard perfectly within Safari's frame without scrolling.
-- **OLED Black Theme:** Pure `#000` background for maximum energy efficiency and contrast.
-- **Shining Typography:** Labels feature a subtle glow (`text-shadow`) and pure white color for high legibility.
-- **Vivid Status:** Data freshness ("X mp-cel ezelőtt") is highlighted in neon blue (`#00d4ff`).
-- **Full-Surface Touch:** Each parking card is a clickable `<a>` tag for easy one-handed navigation.
+### Prerequisites
+- Node.js (v20 or higher)
+- Firefox Browser (for local scraping)
 
-## Quickstart
+### Local Installation
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/dkg11hu/ormezo-parking.git](https://github.com/dkg11hu/ormezo-parking.git)
+   cd ormezo-parking
 
-```bash
-git clone [https://github.com/dkg11hu/ormezo-parking.git](https://github.com/dkg11hu/ormezo-parking.git)
-cd ormezo-parking
-npm install
-make extract
-make build
-```
+### Install dependencies:
 
-## 🛠 Project Logic
+   ```bash
+    npm install
+   ```
 
-### File,Responsibility
-extractor.js,Selenium scraper that fetches live data and generates index.html.
-urls.json,Source configuration (URLs and CSS selectors).
-style.css,"XS-optimized ""Shining White"" stylesheet."
-public/,Deployment-ready folder containing synced assets.
+### Create a urls.json file in the root directory (see Configuration).
 
-## CI/CD
-Automated Extraction: Scheduled Selenium runs via GitHub Actions.
+### Run the extractor locally:
 
-Auto-Sync: Build process automatically copies index.html, style.css, and script.js to the public/ directory.
+   ```bash
+    node extractor.js
+   ```
 
-Semantic versioning: Automated GitHub Releases.
+### Open public/index.html to view the result.
 
-```bash
-make extract
-```
+## ⚙️ Configuration
+The scraper requires a urls.json file to define the parking facilities. Example structure:
 
-## Runtime Flow
-```Plaintext
-Selenium (Geckodriver) → urls.json → parking-status.json → index.html
-```
+    ```JSON
+
+[
+  {
+    "id": "p1",
+    "label": "P+R P1",
+    "url": "[https://example.com/parking1](https://example.com/parking1)",
+    "selector": { "css": ".free-spots-class" },
+    "maxLot": 500
+  }
+]
+    ```
+
+    This project is a streamlined, automated parking availability dashboard for Őrmező. It uses a headless Firefox scraper (via Selenium) to fetch data, processes it into a static HTML dashboard, and deploys it automatically to GitHub Pages every 15 minutes.
+
+Based on the files provided, I have drafted a comprehensive suite of GitHub documentation files for you.
+
+1. README.md
+This is the main entry point for your repository. It explains what the project does and how to set it up.
+
+Markdown
+
+# Őrmező Parking Dashboard 🚗
+
+[![CI](https://github.com/dkg11hu/ormezo-parking/actions/workflows/schedule.yml/badge.svg)](https://github.com/dkg11hu/ormezo-parking/actions/workflows/schedule.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D20-green?logo=node.js)](https://nodejs.org/)
+
+A real-time (updated every 15 minutes) dashboard monitoring parking spot availability in the Őrmező area. The system scrapes public data, generates a responsive "Cyberpunk-style" dashboard, and hosts it via GitHub Pages.
+
+## 🌟 Features
+- **Automated Extraction**: Scrapes parking data using Selenium (Firefox Headless).
+- **Static Site Generation**: Injects live data into a pre-defined HTML template.
+- **Responsive Design**: Optimized for both Portrait (mobile) and Landscape (tablet/kiosk) orientations.
+- **Visual Status Indicators**: Color-coded cards (Green/Yellow/Red) based on occupancy levels.
+- **Data Freshness**: Includes a live "time-since-update" counter and system clock.
+
+## 🛠️ Tech Stack
+- **Backend/Scraper**: Node.js, Selenium WebDriver (Geckodriver/Firefox).
+- **CI/CD**: GitHub Actions (scheduled CRON jobs).
+- **Frontend**: Vanilla JS, CSS3 (Flexbox/Grid), HTML5.
+- **Hosting**: GitHub Pages.
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v20 or higher)
+- Firefox Browser (for local scraping)
+
+### Local Installation
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/dkg11hu/ormezo-parking.git](https://github.com/dkg11hu/ormezo-parking.git)
+   cd ormezo-parking
+
+### Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Create a urls.json file in the root directory (see Configuration).
+
+### Run the extractor locally:
+
+   ```bash
+   node extractor.js
+   ```
+
+### Open public/index.html to view the result.
+
+## ⚙️ Configuration
+The scraper requires a urls.json file to define the parking facilities. Example structure:
+
+   ```JSON
+[
+  {
+    "id": "p1",
+    "label": "P+R P1",
+    "url": "[https://example.com/parking1](https://example.com/parking1)",
+    "selector": { "css": ".free-spots-class" },
+    "maxLot": 500
+  }
+]
+   ```
+
+## 🤖 CI/CD Workflow
+The project uses GitHub Actions (schedule.yml):
+Triggers: Runs every 15 minutes, on every push to main, or via manual dispatch.
+
+Process:
+- Checks out code.
+- Sets up Firefox/Geckodriver.
+- Runs extractor.js to generate the public/ folder.
+- Automatically copies script.js, style.css, and index.html to the deployment directory.
+- Deploys the contents of public/ to the gh-pages branch.
+
