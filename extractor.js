@@ -36,6 +36,7 @@ async function runExtractor() {
         const now = new Date();
         const huTime = now.toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         const isoTime = now.toISOString();
+        const timestamp = now.getTime(); // ISO helyett tiszta szám (ezredmásodperc)
 
         for (const entry of facilities) {
             console.log(`⏳ Scrape: ${entry.label}...`);
@@ -79,8 +80,9 @@ async function runExtractor() {
             // HTML frissítés (A pontos ID-kat használva)
             html = html.replace(/(id="col-p1-p2"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${p1p2}\n$3`);
             html = html.replace(/(id="col-p3-p4"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${others}\n$3`);
-            html = html.replace(/(id="last-update"\s+data-generated=").*?(")/, `$1${isoTime}$2`);
+            // html = html.replace(/(id="last-update"\s+data-generated=").*?(")/, `$1${isoTime}$2`);
             html = html.replace(/id="system-time">.*?<\/div>/, `id="system-time">${huTime}</div>`);
+            html = html.replace(/(id="last-update"\s+data-generated=").*?(")/, `$1${timestamp}$2`);
 
             // Mentés a public mappába
             if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
