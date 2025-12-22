@@ -11,7 +11,8 @@ try {
         'extractor.js',
         'index.template.html',
         'style.css',   // <--- Most már a gyökérben keressük
-        'script.js'    // <--- Most már a gyökérben keressük
+        'script.js',    // <--- Most már a gyökérben keressük
+        'favicon.svg'    // <--- Most már a gyökérben keressük
     ];
 
     masterSources.forEach(file => {
@@ -52,11 +53,6 @@ try {
 
     if (htmlContent.length < 100) {
         throw new Error("A generált index.html túl rövid vagy üres!");
-    }
-
-    // Modern Dark check: nézzük meg, benne van-e a sötét háttérszín
-    if (!cssContent.includes('#0d1117') && !cssContent.includes('--bg')) {
-        console.warn("⚠️ FIGYELEM: A style.css-ben nem találom a sötét stílus nyomait!");
     }
 
     console.log("\n✨ SIKER! A 'public' mappa szerkezete helyes, az útvonalak (relatív hivatkozások) rendben lesznek.");

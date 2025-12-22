@@ -22,7 +22,7 @@ body {
 header {
   background: #111;
   border-radius: 12px;
-  padding: 20px;
+  padding: 15px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -33,12 +33,26 @@ header {
 
 header h1 {
   font-size: 1.8rem;
-  color: #ffcc00;
-  /* Cyber Gold */
-  text-transform: uppercase;
-  font-weight: 900;
-  letter-spacing: -1px;
-  text-shadow: 0 0 10px rgba(255, 204, 0, 0.4), 0 0 20px rgba(255, 204, 0, 0.2);
+  line-height: 1;
+  /* Ensures the flexbox centering is accurate */
+  margin: 0;
+}
+
+.title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* Space between logo and text */
+}
+
+.header-logo {
+  height: 1.2rem;
+  /* Reduced from 2rem to match text height */
+  width: auto;
+  /* Subtle glow to match the text-shadow of the H1 */
+  filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.6));
+  /* Fine-tune vertical alignment if it looks too high/low */
+  transform: translateY(-1px);
 }
 
 #last-update {
@@ -175,20 +189,23 @@ header h1 {
 
   #dashboard-grid {
     flex-direction: column;
-    flex: 1; /* Ez kitölti a maradék függőleges helyet a fejléc alatt */
+    flex: 1;
+    /* Ez kitölti a maradék függőleges helyet a fejléc alatt */
   }
 
   .column-narrow,
   .column-wide {
     width: 100%;
-    flex: 1; /* Kényszerítjük, hogy mindkét oszlop a grid magasságának pontosan a felét foglalja el */
+    flex: 1;
+    /* Kényszerítjük, hogy mindkét oszlop a grid magasságának pontosan a felét foglalja el */
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
 
   .card {
-    flex: 1; /* Minden kártya kitölti az oszlopa rendelkezésre álló magasságának felét */
+    flex: 1;
+    /* Minden kártya kitölti az oszlopa rendelkezésre álló magasságának felét */
   }
 }
 
@@ -203,10 +220,16 @@ header h1 {
   }
 
   #dashboard-grid {
-    flex-direction: row; /* Fektetve egymás mellett vannak */
+    flex-direction: row;
+    /* Fektetve egymás mellett vannak */
     flex: 1;
   }
 
-  .column-narrow { flex: 0 0 25%; }
-  .column-wide { flex: 1; }
+  .column-narrow {
+    flex: 0 0 25%;
+  }
+
+  .column-wide {
+    flex: 1;
+  }
 }
