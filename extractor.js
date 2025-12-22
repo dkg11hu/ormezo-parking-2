@@ -92,7 +92,7 @@ async function runExtractor() {
             // Assetek másolása (2025-12-17 szabály szerint)
             if (fs.existsSync(srcStylePath)) fs.copyFileSync(srcStylePath, targetStylePath);
             if (fs.existsSync(srcScriptPath)) fs.copyFileSync(srcScriptPath, targetScriptPath);
-
+            if (fs.existsSync('favicon.png')) fs.copyFileSync('favicon.png', 'public/favicon.png');
             console.log(`✅ Minden fájl készen áll a public/ mappában.`);
         }
     } catch (criticalErr) {
