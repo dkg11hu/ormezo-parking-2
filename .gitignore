@@ -4,3 +4,31 @@
 
 # Ignore local history/scratch files
 .history/
+
+# Függőségek
+node_modules/
+npm-debug.log*
+
+# Selenium és böngésző maradványok
+.cache/
+.chromedriver/
+/usr/local/bin/geckodriver
+chromedriver
+geckodriver
+ghostdriver.log
+
+# Operációs rendszer fájlok
+.DS_Store
+Thumbs.db
+
+# Ideiglenes fájlok és naplók
+*.log
+logs/
+temp/
+
+# backups
+/archives/
+*.tgz
+# Build maradványok (opcionális, ha a public-ot csak az Action generálja)
+# public/index.html 
+# (Ezt most NE vedd ki, mert a gh-pages-nek szüksége van rá)
