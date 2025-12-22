@@ -29,8 +29,16 @@ jobs:
 
       - name: ⚙️ Install UI Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-0 libdbus-glib-1-2 libxt6 libx11-xcb1 libasound2 libpci3
+            sudo apt-get update
+            sudo apt-get install -y \
+            libgtk-3-0 \
+            libdbus-glib-1-2 \
+            libxt6 \
+            libx11-xcb1 \
+            libasound2t64 \
+            libpci3 \
+            libnss3 \
+            libgbm1
 
       - name: ⚙️ Install dependencies
         run: npm install
