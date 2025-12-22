@@ -1,65 +1,48 @@
-function updateClock() {
+function updateDashboard() {
+    const now = new Date();
+
+    // 1. ÓRA FRISSÍTÉSE
     const clockEl = document.getElementById('system-time');
-    if (!clockEl) return;
+    if (clockEl) {
+        clockEl.textContent = now.toLocaleTimeString('hu-HU', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+    }
 
-    const now = new Date();
-    // Magyar formátum: 20:15:05
-    const timeStr = now.toLocaleTimeString('hu-HU', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-    });
+    // 2. ADAT-KOR FRISSÍTÉSE
+    const ageEl = document.getElementById('last-update'); // A HTML-edben ez az ID!
+    if (ageEl) {
+        const genTimeStr = ageEl.getAttribute('data-generated');
+        
+        if (!genTimeStr || genTimeStr === "") {
+            ageEl.textContent = "Adatok: Frissítésre vár...";
+            return;
+        }
 
-    clockEl.textContent = timeStr;
-}
+        const genTime = new Date(genTimeStr);
+        const diffSec = Math.floor((now - genTime) / 1000);
 
-// A korábbi adat-kor számláló függvényed mellé add be ezt is:
-function updateDataAge() {
-    const ageEl = document.getElementById('data-age');
-    if (!ageEl || !ageEl.getAttribute('data-generated')) return;
-
-    const genTime = new Date(ageEl.getAttribute('data-generated'));
-    const now = new Date();
-    const diffSec = Math.floor((now - genTime) / 1000);
-
-    if (isNaN(diffSec)) return;
-
-    if (diffSec < 60) {
-        ageEl.textContent = `Adatok: ${diffSec} mp-cel ezelőtt`;
-    } else {
-        const mins = Math.floor(diffSec / 60);
-        const secs = diffSec % 60;
-        ageEl.textContent = `Adatok: ${mins}p ${secs}mp-cel ezelőtt`;
+        if (!isNaN(diffSec)) {
+            // Itt számoljuk ki és írjuk ki a magyar szöveget, BELÜL a függvényben
+            if (diffSec < 60) {
+                ageEl.textContent = `Adatok: ${diffSec} mp-e frissültek`;
+            } else {
+                const mins = Math.floor(diffSec / 60);
+                const secs = diffSec % 60;
+                ageEl.textContent = `Adatok: ${mins}p ${secs}mp-e frissültek`;
+            }
+            
+            // Színkód: 20 perc után piros
+            ageEl.style.color = (diffSec > 1200) ? "#ff4444" : "#00f2ff";
+        }
     }
 }
 
-// Indítás és folyamatos frissítés
-setInterval(() => {
-    updateClock();
-    updateDataAge();
-}, 1000);
+// EGYETLEN időzítő, ami mindent kezel másodpercenként
+setInterval(updateDashboard, 1000);
 
-updateClock();
-updateDataAge();
-
-// 1 másodpercenkénti frissítés
-setInterval(updateDataAge, 1000);
-// Azonnali indítás
-updateDataAge();
-
-setInterval(updateDataAge, 1000);
-updateDataAge();
-// Magyaros kijelzés
-if (diffSec < 60) {
-    ageEl.textContent = `Adatok: ${diffSec} másodperce frissültek`;
-} else {
-    const mins = Math.floor(diffSec / 60);
-    const secs = diffSec % 60;
-    ageEl.textContent = `Adatok: ${mins} perc ${secs} mp-e frissültek`;
-}
-
-// Másodpercenként frissítjük a kijelzőt
-setInterval(updateDataAge, 1000);
-
-// Azonnal is lefuttatjuk a betöltéskor
-document.addEventListener('DOMContentLoaded', updateDataAge);
+// Indítás betöltéskor
+document.addEventListener('DOMContentLoaded', updateDashboard);
+updateDashboard();
