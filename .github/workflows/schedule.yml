@@ -18,30 +18,19 @@ jobs:
     steps:
       - name: ⬇️ Checkout Main Branch
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: 📦 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: 🦊 Setup Firefox
+      - name: 🦊 Setup Firefox and Geckodriver
         uses: browser-actions/setup-firefox@v1
 
-      - name: ⚙️ Install UI Dependencies (Fix status 255)
+      - name: ⚙️ Install UI Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgtk-3-0t64 libdbus-glib-1-2 libxt6t64 libx11-xcb1 libasound2t64 libpci3
-
-      - name: ⚙️ Setup Geckodriver
-        run: |
-          URL="https://github.com/mozilla/geckodriver/releases/download/v0.35.0/geckodriver-v0.35.0-linux64.tar.gz"
-          curl -L -o geckodriver.tar.gz "$URL"
-          tar -xvzf geckodriver.tar.gz
-          chmod +x geckodriver
-          sudo mv geckodriver /usr/local/bin/
-          rm geckodriver.tar.gz
+          sudo apt-get install -y libgtk-3-0 libdbus-glib-1-2 libxt6 libx11-xcb1 libasound2 libpci3
 
       - name: ⚙️ Install dependencies
         run: npm install
@@ -49,15 +38,14 @@ jobs:
       - name: 📁 Prepare Public Folder
         run: mkdir -p public 
 
-      - name: 🚀 Run Data Extractor, 🏗️ Build HTML and Copy Assets
+      - name: 🚀 Run Data Extractor
         run: node extractor.js
 
-
       - name: 🚀 Deploy to GH Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public 
           publish_branch: gh-pages
           force_orphan: true
-          commit_message: "chore(deploy): Automated update from main [skip ci]"
+          commit_message: "chore(deploy): Automated update [skip ci]"
