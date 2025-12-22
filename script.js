@@ -1,36 +1,31 @@
 function updateDashboard() {
-    const now = new Date();
+    const now = new Date().getTime(); // Jelenlegi idő timestamp-ként
 
-    // 1. ÓRA
     const clockEl = document.getElementById('system-time');
     if (clockEl) {
-        clockEl.textContent = now.toLocaleTimeString('hu-HU', {
+        clockEl.textContent = new Date().toLocaleTimeString('hu-HU', {
             hour: '2-digit', minute: '2-digit', second: '2-digit'
         });
     }
 
-    // 2. ADAT-KOR
     const ageEl = document.getElementById('last-update');
     if (ageEl) {
-        const genTimeStr = ageEl.getAttribute('data-generated');
-        if (genTimeStr) {
-            const genTime = new Date(genTimeStr);
-            // .getTime() használatával kiküszöböljük az időzóna hibákat
-            let diffSec = Math.floor((now.getTime() - genTime.getTime()) / 1000);
+        const genTimestamp = parseInt(ageEl.getAttribute('data-generated'));
 
-            // Ha negatív lenne (időzóna elcsúszás miatt), állítsuk 0-ra
+        if (!isNaN(genTimestamp)) {
+            let diffSec = Math.floor((now - genTimestamp) / 1000);
+
+            // Ha az eltolódás miatt negatív lenne, kezeljük le
             if (diffSec < 0) diffSec = 0;
 
-            if (!isNaN(diffSec)) {
-                if (diffSec < 60) {
-                    ageEl.textContent = `Adatok: ${diffSec} mp-e frissültek`;
-                } else {
-                    const mins = Math.floor(diffSec / 60);
-                    const secs = diffSec % 60;
-                    ageEl.textContent = `Adatok: ${mins}p ${secs}mp-e frissültek`;
-                }
-                ageEl.style.color = (diffSec > 1200) ? "#ff4444" : "#00f2ff";
+            if (diffSec < 60) {
+                ageEl.textContent = `Adatok: ${diffSec} mp-e frissültek`;
+            } else {
+                const mins = Math.floor(diffSec / 60);
+                const secs = diffSec % 60;
+                ageEl.textContent = `Adatok: ${mins}p ${secs}mp-e frissültek`;
             }
+            ageEl.style.color = (diffSec > 1200) ? "#ff4444" : "#00f2ff";
         }
     }
 }
