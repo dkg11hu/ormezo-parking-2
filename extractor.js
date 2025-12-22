@@ -91,12 +91,21 @@ async function runExtractor() {
             const p1p2 = results.filter(r => r.id === 'p1' || r.id === 'p2').map(generateCardHtml).join('\n');
             const others = results.filter(r => r.id !== 'p1' && r.id !== 'p2').map(generateCardHtml).join('\n');
 
-            // Tartalom behelyettesítése a template-be
-            html = html.replace(/(id="col-p1-p2"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${p1p2}\n$3`);
-            html = html.replace(/(id="col-p3-p4"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${others}\n$3`);
-            html = html.replace(/id="system-time">.*?<\/div>/, `id="system-time">${huTime}</div>`);
-            html = html.replace(/data-generated=".*?"/, `data-generated="${isoTime}"`);
+            // extractor.js releváns része:
+            html = html.replace(/id="col-p1-p2"[^>]*>([\s\S]*?)<\/div>/, `id="col-p1-p2">${p1p2}</div>`);
+            html = html.replace(/id="col-p3-p4"[^>]*>([\s\S]*?)<\/div>/, `id="col-p3-p4">${others}</div>`);
 
+            // Ez a sor garantáltan megtalálja a last-update div-et és beírja az ISO időt
+            html = html.replace(
+                /(id="last-update"\s+data-generated=").*?(")/, 
+                `$1${isoTime}$2`
+            );
+
+            // Biztonság kedvéért a system-time-ot is töltsük fel kezdőértékkel
+            html = html.replace(
+                /(id="system-time">)(.*?)(<\/div>)/, 
+                `$1${huTime}$3`
+            );
             // 1. Biztosítjuk a public mappa létezését
             if (!fs.existsSync(publicDir)) {
                 fs.mkdirSync(publicDir, { recursive: true });
