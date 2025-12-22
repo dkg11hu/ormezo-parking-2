@@ -8,15 +8,14 @@ body {
   background-color: #000 !important;
   color: #fff;
   font-family: -apple-system, system-ui, sans-serif;
-  /* Safe Area Insets for iPhone Notch/Home Indicator */
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  /* Safe Area for iPhone XS Notch & Home Indicator */
+  padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom) 10px;
   width: 100vw;
-  /* Use dvh to fix Safari mobile address bar issues */
+  /* Dynamic Viewport Height for Safari Mobile */
   height: 100dvh;
   display: flex;
   gap: 10px;
   overflow: hidden;
-  /* Prevent "bouncing" or scrolling */
 }
 
 /* --- HEADER --- */
@@ -32,6 +31,20 @@ header {
   flex: 0 0 auto;
 }
 
+.title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-logo {
+  /* Shrunk to ~80% of previous 1.2rem to fit inline better */
+  height: 0.95rem;
+  width: auto;
+  filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.6));
+  transform: translateY(-1px);
+}
+
 header h1 {
   font-size: 1.8rem;
   line-height: 1;
@@ -41,21 +54,6 @@ header h1 {
   text-transform: uppercase;
   font-weight: 900;
   letter-spacing: -1px;
-  text-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
-}
-
-.title-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.header-logo {
-  height: 1.2rem;
-  /* Inline with text height */
-  width: auto;
-  filter: drop-shadow(0 0 5px rgba(255, 204, 0, 0.6));
-  transform: translateY(-1px);
 }
 
 #last-update {
@@ -83,7 +81,6 @@ header h1 {
   display: flex;
   gap: 10px;
   min-height: 0;
-  /* Critical for flex-shrink behavior */
 }
 
 .column-narrow {
@@ -116,7 +113,6 @@ header h1 {
   transition: transform 0.1s ease;
   flex: 1;
   min-height: 0;
-  /* Allow cards to shrink to fit screen */
 }
 
 .card:active {
@@ -149,7 +145,6 @@ header h1 {
 
 .value {
   font-size: 7vh;
-  /* Scaled relative to viewport height */
   font-weight: 900;
   color: #fff;
   line-height: 1;
@@ -162,7 +157,6 @@ header h1 {
   color: #444;
   font-weight: 700;
   margin-left: 10px;
-  text-shadow: 0 0 5px rgba(68, 68, 68, 0.5);
 }
 
 /* Status Colors */
@@ -182,8 +176,6 @@ header h1 {
 @media (orientation: portrait) {
   body {
     flex-direction: column;
-    padding: 10px;
-    padding-top: env(safe-area-inset-top);
   }
 
   header {
@@ -211,7 +203,7 @@ header h1 {
 
   .value {
     font-size: 6vh;
-    /* Smaller on mobile to ensure it fits the card width */
+    /* Prevents overflow on narrow screens */
   }
 }
 
