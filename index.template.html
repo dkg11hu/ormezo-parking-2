@@ -3,34 +3,33 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Parking Dashboard</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="alternate icon" type="image/png" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <header>
-    <div class="title-group">
+  <div id="app-container" style="display: contents;">
+    <header>
       <img src="favicon.svg" class="header-logo" alt="P">
-      <h1>Parking</h1>
-    </div>
-    <div class="header-info">
-      <div class="info-line">
-        <span class="info-label">Adatok:</span>
-        <span id="last-update" class="info-value" data-generated="0">0mp</span>
+      <div class="header-text-content">
+        <h1>Parking</h1>
+        <div class="header-info">
+          <div class="info-line">
+            <span class="info-label">Adatok:</span>
+            <span id="last-update" class="info-value">--:--:--</span>
+          </div>
+          <div class="info-line">
+            <span class="info-label">Pontos idő:</span>
+            <span id="system-time" class="info-value system-time-color">--:--:--</span>
+          </div>
+        </div>
       </div>
-      <div class="info-line">
-        <span class="info-label">Pontos idő:</span>
-        <span id="system-time" class="info-value system-time-color">00:00:00</span>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <div id="dashboard-grid">
+    <div id="dashboard-grid">
+    </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 

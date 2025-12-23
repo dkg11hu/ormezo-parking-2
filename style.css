@@ -13,7 +13,6 @@ body {
   overflow: hidden;
   background-color: #000 !important;
   color: #888;
-  /* Alapértelmezett szürke a neveknek és feliratoknak */
   font-family: "Barlow Condensed", sans-serif;
   font-size: clamp(10px, 2.3vh, 16px);
 }
@@ -25,52 +24,61 @@ body {
   padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom) 10px;
 }
 
-/* --- EGYSÉGES KÁRTYA ÉS HEADER --- */
-header,
-.card {
+/* --- HEADER --- */
+header {
   background: #111;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  padding: 0.8vh 1.5vw;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 1vh 15px;
   min-width: fit-content;
-  position: relative;
 }
 
-/* --- HEADER --- */
+.header-logo {
+  height: clamp(2.2rem, 6vh, 3.2rem);
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px #ffcc00);
+}
+
+.header-text-content {
+  display: flex;
+  flex-direction: column;
+}
+
 header h1 {
   font-weight: 700;
-  font-size: clamp(1.2rem, 5vh, 1.8rem);
+  font-size: clamp(1.1rem, 4vh, 1.5rem);
   color: #ffcc00;
-  /* Vissza a sárgához */
   text-transform: uppercase;
   line-height: 1;
 }
 
-.header-logo {
-  height: 3.5vh;
-  min-height: 18px;
-  filter: drop-shadow(0 0 8px #ffcc00);
-}
-
 .header-info {
   border-top: 1px solid #222 !important;
-  padding-top: 0.5vh;
+  padding-top: 4px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Adatok: és Pontos idő: legyen FEHÉR */
+.info-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
 .info-label {
   font-size: 0.65rem;
-  color: #fff;
+  color: #fff !important;
+  /* FEHÉR */
   text-transform: uppercase;
-  opacity: 0.9;
 }
 
 .info-value {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: #00ffcc;
 }
 
@@ -85,6 +93,23 @@ header h1 {
   gap: 0.8vh;
 }
 
+.card-link {
+  display: contents;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  background: #111;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 0.8vh 15px;
+  display: flex;
+  flex-direction: column;
+  min-width: fit-content;
+  position: relative;
+}
+
 .card-content-row {
   display: flex;
   flex-direction: row;
@@ -96,35 +121,26 @@ header h1 {
 .card h2 {
   font-size: clamp(0.8rem, 2.8vh, 1.1rem);
   color: #888;
-  /* Szürke parkoló név */
+  /* SZÜRKE */
   text-transform: uppercase;
-  line-height: 1;
   white-space: nowrap;
-}
-
-.value-container {
-  display: flex;
-  align-items: baseline;
 }
 
 .value {
   font-family: "Impact", sans-serif;
   font-size: clamp(1.6rem, 8.5vh, 2.8rem);
-  line-height: 1;
   color: #fff;
-  /* A szám maradjon jól látható fehér/világos */
+  /* FEHÉR */
 }
 
-/* A /999 rész legyen FEHÉR */
 .max-lot {
   font-size: 0.8rem;
-  color: #fff;
-  margin-left: 4px;
+  color: #fff !important;
+  /* FEHÉR */
   opacity: 0.7;
-  /* Enyhe áttetszőség, hogy ne nyomja el a fő számot */
+  margin-left: 4px;
 }
 
-/* Status Bar */
 .card::after {
   content: '';
   position: absolute;
@@ -146,35 +162,18 @@ header h1 {
   background: #ff4444;
 }
 
-/* --- ORIENTÁCIÓ ÉS ZSUGORODÁS --- */
+/* --- ORIENTÁCIÓ --- */
 @media screen and (orientation: landscape) {
   body {
     flex-direction: row;
     gap: 15px;
     align-items: flex-start;
-    justify-content: center;
   }
 
   header,
   #dashboard-grid {
     width: fit-content !important;
     flex: 0 0 auto;
-  }
-
-  #dashboard-grid {
-    align-items: stretch;
-  }
-
-  @media (max-height: 380px) {
-
-    header,
-    .card {
-      padding: 0.4vh 1vw;
-    }
-
-    #dashboard-grid {
-      gap: 0.4vh;
-    }
   }
 }
 
@@ -187,13 +186,5 @@ header h1 {
   header,
   #dashboard-grid {
     width: 85% !important;
-  }
-
-  #dashboard-grid {
-    align-items: stretch;
-  }
-
-  .card {
-    width: 100%;
   }
 }

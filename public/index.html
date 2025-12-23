@@ -3,74 +3,79 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Parking Dashboard</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="alternate icon" type="image/png" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <header>
-    <div class="title-group">
+  <div id="app-container" style="display: contents;">
+    <header>
       <img src="favicon.svg" class="header-logo" alt="P">
-      <h1>Parking</h1>
-    </div>
-    <div class="header-info">
-      <div class="info-line">
-        <span class="info-label">Adatok:</span>
-        <span id="last-update" class="info-value" data-generated="1766496605928">0mp</span>
+      <div class="header-text-content">
+        <h1>Parking</h1>
+        <div class="header-info">
+          <div class="info-line">
+            <span class="info-label">Adatok:</span>
+            <span id="last-update" class="info-value">2025-12-23 14:49:50</span>
+          </div>
+          <div class="info-line">
+            <span class="info-label">Pontos idő:</span>
+            <span id="system-time" class="info-value system-time-color">13:51:12</span>
+          </div>
+        </div>
       </div>
-      <div class="info-line">
-        <span class="info-label">Pontos idő:</span>
-        <span id="system-time" class="info-value system-time-color">13:30:05</span>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <div id="dashboard-grid">
-
-                <div class="card status-warn" style="--ratio: 49%">
-                    <div class="card-content-row">
-                        <h2>Őrmező P1 P+R parkoló</h2>
-                        <div class="value-container">
-                            <span class="value">236</span>
-                            <span class="max-lot">/ 485</span>
+    <div id="dashboard-grid">
+                <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P121" target="_blank" class="card-link">
+                    <div class="card status-ok" style="--ratio: 51%">
+                        <div class="card-content-row">
+                            <h2>Őrmező P1 P+R parkoló</h2>
+                            <div class="value-container">
+                                <span class="value">248</span>
+                                <span class="max-lot">/ 485</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="card status-warn" style="--ratio: 50%">
-                    <div class="card-content-row">
-                        <h2>Őrmező P2 P+R parkoló</h2>
-                        <div class="value-container">
-                            <span class="value">251</span>
-                            <span class="max-lot">/ 500</span>
+                <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P131" target="_blank" class="card-link">
+                    <div class="card status-ok" style="--ratio: 53%">
+                        <div class="card-content-row">
+                            <h2>Őrmező P2 P+R parkoló</h2>
+                            <div class="value-container">
+                                <span class="value">264</span>
+                                <span class="max-lot">/ 500</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="card status-warn" style="--ratio: 17%">
-                    <div class="card-content-row">
-                        <h2>Etele P1 P+R parkoló</h2>
-                        <div class="value-container">
-                            <span class="value">42</span>
-                            <span class="max-lot">/ 247</span>
+                <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P101" target="_blank" class="card-link">
+                    <div class="card status-warn" style="--ratio: 19%">
+                        <div class="card-content-row">
+                            <h2>Etele P1 P+R parkoló</h2>
+                            <div class="value-container">
+                                <span class="value">48</span>
+                                <span class="max-lot">/ 247</span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <div class="card status-warn" style="--ratio: 47%">
-                    <div class="card-content-row">
-                        <h2>Etele P2 P+R parkoló</h2>
-                        <div class="value-container">
-                            <span class="value">104</span>
-                            <span class="max-lot">/ 221</span>
+                <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P111" target="_blank" class="card-link">
+                    <div class="card status-ok" style="--ratio: 53%">
+                        <div class="card-content-row">
+                            <h2>Etele P2 P+R parkoló</h2>
+                            <div class="value-container">
+                                <span class="value">117</span>
+                                <span class="max-lot">/ 221</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-</div>
-
+                </a></div>
+  </div>
   <script src="script.js"></script>
 </body>
 
