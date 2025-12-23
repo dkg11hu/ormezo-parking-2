@@ -6,22 +6,35 @@
   padding: 0;
 }
 
-html,
-body {
+/* 1. Alapbeállítások: A HTML legyen a teljes háttér */
+html {
+  background-color: #000;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+}
+
+/* 2. BODY: Ez lesz a "Keret" (Vorder/Border) és a Sizer konténere */
+body {
+  height: calc(100vh - 20px);
+  /* 10px margin minden oldalon */
+  width: calc(100vw - 20px);
+  margin: 10px;
+
   background-color: #000 !important;
   color: #888;
   font-family: "Barlow Condensed", sans-serif;
-  font-size: clamp(10px, 2.3vh, 16px);
-}
 
-body {
+  /* Keret beállítása */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 15px;
+  padding: env(safe-area-inset-top) 15px env(safe-area-inset-bottom) 15px;
+
+  /* Elrendezés: Sizer logika */
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom) 10px;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 /* --- HEADER --- */
@@ -35,6 +48,8 @@ header {
   gap: 12px;
   padding: 1vh 15px;
   min-width: fit-content;
+  flex-shrink: 0;
+  /* Ne zsugorodjon össze */
 }
 
 .header-logo {
@@ -63,16 +78,9 @@ header h1 {
   flex-direction: column;
 }
 
-.info-line {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-}
-
 .info-label {
   font-size: 0.65rem;
   color: #fff !important;
-  /* FEHÉR */
   text-transform: uppercase;
 }
 
@@ -86,11 +94,15 @@ header h1 {
   color: #ff8800 !important;
 }
 
-/* --- ADATKÁRTYÁK --- */
+/* --- ADATKÁRTYÁK SIZER --- */
 #dashboard-grid {
   display: flex;
   flex-direction: column;
-  gap: 0.8vh;
+  gap: 1vh;
+  flex-grow: 1;
+  /* Ez tölti ki a maradék helyet az ablakban */
+  justify-content: center;
+  /* Kártyák középre igazítása a sizer-en belül */
 }
 
 .card-link {
@@ -103,11 +115,11 @@ header h1 {
   background: #111;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  padding: 0.8vh 15px;
+  padding: 1vh 15px;
   display: flex;
   flex-direction: column;
-  min-width: fit-content;
   position: relative;
+  min-width: fit-content;
 }
 
 .card-content-row {
@@ -121,22 +133,20 @@ header h1 {
 .card h2 {
   font-size: clamp(0.8rem, 2.8vh, 1.1rem);
   color: #888;
-  /* SZÜRKE */
   text-transform: uppercase;
   white-space: nowrap;
 }
 
 .value {
   font-family: "Impact", sans-serif;
-  font-size: clamp(1.6rem, 8.5vh, 2.8rem);
+  font-size: clamp(1.8rem, 9vh, 3rem);
+  /* Kicsit nagyobb értékek a sizer miatt */
   color: #fff;
-  /* FEHÉR */
 }
 
 .max-lot {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: #fff !important;
-  /* FEHÉR */
   opacity: 0.7;
   margin-left: 4px;
 }
@@ -162,18 +172,19 @@ header h1 {
   background: #ff4444;
 }
 
-/* --- ORIENTÁCIÓ --- */
+/* --- ORIENTÁCIÓ SZABÁLYOK --- */
 @media screen and (orientation: landscape) {
   body {
     flex-direction: row;
-    gap: 15px;
-    align-items: flex-start;
+    gap: 20px;
+    align-items: center;
+    /* Fejléc és kártyák egy vonalba kerülnek */
   }
 
   header,
   #dashboard-grid {
-    width: fit-content !important;
-    flex: 0 0 auto;
+    height: 100%;
+    /* Kitöltik a keret magasságát */
   }
 }
 
@@ -185,6 +196,7 @@ header h1 {
 
   header,
   #dashboard-grid {
-    width: 85% !important;
+    width: 100%;
+    /* Kitöltik a keret szélességét */
   }
 }

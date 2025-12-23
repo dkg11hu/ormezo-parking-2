@@ -1,5 +1,5 @@
 const { Builder, By, until } = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome'); // Firefoxról Chrome-ra váltás
+const chrome = require('selenium-webdriver/chrome');
 const fs = require('fs');
 const path = require('path');
 
@@ -11,16 +11,15 @@ async function runExtractor() {
     if (!fs.existsSync(urlsPath)) return console.error("❌ urls.json hiányzik!");
     const facilities = JSON.parse(fs.readFileSync(urlsPath, 'utf8'));
 
-    // Chrome opciók a stabil futáshoz (Sandbox kikapcsolása a CI környezet miatt)
+    // Chrome opciók a stabilitásért és a hibák elkerüléséért
     let options = new chrome.Options();
-    options.addArguments('--headless=new');
+    options.addArguments('--headless'); // Simább headless mód az 'unknown command' ellen
     options.addArguments('--no-sandbox');
     options.addArguments('--disable-dev-shm-usage');
-    options.addArguments('--disable-gpu');
+    options.addArguments('--remote-allow-origins=*');
 
     let driver;
     try {
-        // Driver felépítése Chrome-mal
         driver = await new Builder()
             .forBrowser('chrome')
             .setChromeOptions(options)
@@ -50,7 +49,6 @@ async function runExtractor() {
                 const match = rawText.match(/(\d+)/);
                 results.push({ ...entry, free: match ? match[1] : "N/A" });
             } catch (err) {
-                console.error(`⚠️ Hiba (${entry.label}): ${err.message}`);
                 results.push({ ...entry, free: "N/A" });
             }
         }
@@ -66,6 +64,7 @@ async function runExtractor() {
                 const percent = Math.min(Math.round((freeNum / max) * 100), 100);
                 let status = percent <= 15 ? 'status-low' : (percent <= 50 ? 'status-warn' : 'status-ok');
 
+                // A kártya struktúra megtartja a flexible shrinkage-et támogató osztályokat
                 return `
                 <a href="${res.url}" target="_blank" class="card-link">
                     <div class="card ${status}" style="--ratio: ${percent}%">
@@ -87,18 +86,15 @@ async function runExtractor() {
             if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
             fs.writeFileSync(path.join(publicDir, 'index.html'), html);
 
-            // Másolás a public mappába az utasításod szerint
-            if (fs.existsSync('style.css')) fs.copyFileSync('style.css', path.join(publicDir, 'style.css'));
-            if (fs.existsSync('script.js')) fs.copyFileSync('script.js', path.join(publicDir, 'script.js'));
-            if (fs.existsSync('favicon.svg')) fs.copyFileSync('favicon.svg', path.join(publicDir, 'favicon.svg'));
+            // Fájlok másolása a public mappába (2025-12-17-i utasítás szerint)
+            ['style.css', 'script.js', 'favicon.svg'].forEach(file => {
+                if (fs.existsSync(file)) fs.copyFileSync(file, path.join(publicDir, file));
+            });
 
-            console.log(`✅ Sikeres generálás: ${huTime}`);
+            console.log(`✅ Kész: ${huTime}`);
         }
-    } catch (criticalErr) {
-        console.error("❌ Kritikus hiba:", criticalErr.message);
     } finally {
         if (driver) await driver.quit();
     }
 }
-
 runExtractor();
