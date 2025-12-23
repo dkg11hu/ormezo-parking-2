@@ -11,15 +11,24 @@ async function runExtractor() {
     if (!fs.existsSync(urlsPath)) return console.error("❌ urls.json hiányzik!");
     const facilities = JSON.parse(fs.readFileSync(urlsPath, 'utf8'));
 
-    // Chrome opciók a stabilitásért és a hibák elkerüléséért
     let options = new chrome.Options();
-    options.addArguments('--headless'); // Simább headless mód az 'unknown command' ellen
+
+    // Kényszerített Headless és stabilitási flag-ek
+    options.addArguments('--headless=new');
     options.addArguments('--no-sandbox');
     options.addArguments('--disable-dev-shm-usage');
+    options.addArguments('--disable-gpu');
     options.addArguments('--remote-allow-origins=*');
+
+    // GitHub Actions-ön a Chrome gyakran itt található:
+    if (process.env.CHROME_BIN) {
+        options.setBinaryPath(process.env.CHROME_BIN);
+    }
 
     let driver;
     try {
+        // Driver létrehozása hibakezeléssel
+        console.log("🚀 Selenium indítása...");
         driver = await new Builder()
             .forBrowser('chrome')
             .setChromeOptions(options)
@@ -38,33 +47,22 @@ async function runExtractor() {
                 const el = await driver.wait(until.elementLocated(selector), 15000);
                 const rawText = await el.getText();
 
-                if (entry.timestampSelector) {
-                    try {
-                        const tsSelector = entry.timestampSelector.css ? By.css(entry.timestampSelector.css) : By.xpath(entry.timestampSelector.xpath);
-                        const tsEl = await driver.findElement(tsSelector);
-                        sourceUpdateTimes.push(await tsEl.getText());
-                    } catch (e) { }
-                }
-
                 const match = rawText.match(/(\d+)/);
                 results.push({ ...entry, free: match ? match[1] : "N/A" });
             } catch (err) {
+                console.error(`⚠️ Hiba (${entry.label}): ${err.message}`);
                 results.push({ ...entry, free: "N/A" });
             }
         }
 
-        const displaySourceTime = sourceUpdateTimes.length > 0 ? sourceUpdateTimes[0] : huTime;
-
+        // HTML generálás (megtartva a flexible shrinkage-et)
         if (fs.existsSync(templatePath)) {
             let html = fs.readFileSync(templatePath, 'utf8');
-
             const allCardsHtml = results.map(res => {
                 const freeNum = res.free === "N/A" ? 0 : parseInt(res.free);
                 const max = parseInt(res.maxLot) || 1;
                 const percent = Math.min(Math.round((freeNum / max) * 100), 100);
                 let status = percent <= 15 ? 'status-low' : (percent <= 50 ? 'status-warn' : 'status-ok');
-
-                // A kártya struktúra megtartja a flexible shrinkage-et támogató osztályokat
                 return `
                 <a href="${res.url}" target="_blank" class="card-link">
                     <div class="card ${status}" style="--ratio: ${percent}%">
@@ -80,19 +78,20 @@ async function runExtractor() {
             }).join('\n');
 
             html = html.replace(/(id="dashboard-grid"[^>]*>)([\s\S]*?)(<\/div>)/, `$1${allCardsHtml}$3`);
-            html = html.replace(/id="last-update"[^>]*>.*?<\/span>/, `id="last-update" class="info-value">${displaySourceTime}</span>`);
+            html = html.replace(/id="last-update"[^>]*>.*?<\/span>/, `id="last-update" class="info-value">${huTime}</span>`);
             html = html.replace(/id="system-time"[^>]*>.*?<\/span>/, `id="system-time" class="info-value system-time-color">${huTime}</span>`);
 
             if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
             fs.writeFileSync(path.join(publicDir, 'index.html'), html);
 
-            // Fájlok másolása a public mappába (2025-12-17-i utasítás szerint)
             ['style.css', 'script.js', 'favicon.svg'].forEach(file => {
                 if (fs.existsSync(file)) fs.copyFileSync(file, path.join(publicDir, file));
             });
-
-            console.log(`✅ Kész: ${huTime}`);
+            console.log(`✅ Sikeres generálás: ${huTime}`);
         }
+    } catch (criticalErr) {
+        console.error("❌ Kritikus hiba a Selenium indításakor:", criticalErr.message);
+        process.exit(1);
     } finally {
         if (driver) await driver.quit();
     }
