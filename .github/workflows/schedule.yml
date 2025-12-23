@@ -27,10 +27,9 @@ jobs:
       # Chrome telepítése Firefox helyett
       - name: ⚙️ Install ChromeDriver
         run: |
-          # Ez a lépés biztosítja, hogy a chromedriver elérhető legyen
           sudo apt-get update
-          sudo apt-get install -y chromium-chromedriver
-          # Megnézzük hol van pontosan (ellenőrzés)
+          sudo apt-get install -y chromium-browser chromium-chromedriver
+          which chromium-browser || which chromium
           which chromedriver
 
       - name: ⚙️ Install dependencies
@@ -41,6 +40,8 @@ jobs:
 
       - name: 🚀 Run Data Extractor
         run: node extractor.js
+        env:
+          GITHUB_ACTIONS: true
 
       - name: 🚀 Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v4
