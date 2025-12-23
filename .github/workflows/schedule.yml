@@ -25,10 +25,13 @@ jobs:
           node-version: '20'
 
       # Chrome telepítése Firefox helyett
-      - name: 🌐 Setup Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
+      - name: ⚙️ Install ChromeDriver
+        run: |
+          # Ez a lépés biztosítja, hogy a chromedriver elérhető legyen
+          sudo apt-get update
+          sudo apt-get install -y chromium-chromedriver
+          # Megnézzük hol van pontosan (ellenőrzés)
+          which chromedriver
 
       - name: ⚙️ Install dependencies
         run: npm install

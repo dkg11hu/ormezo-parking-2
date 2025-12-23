@@ -1,37 +1,32 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const chrome = require('selenium-webdriver/chrome');
-const fs = require('fs');
-const path = require('path');
+// ... többi import ...
 
 async function runExtractor() {
-    const publicDir = path.join(__dirname, 'public');
-    const urlsPath = path.join(__dirname, 'urls.json');
-    const templatePath = path.join(__dirname, 'index.template.html');
-
-    if (!fs.existsSync(urlsPath)) return console.error("❌ urls.json hiányzik!");
-    const facilities = JSON.parse(fs.readFileSync(urlsPath, 'utf8'));
+    // ... utak beállítása ...
 
     let options = new chrome.Options();
-
-    // Kényszerített Headless és stabilitási flag-ek
     options.addArguments('--headless=new');
     options.addArguments('--no-sandbox');
     options.addArguments('--disable-dev-shm-usage');
     options.addArguments('--disable-gpu');
     options.addArguments('--remote-allow-origins=*');
 
-    // GitHub Actions-ön a Chrome gyakran itt található:
-    if (process.env.CHROME_BIN) {
-        options.setBinaryPath(process.env.CHROME_BIN);
+    // GitHub Actions környezetben fixáljuk az utat, hogy ne omoljon össze a kereső
+    if (process.env.GITHUB_ACTIONS) {
+        options.setBinaryPath('/usr/bin/google-chrome');
     }
 
     let driver;
     try {
-        // Driver létrehozása hibakezeléssel
-        console.log("🚀 Selenium indítása...");
+        console.log("🚀 Selenium indítása (Manual Driver Mode)...");
+
+        const service = new chrome.ServiceBuilder('/usr/bin/chromedriver'); // Fix driver út
+
         driver = await new Builder()
             .forBrowser('chrome')
             .setChromeOptions(options)
+            .setChromeService(service) // Kényszerített szerviz használat
             .build();
 
         let results = [];
