@@ -24,21 +24,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 🦊 Setup Firefox and Geckodriver
-        uses: browser-actions/setup-firefox@v1
-
-      - name: ⚙️ Install UI Dependencies
-        run: |
-            sudo apt-get update
-            sudo apt-get install -y \
-            libgtk-3-0 \
-            libdbus-glib-1-2 \
-            libxt6 \
-            libx11-xcb1 \
-            libasound2t64 \
-            libpci3 \
-            libnss3 \
-            libgbm1
+      # Chrome telepítése Firefox helyett
+      - name: 🌐 Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
 
       - name: ⚙️ Install dependencies
         run: npm install
