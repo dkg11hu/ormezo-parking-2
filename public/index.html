@@ -4,75 +4,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Őrmező Parking Dashboard</title>
+  <title>Parking Dashboard</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 
 <body>
-
   <header>
     <div class="title-group">
-      <img src="favicon.svg" class="header-logo" alt="logo">
-      <h1>Őrmező</h1>
+      <img src="favicon.svg" class="header-logo" alt="P">
+      <h1>Parking</h1>
     </div>
-    <div id="last-update" data-generated="1766488267819">Updated: -- min ago</div>
-    <div id="system-time">11:11:07</div>
+    <div class="header-info">
+      <div class="info-line">
+        <span class="info-label">Adatok:</span>
+        <span id="data-age" class="info-value">19p 11mp-e frissült</span>
+      </div>
+      <div class="info-line">
+        <span class="info-label">Pontos idő:</span>
+        <span id="system-time" class="info-value system-time-color">12:30:19</span>
+      </div>
+    </div>
   </header>
 
   <div id="dashboard-grid">
-    <div class="column-narrow" id="col-p1-p2">
-
-      <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P121" class="card status-warn" target="_blank" style="--ratio: 46%">
-        <div class="card-inner">
-          <div class="card-content-row">
-            <h2>Őrmező P1 P+R parkoló</h2>
-            <div class="value-container">
-              <span class="value">221</span>
-              <span class="max-lot">/ 485</span>
-            </div>
-          </div>
+    <div class="card status-ok" style="--ratio: 45%;">
+      <div class="card-content-row">
+        <h2>Őrmező P1 P+R parkoló</h2>
+        <div class="value-container">
+          <span class="value">221</span>
+          <span class="max-lot">/ 485</span>
         </div>
-      </a>
+      </div>
+    </div>
 
-      <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P131" class="card status-warn" target="_blank" style="--ratio: 48%">
-        <div class="card-inner">
-          <div class="card-content-row">
-            <h2>Őrmező P2 P+R parkoló</h2>
-            <div class="value-container">
-              <span class="value">240</span>
-              <span class="max-lot">/ 500</span>
-            </div>
-          </div>
+    <div class="card status-ok" style="--ratio: 48%;">
+      <div class="card-content-row">
+        <h2>Őrmező P2 P+R parkoló</h2>
+        <div class="value-container">
+          <span class="value">240</span>
+          <span class="max-lot">/ 500</span>
         </div>
-      </a>
-</div>
-    <div class="column-wide" id="col-p3-p4">
+      </div>
+    </div>
 
-      <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P101" class="card status-low" target="_blank" style="--ratio: 15%">
-        <div class="card-inner">
-          <div class="card-content-row">
-            <h2>Etele P1 P+R parkoló</h2>
-            <div class="value-container">
-              <span class="value">36</span>
-              <span class="max-lot">/ 247</span>
-            </div>
-          </div>
+    <div class="card status-low" style="--ratio: 14%;">
+      <div class="card-content-row">
+        <h2>Etele P1 P+R parkoló</h2>
+        <div class="value-container">
+          <span class="value">36</span>
+          <span class="max-lot">/ 247</span>
         </div>
-      </a>
+      </div>
+    </div>
 
-      <a href="https://kozutfigyelo.budapestkozut.hu/list/pfhistory?id=P111" class="card status-ok" target="_blank" style="--ratio: 53%">
-        <div class="card-inner">
-          <div class="card-content-row">
-            <h2>Etele P2 P+R parkoló</h2>
-            <div class="value-container">
-              <span class="value">118</span>
-              <span class="max-lot">/ 221</span>
-            </div>
-          </div>
+    <div class="card status-warn" style="--ratio: 53%;">
+      <div class="card-content-row">
+        <h2>Etele P2 P+R parkoló</h2>
+        <div class="value-container">
+          <span class="value">118</span>
+          <span class="max-lot">/ 221</span>
         </div>
-      </a>
-</div>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
