@@ -11,7 +11,7 @@
     "node": "20.x"
   },
   "dependencies": {
-    "chromedriver": "^143.0.1",
+    "chromedriver": "^143.0.3",
     "express": "^4.22.1",
     "selenium-webdriver": "^4.39.0"
   },
