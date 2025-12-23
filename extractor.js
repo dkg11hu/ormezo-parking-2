@@ -43,7 +43,10 @@ async function runExtractor() {
                 const selector = entry.selector.css ? By.css(entry.selector.css) : By.xpath(entry.selector.xpath);
                 const el = await driver.wait(until.elementLocated(selector), 15000);
                 const rawText = await el.getText();
-                const freeSpots = parseInt(rawText.match(/(\d+)/)[1], 10);
+
+                // Hibatűrő szám kinyerés
+                const match = rawText.match(/(\d+)/);
+                const freeSpots = match ? parseInt(match[1], 10) : "N/A";
 
                 results.push({
                     id: entry.id,
@@ -68,46 +71,51 @@ async function runExtractor() {
             let html = fs.readFileSync(templatePath, 'utf8');
 
             function generateCardHtml(res) {
-                const label = res.label || res.id;
-                const free = parseInt(res.free) || 0;
+                const free = res.free === "N/A" ? 0 : parseInt(res.free);
                 const max = parseInt(res.maxLot) || 1;
-                const url = res.url || "#";
+                // Százalék kiszámítása a progress barhoz
                 const percent = Math.min(Math.round((free / max) * 100), 100);
-                const statusClass = percent > 50 ? 'status-ok' : (percent > 15 ? 'status-warn' : 'status-low');
+
+                // Státusz osztály meghatározása
+                let statusClass = 'status-ok';
+                if (percent <= 15) statusClass = 'status-low';
+                else if (percent <= 50) statusClass = 'status-warn';
 
                 return `
-      <a href="${url}" class="card ${statusClass}" target="_blank" style="--ratio: ${percent}%">
-        <div class="card-inner">
-          <div class="card-content-row">
-            <h2>${label}</h2>
-            <div class="value-container">
-              <span class="value">${res.free === "N/A" ? "N/A" : free}</span>
-              <span class="max-lot">/ ${max}</span>
-            </div>
-          </div>
-        </div>
-      </a>`;
+                <div class="card ${statusClass}" style="--ratio: ${percent}%">
+                    <div class="card-content-row">
+                        <h2>${res.label}</h2>
+                        <div class="value-container">
+                            <span class="value">${res.free === "N/A" ? "N/A" : free}</span>
+                            <span class="max-lot">/ ${max}</span>
+                        </div>
+                    </div>
+                </div>`;
             }
 
-            const p1p2 = results.filter(r => r.id === 'p1' || r.id === 'p2').map(generateCardHtml).join('\n');
-            const others = results.filter(r => r.id !== 'p1' && r.id !== 'p2').map(generateCardHtml).join('\n');
+            // Összes kártya összefűzése
+            const allCardsHtml = results.map(generateCardHtml).join('\n');
 
-            html = html.replace(/(id="col-p1-p2"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${p1p2}\n$3`);
-            html = html.replace(/(id="col-p3-p4"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${others}\n$3`);
-            html = html.replace(/id="system-time">.*?<\/div>/, `id="system-time">${huTime}</div>`);
+            // Beillesztés a közös konténerbe
+            html = html.replace(/(id="dashboard-grid"[^>]*>)([\s\S]*?)(<\/div>)/, `$1\n${allCardsHtml}\n$3`);
+
+            // Időbélyegek frissítése (Figyeljünk a span/id egyezőségre a template-ben)
+            html = html.replace(/id="system-time"[^>]*>.*?<\/span>/, `id="system-time" class="info-value system-time-color">${huTime}</span>`);
             html = html.replace(/data-generated="[^"]*"/, `data-generated="${timestamp}"`);
 
+            // Könyvtár és fájl műveletek
             if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
             fs.writeFileSync(targetHtmlPath, html);
 
+            // Statikus fájlok másolása (szabályod szerint a public-ba)
             if (fs.existsSync(srcStylePath)) fs.copyFileSync(srcStylePath, targetStylePath);
             if (fs.existsSync(srcScriptPath)) fs.copyFileSync(srcScriptPath, targetScriptPath);
-            if (fs.existsSync('favicon.svg')) fs.copyFileSync('favicon.svg', 'public/favicon.svg');
+            if (fs.existsSync('favicon.svg')) fs.copyFileSync('favicon.svg', path.join(publicDir, 'favicon.svg'));
 
-            console.log(`✅ Adatok frissítve: ${huTime}`);
+            console.log(`✅ Sikeres frissítés: ${huTime}`);
         }
     } catch (criticalErr) {
-        console.error("❌ Hiba:", criticalErr.message);
+        console.error("❌ Kritikus hiba a futás során:", criticalErr.message);
     } finally {
         if (driver) await driver.quit();
     }

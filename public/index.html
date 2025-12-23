@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Parking Dashboard</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="alternate icon" type="image/png" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -17,56 +19,57 @@
     <div class="header-info">
       <div class="info-line">
         <span class="info-label">Adatok:</span>
-        <span id="data-age" class="info-value">19p 11mp-e frissült</span>
+        <span id="last-update" class="info-value" data-generated="1766496605928">0mp</span>
       </div>
       <div class="info-line">
         <span class="info-label">Pontos idő:</span>
-        <span id="system-time" class="info-value system-time-color">12:30:19</span>
+        <span id="system-time" class="info-value system-time-color">13:30:05</span>
       </div>
     </div>
   </header>
 
   <div id="dashboard-grid">
-    <div class="card status-ok" style="--ratio: 45%;">
-      <div class="card-content-row">
-        <h2>Őrmező P1 P+R parkoló</h2>
-        <div class="value-container">
-          <span class="value">221</span>
-          <span class="max-lot">/ 485</span>
-        </div>
-      </div>
-    </div>
 
-    <div class="card status-ok" style="--ratio: 48%;">
-      <div class="card-content-row">
-        <h2>Őrmező P2 P+R parkoló</h2>
-        <div class="value-container">
-          <span class="value">240</span>
-          <span class="max-lot">/ 500</span>
-        </div>
-      </div>
-    </div>
+                <div class="card status-warn" style="--ratio: 49%">
+                    <div class="card-content-row">
+                        <h2>Őrmező P1 P+R parkoló</h2>
+                        <div class="value-container">
+                            <span class="value">236</span>
+                            <span class="max-lot">/ 485</span>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="card status-low" style="--ratio: 14%;">
-      <div class="card-content-row">
-        <h2>Etele P1 P+R parkoló</h2>
-        <div class="value-container">
-          <span class="value">36</span>
-          <span class="max-lot">/ 247</span>
-        </div>
-      </div>
-    </div>
+                <div class="card status-warn" style="--ratio: 50%">
+                    <div class="card-content-row">
+                        <h2>Őrmező P2 P+R parkoló</h2>
+                        <div class="value-container">
+                            <span class="value">251</span>
+                            <span class="max-lot">/ 500</span>
+                        </div>
+                    </div>
+                </div>
 
-    <div class="card status-warn" style="--ratio: 53%;">
-      <div class="card-content-row">
-        <h2>Etele P2 P+R parkoló</h2>
-        <div class="value-container">
-          <span class="value">118</span>
-          <span class="max-lot">/ 221</span>
-        </div>
-      </div>
-    </div>
-  </div>
+                <div class="card status-warn" style="--ratio: 17%">
+                    <div class="card-content-row">
+                        <h2>Etele P1 P+R parkoló</h2>
+                        <div class="value-container">
+                            <span class="value">42</span>
+                            <span class="max-lot">/ 247</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card status-warn" style="--ratio: 47%">
+                    <div class="card-content-row">
+                        <h2>Etele P2 P+R parkoló</h2>
+                        <div class="value-container">
+                            <span class="value">104</span>
+                            <span class="max-lot">/ 221</span>
+                        </div>
+                    </div>
+                </div>
+</div>
 
   <script src="script.js"></script>
 </body>
