@@ -31,4 +31,6 @@ temp/
 *.tgz
 # Build maradványok (opcionális, ha a public-ot csak az Action generálja)
 # public/index.html 
-# (Ezt most NE vedd ki, mert a gh-pages-nek szüksége van rá)
+# (Ezt most NE vedd ki, mert a gh-pages-nek szüksége van rá)google-chrome-stable_current_amd64.deb
+*.deb*
+*.deb*

@@ -1,8 +1,0 @@
-<svg viewBox="-15 -15 130 130" xmlns="http://www.w3.org/2000/svg">
-  <path d="M30 85 V15 H55 C72 15 78 28 78 40 C78 55 72 65 55 65 H30" 
-        fill="none" 
-        stroke="#ffcc00" 
-        stroke-width="12" 
-        stroke-linecap="square" 
-        stroke-linejoin="miter" />
-</svg>
